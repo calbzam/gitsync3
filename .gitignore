@@ -3,6 +3,9 @@
 # Get latest from https://github.com/github/gitignore/blob/main/Unity.gitignore
 #
 
+# don't track plastic SCM folder
+/.plastic/
+
 # don't commit unused folders
 # **/unused/
 # **/unused.meta
