@@ -504,7 +504,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8367421080749263070, guid: 5d77a861606484d428c39b6cfde6427b, type: 3}
       propertyPath: m_Name
-      value: tree-temp (6)
+      value: "\uB098\uBB34 TEMP (6)"
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -768,7 +768,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8367421080749263070, guid: 5d77a861606484d428c39b6cfde6427b, type: 3}
       propertyPath: m_Name
-      value: tree-temp (2)
+      value: "\uB098\uBB34 TEMP (2)"
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1288,7 +1288,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8367421080749263070, guid: 5d77a861606484d428c39b6cfde6427b, type: 3}
       propertyPath: m_Name
-      value: tree-temp (3)
+      value: "\uB098\uBB34 TEMP (3)"
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2958,7 +2958,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8367421080749263070, guid: 5d77a861606484d428c39b6cfde6427b, type: 3}
       propertyPath: m_Name
-      value: tree-temp (4)
+      value: "\uB098\uBB34 TEMP (4)"
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3220,7 +3220,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8367421080749263070, guid: 5d77a861606484d428c39b6cfde6427b, type: 3}
       propertyPath: m_Name
-      value: tree-temp (5)
+      value: "\uB098\uBB34 TEMP (5)"
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4095,7 +4095,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1657968780}
   m_Layer: 7
-  m_Name: Backgrounds
+  m_Name: "\uBC30\uACBD"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4837,7 +4837,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8367421080749263070, guid: 5d77a861606484d428c39b6cfde6427b, type: 3}
       propertyPath: m_Name
-      value: tree-temp
+      value: "\uB098\uBB34 TEMP"
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4894,7 +4894,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8367421080749263070, guid: 5d77a861606484d428c39b6cfde6427b, type: 3}
       propertyPath: m_Name
-      value: tree-temp (1)
+      value: "\uB098\uBB34 TEMP (1)"
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
