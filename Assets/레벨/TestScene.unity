@@ -445,7 +445,7 @@ GameObject:
   - component: {fileID: 326156097}
   - component: {fileID: 326156098}
   m_Layer: 0
-  m_Name: "\u1102\u1169\u1111\u1173 \u110F\u1165\u11AB\u1109\u1166\u11B8\u110B\u1161\u1110\u11732"
+  m_Name: noahproject_conceptart
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
