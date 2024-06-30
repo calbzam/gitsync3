@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1735080632153585749}
   - component: {fileID: 7743753229589983629}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: rock-2d-temp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -52,7 +52,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 2683ae1d090216c4597b67bbee635471, type: 2}
+  - {fileID: 2100000, guid: 13a08ad2aaa2249468528478050428e7, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -93,8 +93,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6184342223323034734}
-  m_Layer: 6
-  m_Name: "\uD68C\uC0C9\uB3CC TEMP"
+  m_Layer: 0
+  m_Name: "\uBE68\uAC04\uB3CC_TEMP"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -126,7 +126,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7000819094139910281}
   - component: {fileID: 1059699177041766627}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -183,20 +183,21 @@ EdgeCollider2D:
   m_Offset: {x: 0, y: 0}
   m_EdgeRadius: 0
   m_Points:
-  - {x: 4.890238, y: -2.3435817}
-  - {x: -2.9154315, y: -2.4429314}
-  - {x: -6.053376, y: -1.8856757}
-  - {x: -6.9285455, y: -0.734673}
-  - {x: -6.469963, y: 0.28963792}
+  - {x: 5.076104, y: -0.7823278}
+  - {x: 2.1347303, y: -0.73290396}
+  - {x: -3.1012976, y: -0.58429563}
+  - {x: -4.9381924, y: -0.36159432}
+  - {x: -5.9248815, y: -0.17708182}
+  - {x: -5.9123726, y: 0.32681048}
   - {x: -5.2281375, y: 0.79818153}
   - {x: -4.930759, y: 1.5759482}
   - {x: -1.8473308, y: 2.2411263}
   - {x: 3.652664, y: 2.0655558}
   - {x: 5.7444067, y: 1.154064}
   - {x: 6.063985, y: 0.25833058}
-  - {x: 6.9482837, y: -0.5121508}
-  - {x: 6.381707, y: -1.7543147}
-  - {x: 4.933031, y: -2.329173}
+  - {x: 6.465037, y: -0.17759636}
+  - {x: 6.2701874, y: -0.67630625}
+  - {x: 5.044545, y: -0.7679186}
   m_AdjacentStartPoint: {x: 0, y: 0}
   m_AdjacentEndPoint: {x: 0, y: 0}
   m_UseAdjacentStartPoint: 0
@@ -210,7 +211,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3335295496400500022}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: container
   m_TagString: Untagged
   m_Icon: {fileID: 0}
