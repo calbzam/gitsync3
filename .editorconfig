@@ -1,0 +1,18 @@
+# [유니티 Unity] 깃허브, Mac에서 (비주얼스튜디오) 한글 깨지는 경우 해결하는 방법
+# https://j2su0218.tistory.com/494
+
+
+# .editorconfig에 대해 자세히 알아보려면 다음을 참조하세요. https://aka.ms/
+editorconfigdocs
+
+root = true
+
+# All files
+[*]
+indent_style = space
+charset = utf-8
+
+# Xml files
+[*.xml]
+indent_size = 2
+
