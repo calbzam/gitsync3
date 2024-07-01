@@ -23,12 +23,12 @@ MonoBehaviour:
   HorizontalDeadZoneThreshold: 0.1
   MaxSpeed: 6
   Acceleration: 14
-  GroundDeceleration: 60
+  GroundDeceleration: 40
   AirDeceleration: 30
   GroundingForce: -1.5
   GrounderDistance: 0.12
   GroundCheckCapsuleSize: {x: 0.2, y: 1.2}
-  JumpPower: 8
+  JumpPower: 9
   MaxFallSpeed: 40
   FallAcceleration: 30
   JumpUpGravityModifier: 0.6
