@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4278596004178295628}
   - component: {fileID: 7617296077248066839}
-  - component: {fileID: 3424157184112802806}
+  - component: {fileID: 703432992198136693}
   m_Layer: 3
   m_Name: character-sprite
   m_TagString: Untagged
@@ -85,7 +85,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &3424157184112802806
+--- !u!114 &703432992198136693
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -94,7 +94,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5077590531949159457}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2febf79323e05a14a86fd7ace2c35688, type: 3}
+  m_Script: {fileID: 11500000, guid: 1831a159edae3a94fb900869f3e8d360, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &6155250899596801362
@@ -108,7 +108,7 @@ GameObject:
   - component: {fileID: 8427960290674326022}
   - component: {fileID: 2386182387283491113}
   - component: {fileID: 6803105606044713152}
-  - component: {fileID: 6013848397926091319}
+  - component: {fileID: 6780390211958808654}
   m_Layer: 3
   m_Name: Player_Test
   m_TagString: Untagged
@@ -194,7 +194,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &6013848397926091319
+--- !u!114 &6780390211958808654
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -203,7 +203,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6155250899596801362}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 592916feea492a8488335b7a47084e3d, type: 3}
+  m_Script: {fileID: 11500000, guid: 24f73e35fa09c004f93cf8958bfd1c6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _stats: {fileID: 11400000, guid: 26074dc20ccdc8348a1dde708e751469, type: 2}
+  _stats: {fileID: 11400000, guid: 4f06b2c7c06da8e4383d21d1cf020319, type: 2}
