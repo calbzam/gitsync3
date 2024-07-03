@@ -57,10 +57,10 @@ namespace TarodevController
             input.Enable();
         }
 
-        private void Start()
-        {
-            Physics2D.IgnoreLayerCollision(0, 3); // default layer <--> player layer
-        }
+        //private void Start()
+        //{
+        //
+        //}
 
         private void OnDisable()
         {
