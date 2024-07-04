@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1735080632153585749}
   - component: {fileID: 7743753229589983629}
+  - component: {fileID: 3038984009597091305}
   m_Layer: 6
   m_Name: rock-2d-temp
   m_TagString: Untagged
@@ -84,6 +85,26 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &3038984009597091305
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3514886795583378766}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a0c3ae34d4ec1746a5014773ebe5fde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  changeSelectionTo: {fileID: 4654735858374499730}
+  lockScale: 1
+  baseScale: {x: 1, y: 1, z: 1}
+  lockRotation: 1
+  baseRot: {x: 0, y: 0, z: 0}
+  lockTranslation: 1
+  basePos: {x: 0, y: 0, z: 0}
+  lockNonUniformScale: 0
 --- !u!1 &4654735858374499730
 GameObject:
   m_ObjectHideFlags: 0
@@ -126,6 +147,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7000819094139910281}
   - component: {fileID: 1059699177041766627}
+  - component: {fileID: 6312515543388361921}
   m_Layer: 6
   m_Name: collider
   m_TagString: Untagged
@@ -201,6 +223,26 @@ EdgeCollider2D:
   m_AdjacentEndPoint: {x: 0, y: 0}
   m_UseAdjacentStartPoint: 0
   m_UseAdjacentEndPoint: 0
+--- !u!114 &6312515543388361921
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5510419437962643842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a0c3ae34d4ec1746a5014773ebe5fde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  changeSelectionTo: {fileID: 4654735858374499730}
+  lockScale: 1
+  baseScale: {x: 1, y: 1, z: 1}
+  lockRotation: 1
+  baseRot: {x: 0, y: 0, z: 0}
+  lockTranslation: 1
+  basePos: {x: 0, y: 0, z: 0}
+  lockNonUniformScale: 0
 --- !u!1 &7569799033867585379
 GameObject:
   m_ObjectHideFlags: 0
