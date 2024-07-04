@@ -1,0 +1,35 @@
+    // https://obi.virtualmethodstudio.com/manual/6.2/scriptingcollisions.html
+    
+    private void Solver_OnCollision(object sender, ObiSolver.ObiCollisionEventArgs e)
+    {
+        var world = ObiColliderWorld.GetInstance();
+
+        // just iterate over all contacts in the current frame:
+        foreach (Oni.Contact contact in e.contacts)
+        {
+            // if this one is an actual collision:
+            if (contact.distance < 0.01)
+            {
+                ObiColliderBase col = world.colliderHandles[contact.bodyB].owner;
+                if (col != null)
+                {
+                    // do something with the collider.
+                    //Debug.Log(col);
+
+                    // retrieve the offset and size of the simplex in the solver.simplices array:
+                    int simplexStart = rope.solver.simplexCounts.GetSimplexStartAndSize(contact.bodyA, out int simplexSize);
+
+                    // starting at simplexStart, iterate over all particles in the simplex:
+                    for (int i = 0; i < simplexSize; ++i)
+                    {
+                        int particleIndex = rope.solver.simplices[simplexStart + i];
+
+                        //var position = rope.solver.positions[particleIndex];
+                        //Debug.Log(position);
+
+                        rope.solver.colors[particleIndex] = Color.red;
+                    }
+                }
+            }
+        }
+    }

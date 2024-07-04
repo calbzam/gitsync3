@@ -77,10 +77,11 @@ public class MarkParticlePositions : MonoBehaviour
     {
         Transform[] circles = markers.GetComponentsInChildren<Transform>().Skip(1).ToArray();
 
+        circles[0].localPosition = firstPos;
         for (int i = 0; i < rope.elements.Count && i < circles.Length; ++i)
         {
-            circles[i].localPosition = rope.solver.positions[rope.elements[i].particle2];
-            circles[i].localPosition += offset;
+            circles[i + 1].localPosition = rope.solver.positions[rope.elements[i].particle2];
+            circles[i + 1].localPosition += offset;
         }
     }
 
