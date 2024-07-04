@@ -15,6 +15,9 @@ MonoBehaviour:
   PlayerLayer:
     serializedVersion: 2
     m_Bits: 8
+  SwingingGroundLayer:
+    serializedVersion: 2
+    m_Bits: 512
   GroundLayer:
     serializedVersion: 2
     m_Bits: 64

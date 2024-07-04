@@ -30,6 +30,8 @@ namespace TarodevController
         private Vector2 _frameVelocity;
         private bool _cachedQueryStartInColliders;
 
+        private Rigidbody2D swingingGround;
+
         #region Interface
 
         public Vector2 FrameInput => _frameInput.Move;
@@ -122,15 +124,24 @@ namespace TarodevController
         //_col.size: (x=0.50, y=1.26)
         //_col.direction: Vertical
 
+        bool swingingGroundHit;
         private void CheckCollisions()
         {
             Physics2D.queriesStartInColliders = false;
 
 
             // Ground and Ceiling
-            //bool groundHit = Physics2D.CapsuleCast(_col.bounds.center, _col.size, _col.direction, 0, Vector2.down, _stats.GrounderDistance, ~_stats.PlayerLayer);
-            //bool ceilingHit = Physics2D.CapsuleCast(_col.bounds.center, _col.size, _col.direction, 0, Vector2.up, _stats.GrounderDistance, ~_stats.PlayerLayer);
-            bool groundHit = Physics2D.CapsuleCast(_col.bounds.center, _stats.GroundCheckCapsuleSize, _col.direction, 0, Vector2.down, _stats.GrounderDistance, _stats.GroundLayer);
+
+            // add later: Enum groundHitType - static ground, moving ground
+
+            RaycastHit2D hit = Physics2D.CapsuleCast(_col.bounds.center, _stats.GroundCheckCapsuleSize, _col.direction, 0, Vector2.down, _stats.GrounderDistance, _stats.SwingingGroundLayer);
+            if (hit) 
+            {
+                swingingGroundHit = hit;
+                swingingGround = hit.collider.attachedRigidbody;
+            }
+
+            bool groundHit = swingingGroundHit || Physics2D.CapsuleCast(_col.bounds.center, _stats.GroundCheckCapsuleSize, _col.direction, 0, Vector2.down, _stats.GrounderDistance, _stats.GroundLayer);
             bool ceilingHit = Physics2D.CapsuleCast(_col.bounds.center, _stats.GroundCheckCapsuleSize, _col.direction, 0, Vector2.up, _stats.GrounderDistance, _stats.GroundLayer);
 
             // Hit a Ceiling: cancel jumping from there
@@ -191,6 +202,7 @@ namespace TarodevController
             _coyoteUsable = false;
 
             _frameVelocity.y = _stats.JumpPower;
+            swingingGroundHit = false;
             //_rb.AddForce(Vector2.up * _stats.JumpPower, ForceMode2D.Impulse);
             //_frameVelocity = _rb.velocity;
             Jumped?.Invoke();
@@ -222,7 +234,6 @@ namespace TarodevController
             if (_grounded && _frameVelocity.y <= 0f) // on ground and falling
             {
                 _frameVelocity.y = _stats.GroundingForce;
-                //_frameVelocity.y = 0;
             }
             else
             {
@@ -257,7 +268,13 @@ namespace TarodevController
 
         #endregion
 
-        private void ApplyMovement() => _rb.velocity = _frameVelocity;
+        private void ApplyMovement()
+        {
+            if (swingingGroundHit) _frameVelocity.y = _rb.velocity.y;
+            //if (swingingGroundHit) _frameVelocity.y = swingingGround.velocity.y;
+
+            _rb.velocity = _frameVelocity;
+        }
 
 #if UNITY_EDITOR
         private void OnValidate()
