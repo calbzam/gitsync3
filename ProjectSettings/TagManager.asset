@@ -14,8 +14,8 @@ TagManager:
   - Ground
   - Background
   - No Collision
-  - 
-  - 
+  - SwingingGround
+  - ClimbingRope
   - 
   - 
   - 

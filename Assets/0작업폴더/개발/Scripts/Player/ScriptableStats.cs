@@ -10,6 +10,7 @@ namespace TarodevController
         [Tooltip("Set this to the layer your player is on")]
         public LayerMask PlayerLayer;
 
+        public LayerMask SwingingGroundLayer;
         public LayerMask GroundLayer;
 
         [Header("INPUT")]
