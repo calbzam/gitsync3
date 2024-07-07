@@ -41,12 +41,12 @@ public class Test_ColorParticleCollisions : MonoBehaviour
 
     private void Update()
     {
-        SetParticleColors();
+        SetParticleColorsAll();
     }
 
-    private void SetParticleColors()
+    private void SetParticleColorsAll()
     {
-        for (int i = 0; i < particleHasCollision.Length && i < particleHasCollision.Length; ++i)
+        for (int i = 0; i < particleHasCollision.Length && i < rope.solver.colors.count; ++i)
         {
             if (particleHasCollision[i])
                 rope.solver.colors[i] = Color.red;
@@ -55,6 +55,7 @@ public class Test_ColorParticleCollisions : MonoBehaviour
         }
     }
 
+    // documentation: https://obi.virtualmethodstudio.com/manual/6.3/scriptingcollisions.html
     private void Solver_OnCollision(object sender, ObiSolver.ObiCollisionEventArgs e)
     {
         Array.Clear(particleHasCollision, 0, particleHasCollision.Length);
@@ -62,22 +63,18 @@ public class Test_ColorParticleCollisions : MonoBehaviour
         var world = ObiColliderWorld.GetInstance();
         foreach (Oni.Contact contact in e.contacts)
         {
-            // if this one is an actual collision:
             if (contact.distance < 0.01)
             {
+                /* do collsion of bodyB */
                 var col = world.colliderHandles[contact.bodyB].owner;
                 if (col != null)
                 {
-                    // retrieve the offset and size of the simplex in the solver.simplices array:
+                    /* do collsion of bodyA particles */
                     int simplexStart = rope.solver.simplexCounts.GetSimplexStartAndSize(contact.bodyA, out int simplexSize);
-
-                    // starting at simplexStart, iterate over all particles in the simplex:
                     for (int i = 0; i < simplexSize; ++i)
                     {
                         int particleIndex = rope.solver.simplices[simplexStart + i];
-                        
                         particleHasCollision[particleIndex] = true;
-                        //rope.solver.colors[particleIndex] = Color.white;
                     }
                 }
             }
