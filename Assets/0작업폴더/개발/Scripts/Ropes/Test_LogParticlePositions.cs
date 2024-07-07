@@ -29,7 +29,9 @@ public class Test_LogParticlePositions : MonoBehaviour
     {
         GetParticlePositions();
 
+#if UNITY_EDITOR
         LogParticlePositions();
+#endif
     }
 
     private void GetEndPositions()
