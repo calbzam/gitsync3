@@ -4,7 +4,7 @@ using UnityEngine;
 using Obi;
 using System.Linq;
 
-public class MarkParticlePositions : MonoBehaviour
+public class Test_DrawParticlePositions : MonoBehaviour
 {
     private ObiRope rope;
 
