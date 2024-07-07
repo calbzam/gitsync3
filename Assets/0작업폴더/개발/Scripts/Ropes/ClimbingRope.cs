@@ -35,6 +35,8 @@ public class ClimbingRope : MonoBehaviour
 
     }
 
+    // How to attach a GameObject to a rope from script? http://obi.virtualmethodstudio.com/forum/thread-2974.html
+    // Scripting constraints http://obi.virtualmethodstudio.com/manual/6.3/scriptingconstraints.html
     private void Solver_OnCollision(object sender, ObiSolver.ObiCollisionEventArgs e)
     {
         Array.Clear(particleHasCollision, 0, particleHasCollision.Length);
@@ -50,6 +52,7 @@ public class ClimbingRope : MonoBehaviour
                 {
                     /* do collsion of bodyA particles */
                     int simplexStart = rope.solver.simplexCounts.GetSimplexStartAndSize(contact.bodyA, out int simplexSize);
+
                     for (int i = 0; i < simplexSize; ++i)
                     {
                         int particleIndex = rope.solver.simplices[simplexStart + i];
