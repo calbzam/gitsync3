@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using Obi;
 
-public class Test_RopeConstraints : MonoBehaviour
+public class Test_RopeAttachDynamic : MonoBehaviour
 {
     private ObiRope rope;
     [SerializeField] private ObiColliderBase colliderA;
@@ -31,11 +31,11 @@ public class Test_RopeConstraints : MonoBehaviour
         var batch = new ObiPinConstraintsBatch();
 
         // Add a couple constraints to it, pinning the first and last particles in the rope:
-        //batch.AddConstraint(rope.solverIndices[0], colliderA, Vector3.zero, Quaternion.identity, 0, 0, float.PositiveInfinity);
+        batch.AddConstraint(rope.solverIndices[0], colliderA, Vector3.zero, Quaternion.identity, 0, 0, float.PositiveInfinity);
         batch.AddConstraint(rope.solverIndices[rope.blueprint.activeParticleCount - 1], colliderB, Vector3.zero, Quaternion.identity, 0, 0, float.PositiveInfinity);
 
         // set the amount of active constraints in the batch to 2 (the ones we just added).
-        batch.activeConstraintCount = 1;
+        batch.activeConstraintCount = 2;
 
         // append the batch to the pin constraints:
         pinConstraints.AddBatch(batch);
