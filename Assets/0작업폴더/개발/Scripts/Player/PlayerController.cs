@@ -29,14 +29,19 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody2D swingingGround;
 
-    #region Interface
+    /* Time */
+    private float _time = 1f; // 1f > 0 + 0.1:  prevent character from jumping without input at scene start
 
+    /* Interface */
     public event Action<bool, float> GroundedChanged;
     public event Action Jumped;
 
-    #endregion
+    /* Collisions */
+    private float _frameLeftGrounded = float.MinValue;
+    private bool _grounded;
+    private bool disableYVelocity = false;
+    private bool swingingGroundHit = false;
 
-    private float _time = 1f; // 1f > 0 + 0.1:  prevent character from jumping without input at scene start
 
     private void Awake()
     {
@@ -113,14 +118,10 @@ public class PlayerController : MonoBehaviour
 
     #region Collisions
 
-    private float _frameLeftGrounded = float.MinValue;
-    private bool _grounded;
-
     //_col.bounds.center: (x=0.00, y=2.30, z=0.00)
     //_col.size: (x=0.50, y=1.26)
     //_col.direction: Vertical
 
-    bool swingingGroundHit;
     private void CheckCollisions()
     {
         Physics2D.queriesStartInColliders = false;
@@ -133,7 +134,7 @@ public class PlayerController : MonoBehaviour
         RaycastHit2D hit = Physics2D.CapsuleCast(_col.bounds.center, _stats.GroundCheckCapsuleSize, _col.direction, 0, Vector2.down, _stats.GrounderDistance, _stats.SwingingGroundLayer);
         if (hit)
         {
-            swingingGroundHit = hit;
+            disableYVelocity = swingingGroundHit = true;
             swingingGround = hit.collider.attachedRigidbody;
         }
 
@@ -198,9 +199,9 @@ public class PlayerController : MonoBehaviour
         _coyoteUsable = false;
 
         _frameVelocity.y = _stats.JumpPower;
-        swingingGroundHit = false;
         //_rb.AddForce(Vector2.up * _stats.JumpPower, ForceMode2D.Impulse);
         //_frameVelocity = _rb.velocity;
+        swingingGroundHit = false;
         Jumped?.Invoke();
     }
 
@@ -264,13 +265,20 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 
+
+    public void DisableYVelocity()
+    {
+        disableYVelocity = true;
+    }
+
     private void ApplyMovement()
     {
-        if (swingingGroundHit) _frameVelocity.y = _rb.velocity.y;
+        if (disableYVelocity) _frameVelocity.y = _rb.velocity.y;
         //if (swingingGroundHit) _frameVelocity.y = swingingGround.velocity.y;
 
         _rb.velocity = _frameVelocity;
     }
+
 
 #if UNITY_EDITOR
     private void OnValidate()
