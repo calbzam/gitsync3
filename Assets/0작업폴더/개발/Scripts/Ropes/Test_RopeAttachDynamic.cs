@@ -7,6 +7,8 @@ public class Test_RopeAttachDynamic : MonoBehaviour
     private ObiRope rope;
     [SerializeField] private ObiColliderBase colliderA;
     [SerializeField] private ObiColliderBase colliderB;
+    [SerializeField] private ObiColliderBase colMid1;
+    [SerializeField] private ObiColliderBase colMid2;
 
     private void Awake()
     {
@@ -32,10 +34,12 @@ public class Test_RopeAttachDynamic : MonoBehaviour
 
         // Add a couple constraints to it, pinning the first and last particles in the rope:
         batch.AddConstraint(rope.solverIndices[0], colliderA, Vector3.zero, Quaternion.identity, 0, 0, float.PositiveInfinity);
+        batch.AddConstraint(rope.elements[rope.elements.Count / 3].particle2, colMid1, Vector3.zero, Quaternion.identity, 0, 0, float.PositiveInfinity);
+        batch.AddConstraint(rope.elements[rope.elements.Count / 3 * 2].particle2, colMid2, Vector3.zero, Quaternion.identity, 0, 0, float.PositiveInfinity);
         batch.AddConstraint(rope.solverIndices[rope.blueprint.activeParticleCount - 1], colliderB, Vector3.zero, Quaternion.identity, 0, 0, float.PositiveInfinity);
 
         // set the amount of active constraints in the batch to 2 (the ones we just added).
-        batch.activeConstraintCount = 2;
+        batch.activeConstraintCount = 4;
 
         // append the batch to the pin constraints:
         pinConstraints.AddBatch(batch);
