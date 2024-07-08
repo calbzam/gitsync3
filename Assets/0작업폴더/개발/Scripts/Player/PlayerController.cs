@@ -1,3 +1,4 @@
+using Obi;
 using System;
 using UnityEngine;
 
@@ -24,7 +25,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D _rb;
     private CapsuleCollider2D _col;
     private FrameInput _frameInput;
-    private Vector2 _frameVelocity;
+    //private Vector2 _frameVelocity;
     private bool _cachedQueryStartInColliders;
 
     private Rigidbody2D swingingGround;
@@ -34,7 +35,7 @@ public class PlayerController : MonoBehaviour
 
     /* Interface */
     public event Action<bool, float> GroundedChanged;
-    public event Action Jumped;
+    public static event Action Jumped;
 
     /* Collisions */
     private float _frameLeftGrounded = float.MinValue;
@@ -51,6 +52,8 @@ public class PlayerController : MonoBehaviour
         playerTransform = gameObject.GetComponent<Transform>();
         _rb = gameObject.GetComponent<Rigidbody2D>();
         _col = gameObject.GetComponent<CapsuleCollider2D>();
+
+        _frameInput = new FrameInput();
 
         _cachedQueryStartInColliders = Physics2D.queriesStartInColliders;
     }
@@ -78,20 +81,29 @@ public class PlayerController : MonoBehaviour
         CheckDead();
     }
 
+    private void FixedUpdate()
+    {
+        CheckCollisions();
+
+        HandleJump();
+        HandleDirection();
+        HandleGravity();
+
+        //ApplyMovement();
+    }
+
     private void GatherInput()
     {
         JumpHolding = input.Player.Jump.IsPressed();
         JumpTriggered = !JumpTriggeredPrev && JumpHolding;
         JumpTriggeredPrev = JumpHolding;
 
-        _frameInput = new FrameInput
-        {
-            JumpDown = JumpTriggered,
-            JumpHeld = JumpHolding,
-            Move = input.Player.Movement.ReadValue<Vector2>()
-        };
+        _frameInput.JumpDown = JumpTriggered;
+        _frameInput.JumpHeld = JumpHolding;
+        _frameInput.Move = input.Player.Movement.ReadValue<Vector2>();
 
-        // unneeded as arrow keys are automatically snapped
+
+        //// unneeded as arrow keys are automatically snapped
         //if (_stats.SnapInput)
         //{
         //    _frameInput.Move.x = Mathf.Abs(_frameInput.Move.x) < _stats.HorizontalDeadZoneThreshold ? 0 : Mathf.Sign(_frameInput.Move.x);
@@ -103,17 +115,6 @@ public class PlayerController : MonoBehaviour
             _jumpToConsume = true;
             _timeJumpWasPressed = _time;
         }
-    }
-
-    private void FixedUpdate()
-    {
-        CheckCollisions();
-
-        HandleJump();
-        HandleDirection();
-        HandleGravity();
-
-        ApplyMovement();
     }
 
     #region Collisions
@@ -134,7 +135,7 @@ public class PlayerController : MonoBehaviour
         RaycastHit2D hit = Physics2D.CapsuleCast(_col.bounds.center, _stats.GroundCheckCapsuleSize, _col.direction, 0, Vector2.down, _stats.GrounderDistance, _stats.SwingingGroundLayer);
         if (hit)
         {
-            disableYVelocity = swingingGroundHit = true;
+            swingingGroundHit = true;
             swingingGround = hit.collider.attachedRigidbody;
         }
 
@@ -142,7 +143,7 @@ public class PlayerController : MonoBehaviour
         bool ceilingHit = Physics2D.CapsuleCast(_col.bounds.center, _stats.GroundCheckCapsuleSize, _col.direction, 0, Vector2.up, _stats.GrounderDistance, _stats.GroundLayer);
 
         // Hit a Ceiling: cancel jumping from there
-        if (ceilingHit) _frameVelocity.y = Mathf.Min(0, _frameVelocity.y);
+        if (ceilingHit) /*_frameVelocity.y = Mathf.Min(0, _frameVelocity.y);*/_rb.velocity = new Vector2(_rb.velocity.x, Mathf.Min(0, _rb.velocity.y));
 
         // Landed on the Ground
         if (!_grounded && groundHit)
@@ -151,7 +152,7 @@ public class PlayerController : MonoBehaviour
             _coyoteUsable = true;
             _bufferedJumpUsable = true;
             _endedJumpEarly = false;
-            GroundedChanged?.Invoke(true, Mathf.Abs(_frameVelocity.y));
+            GroundedChanged?.Invoke(true, Mathf.Abs(/*_frameVelocity.y*/_rb.velocity.y));
         }
         // Left the Ground
         else if (_grounded && !groundHit)
@@ -198,9 +199,10 @@ public class PlayerController : MonoBehaviour
         _bufferedJumpUsable = false;
         _coyoteUsable = false;
 
-        _frameVelocity.y = _stats.JumpPower;
-        //_rb.AddForce(Vector2.up * _stats.JumpPower, ForceMode2D.Impulse);
+        //_frameVelocity.y = _stats.JumpPower;
         //_frameVelocity = _rb.velocity;
+        _rb.AddForce(Vector2.up * _stats.JumpPower, ForceMode2D.Impulse);
+
         swingingGroundHit = false;
         Jumped?.Invoke();
     }
@@ -213,12 +215,22 @@ public class PlayerController : MonoBehaviour
     {
         if (_frameInput.Move.x == 0)
         {
-            var deceleration = _grounded ? _stats.GroundDeceleration : _stats.AirDeceleration;
-            _frameVelocity.x = Mathf.MoveTowards(_frameVelocity.x, 0, deceleration * Time.fixedDeltaTime);
+            if (_rb.velocity.x != 0)
+            {
+                var deceleration = _grounded ? _stats.GroundDeceleration : _stats.AirDeceleration;
+                //_frameVelocity.x = Mathf.MoveTowards(_frameVelocity.x, 0, deceleration * Time.fixedDeltaTime);
+
+                float prevDir = Mathf.Sign(_rb.velocity.x);
+                _rb.AddForce(Vector2.left * prevDir * deceleration, ForceMode2D.Force);
+                if (Mathf.Sign(_rb.velocity.x) * prevDir < 0) _rb.velocity = new Vector2(0, _rb.velocity.y);
+            }
         }
         else
         {
-            _frameVelocity.x = Mathf.MoveTowards(_frameVelocity.x, _frameInput.Move.x * _stats.MaxSpeed, _stats.Acceleration * Time.fixedDeltaTime);
+            //_frameVelocity.x = Mathf.MoveTowards(_frameVelocity.x, _frameInput.Move.x * _stats.MaxSpeed, _stats.Acceleration * Time.fixedDeltaTime);
+
+            _rb.AddForce(Vector2.right * _frameInput.Move.x * _stats.Acceleration, ForceMode2D.Force);
+            if (Mathf.Abs(_rb.velocity.x) > _stats.MaxSpeed) _rb.velocity = new Vector2(Math.Sign(_rb.velocity.x) * _stats.MaxSpeed, _rb.velocity.y);
         }
     }
 
@@ -228,29 +240,29 @@ public class PlayerController : MonoBehaviour
 
     private void HandleGravity()
     {
-        if (_grounded && _frameVelocity.y <= 0f) // on ground and falling
-        {
-            _frameVelocity.y = _stats.GroundingForce;
-        }
-        else
-        {
-            var inAirGravity = _stats.FallAcceleration;
-            if (_frameVelocity.y > 0)
-            {
-                if (_endedJumpEarly) inAirGravity *= _stats.JumpEndEarlyGravityModifier;
-                else inAirGravity *= _stats.JumpUpGravityModifier;
-            }
-            _frameVelocity.y = Mathf.MoveTowards(_frameVelocity.y, -_stats.MaxFallSpeed, inAirGravity * Time.fixedDeltaTime);
-        }
-
-        //if (_frameVelocity.y > 0)
+        //if (_grounded && _frameVelocity.y <= 0f) // on ground and falling
         //{
-        //    _rb.gravityScale = _stats.JumpUpGravityModifier;
+        //    _frameVelocity.y = _stats.GroundingForce;
         //}
         //else
         //{
-        //    _rb.gravityScale = 1f;
+        //    var inAirGravity = _stats.FallAcceleration;
+        //    if (_frameVelocity.y > 0)
+        //    {
+        //        if (_endedJumpEarly) inAirGravity *= _stats.JumpEndEarlyGravityModifier;
+        //        else inAirGravity *= _stats.JumpUpGravityModifier;
+        //    }
+        //    _frameVelocity.y = Mathf.MoveTowards(_frameVelocity.y, -_stats.MaxFallSpeed, inAirGravity * Time.fixedDeltaTime);
         //}
+
+        if (_rb.velocity.y > 0)
+        {
+            _rb.gravityScale = 1.8f;
+        }
+        else
+        {
+            _rb.gravityScale = 3f;
+        }
     }
 
     #endregion
@@ -265,20 +277,19 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 
-
     public void DisableYVelocity()
     {
         disableYVelocity = true;
     }
 
-    private void ApplyMovement()
-    {
-        if (disableYVelocity) _frameVelocity.y = _rb.velocity.y;
-        //if (swingingGroundHit) _frameVelocity.y = swingingGround.velocity.y;
-
-        _rb.velocity = _frameVelocity;
-    }
-
+    //private void ApplyMovement()
+    //{
+    //    if (disableYVelocity) _frameVelocity.y = _rb.velocity.y;
+    //    //if (swingingGroundHit) _frameVelocity.y = swingingGround.velocity.y;
+    //
+    //    _rb.velocity = _frameVelocity;
+    //    //if (!disableYVelocity) _rb.velocity = new Vector2(_frameVelocity.x, _rb.velocity.y);
+    //}
 
 #if UNITY_EDITOR
     private void OnValidate()
