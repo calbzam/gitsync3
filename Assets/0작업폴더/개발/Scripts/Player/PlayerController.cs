@@ -22,6 +22,8 @@ public class PlayerController : MonoBehaviour
     private Transform playerTransform;
 
     [SerializeField] private ScriptableStats _stats;
+    public ScriptableStats Stats => _stats;
+
     private Rigidbody2D _rb;
     private CapsuleCollider2D _col;
     private FrameInput _frameInput;
@@ -211,27 +213,26 @@ public class PlayerController : MonoBehaviour
 
     #region Horizontal
 
-    private float minSpeedX = 0.5f;
     private void HandleDirection()
     {
         if (_frameInput.Move.x == 0)
         {
             if (_rb.velocity.x != 0)
             {
-                var deceleration = _grounded ? _stats.GroundDeceleration : _stats.AirDeceleration;
-                //_frameVelocity.x = Mathf.MoveTowards(_frameVelocity.x, 0, deceleration * Time.fixedDeltaTime);
+                var decelerationX = _grounded ? _stats.GroundDecelerationX : _stats.AirDecelerationX;
+                //_frameVelocity.x = Mathf.MoveTowards(_frameVelocity.x, 0, decelerationX * Time.fixedDeltaTime);
 
                 float prevDir = Mathf.Sign(_rb.velocity.x);
-                _rb.AddForce(Vector2.left * prevDir * deceleration, ForceMode2D.Force);
-                if (Mathf.Sign(_rb.velocity.x) * prevDir < 0 || MathF.Abs(_rb.velocity.x) < minSpeedX) _rb.AddForce(Vector2.left * _rb.totalForce.x, ForceMode2D.Force);
+                _rb.AddForce(Vector2.left * prevDir * decelerationX, ForceMode2D.Force);
+                if (Mathf.Sign(_rb.velocity.x) * prevDir < 0 || MathF.Abs(_rb.velocity.x) < _stats.MinSpeedX) _rb.AddForce(Vector2.left * _rb.totalForce.x, ForceMode2D.Force);
             }
         }
         else
         {
-            //_frameVelocity.x = Mathf.MoveTowards(_frameVelocity.x, _frameInput.Move.x * _stats.MaxSpeed, _stats.Acceleration * Time.fixedDeltaTime);
+            //_frameVelocity.x = Mathf.MoveTowards(_frameVelocity.x, _frameInput.Move.x * _stats.MaxSpeedX, _stats.AccelerationX * Time.fixedDeltaTime);
 
-            _rb.AddForce(Vector2.right * _frameInput.Move.x * _stats.Acceleration, ForceMode2D.Force);
-            if (Mathf.Abs(_rb.velocity.x) > _stats.MaxSpeed) _rb.velocity = new Vector2(Math.Sign(_rb.velocity.x) * _stats.MaxSpeed, _rb.velocity.y);
+            _rb.AddForce(Vector2.right * _frameInput.Move.x * _stats.AccelerationX, ForceMode2D.Force);
+            if (Mathf.Abs(_rb.velocity.x) > _stats.MaxSpeedX) _rb.velocity = new Vector2(Math.Sign(_rb.velocity.x) * _stats.MaxSpeedX, _rb.velocity.y);
         }
     }
 
@@ -250,19 +251,19 @@ public class PlayerController : MonoBehaviour
         //    var inAirGravity = _stats.FallAcceleration;
         //    if (_frameVelocity.y > 0)
         //    {
-        //        if (_endedJumpEarly) inAirGravity *= _stats.JumpEndEarlyGravityModifier;
-        //        else inAirGravity *= _stats.JumpUpGravityModifier;
+        //        if (_endedJumpEarly) inAirGravity *= _stats.FallDownGravityScale;
+        //        else inAirGravity *= _stats.JumpUpGravityScale;
         //    }
         //    _frameVelocity.y = Mathf.MoveTowards(_frameVelocity.y, -_stats.MaxFallSpeed, inAirGravity * Time.fixedDeltaTime);
         //}
 
         if (_rb.velocity.y > 0)
         {
-            _rb.gravityScale = 1.8f;
+            _rb.gravityScale = _stats.JumpUpGravityScale;
         }
         else
         {
-            _rb.gravityScale = 3f;
+            _rb.gravityScale = _stats.FallDownGravityScale;
         }
     }
 

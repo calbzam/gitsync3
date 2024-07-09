@@ -22,50 +22,50 @@ public class ScriptableStats : ScriptableObject
     [Tooltip("Minimum input required before a left or right is recognized. Avoids drifting with sticky controllers"), Range(0.01f, 0.99f)]
     public float HorizontalDeadZoneThreshold = 0.1f;
 
-    [Header("MOVEMENT")]
 
-    [Tooltip("The top horizontal movement speed")]
-    public float MaxSpeed = 14;
+    [Header("MOVEMENT X")]
 
-    [Tooltip("The player's capacity to gain horizontal speed")]
-    public float Acceleration = 120;
+    public float MaxSpeedX = 6;
+    public float MinSpeedX = 0.5f;
 
-    [Tooltip("The pace at which the player comes to a stop")]
-    public float GroundDeceleration = 60;
-
-    [Tooltip("Deceleration in air only after stopping input mid-air")]
-    public float AirDeceleration = 30;
+    public float AccelerationX = 30;
+    public float GroundDecelerationX = 30;
+    public float AirDecelerationX = 30;
 
     [Tooltip("A constant downward force applied while grounded. Helps on slopes"), Range(0f, -10f)]
     public float GroundingForce = -1.5f;
 
     [Tooltip("The detection distance for grounding and roof detection"), Range(0f, 0.5f)]
-    public float GrounderDistance = 0.05f;
+    public float GrounderDistance = 0.12f;
 
     public Vector2 GroundCheckCapsuleSize = new Vector2(0.2f, 1.2f);
 
-    [Header("JUMP")]
+
+    [Header("MOVEMENT Y")]
 
     [Tooltip("The immediate velocity applied when jumping")]
-    public float JumpPower = 36;
+    public float JumpPower = 9;
 
-    [Tooltip("The maximum vertical movement speed")]
-    public float MaxFallSpeed = 40;
+    //[Tooltip("The maximum vertical movement speed")]
+    //public float MaxFallSpeed = 40;
+    //[Tooltip("The player's capacity to gain fall speed. a.k.a. In Air Gravity")]
+    //public float FallAcceleration = 30;
 
-    [Tooltip("The player's capacity to gain fall speed. a.k.a. In Air Gravity")]
-    public float FallAcceleration = 110;
-
-    [Tooltip("The gravity multiplier added when jumping up")]
-    public float JumpUpGravityModifier = 0.8f;
-
-    [Tooltip("The gravity multiplier added when jump is released early")]
-    public float JumpEndEarlyGravityModifier = 1f;
+    public float JumpUpGravityScale = 1.8f;
+    public float FallDownGravityScale = 3f;
 
     [Tooltip("The time before coyote jump becomes unusable. Coyote jump allows jump to execute even after leaving a ledge")]
-    public float CoyoteTime = .15f;
+    public float CoyoteTime = 0.15f;
 
     [Tooltip("The amount of time we buffer a jump. This allows jump input before actually hitting the ground")]
-    public float JumpBuffer = .2f;
+    public float JumpBuffer = 0.2f;
+
+
+    [Header("ROPE")]
+
+    [Tooltip("The minimum distance threshold between the player and the position where the player jumped from the rope, until the player can interact with rope again.")]
+    public float RopeJumpedDistance = 2f;
+
 
     [Header("RESPAWN")]
 

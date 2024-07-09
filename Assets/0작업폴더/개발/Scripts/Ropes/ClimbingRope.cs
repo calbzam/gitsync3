@@ -14,7 +14,7 @@ public class ClimbingRope : MonoBehaviour
     private int _attachedParticle;
     private ObiPinConstraintsBatch _playerBatch = null;
 
-    public float _jumpedEnoughDistance = 2f;
+    public float _jumpedEnoughDistance;
 
     //private bool[] particleHasCollision;
 
@@ -29,6 +29,7 @@ public class ClimbingRope : MonoBehaviour
     private void Start()
     {
         _player = GameObject.FindGameObjectWithTag("Player").GetComponent<ObiCollider2D>();
+        _jumpedEnoughDistance = _player.GetComponent<PlayerController>().Stats.RopeJumpedDistance;
     }
 
     private void OnEnable()
@@ -87,7 +88,6 @@ public class ClimbingRope : MonoBehaviour
                     /* do collsion of bodyA particles */
                     _attachedParticle = _rope.solver.simplices[contact.bodyA];
                     attachToParticle(_attachedParticle, col);
-                    //col.GetComponent<PlayerController>().RopeAttached(true);
                     _ropeAttached = true;
                     break;
                 }
