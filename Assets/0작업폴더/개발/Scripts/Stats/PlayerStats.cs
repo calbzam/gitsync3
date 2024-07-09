@@ -1,16 +1,8 @@
 using UnityEngine;
 
 [CreateAssetMenu]
-public class ScriptableStats : ScriptableObject
+public class PlayerStats : ScriptableObject
 {
-    [Header("LAYERS")]
-
-    [Tooltip("Set this to the layer your player is on")]
-    public LayerMask PlayerLayer;
-
-    public LayerMask SwingingGroundLayer;
-    public LayerMask GroundLayer;
-
     [Header("INPUT")]
 
     [Tooltip("Makes all Input snap to an integer. Prevents gamepads from walking slowly. Recommended value is true to ensure gamepad/keybaord parity.")]

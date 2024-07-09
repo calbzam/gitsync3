@@ -276,6 +276,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _stats: {fileID: 11400000, guid: 26074dc20ccdc8348a1dde708e751469, type: 2}
+  _layers: {fileID: 11400000, guid: a16b820314918a54bbc084c60ff9b696, type: 2}
 --- !u!114 &4035660408338694134
 MonoBehaviour:
   m_ObjectHideFlags: 0

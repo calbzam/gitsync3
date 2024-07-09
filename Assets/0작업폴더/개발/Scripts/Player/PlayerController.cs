@@ -3,7 +3,7 @@ using System;
 using UnityEngine;
 
 
-// PlayerController.cs and ScriptableStats.cs EDITED from TarodevController on GitHub
+// PlayerController.cs and PlayerStats.cs EDITED from TarodevController on GitHub
 // github: https://github.com/Matthew-J-Spencer/Ultimate-2D-Controller/tree/main
 // license: https://github.com/Matthew-J-Spencer/Ultimate-2D-Controller/blob/main/LICENSE
 public struct FrameInput
@@ -21,8 +21,8 @@ public class PlayerController : MonoBehaviour
 
     private Transform playerTransform;
 
-    [SerializeField] private ScriptableStats _stats;
-    public ScriptableStats Stats => _stats;
+    [SerializeField] private PlayerStats _stats;
+    public PlayerStats Stats => _stats;
 
     private Rigidbody2D _rb;
     private CapsuleCollider2D _col;
@@ -134,15 +134,15 @@ public class PlayerController : MonoBehaviour
 
         // add later: Enum groundHitType - static ground, moving ground
 
-        RaycastHit2D hit = Physics2D.CapsuleCast(_col.bounds.center, _stats.GroundCheckCapsuleSize, _col.direction, 0, Vector2.down, _stats.GrounderDistance, _stats.SwingingGroundLayer);
+        RaycastHit2D hit = Physics2D.CapsuleCast(_col.bounds.center, _stats.GroundCheckCapsuleSize, _col.direction, 0, Vector2.down, _stats.GrounderDistance, Layers.SwingingGroundLayer);
         if (hit)
         {
             swingingGroundHit = true;
             swingingGround = hit.collider.attachedRigidbody;
         }
 
-        bool groundHit = swingingGroundHit || Physics2D.CapsuleCast(_col.bounds.center, _stats.GroundCheckCapsuleSize, _col.direction, 0, Vector2.down, _stats.GrounderDistance, _stats.GroundLayer);
-        bool ceilingHit = Physics2D.CapsuleCast(_col.bounds.center, _stats.GroundCheckCapsuleSize, _col.direction, 0, Vector2.up, _stats.GrounderDistance, _stats.GroundLayer);
+        bool groundHit = swingingGroundHit || Physics2D.CapsuleCast(_col.bounds.center, _stats.GroundCheckCapsuleSize, _col.direction, 0, Vector2.down, _stats.GrounderDistance, Layers.GroundLayer);
+        bool ceilingHit = Physics2D.CapsuleCast(_col.bounds.center, _stats.GroundCheckCapsuleSize, _col.direction, 0, Vector2.up, _stats.GrounderDistance, Layers.GroundLayer);
 
         // Hit a Ceiling: cancel jumping from there
         if (ceilingHit) /*_frameVelocity.y = Mathf.Min(0, _frameVelocity.y);*/_rb.velocity = new Vector2(_rb.velocity.x, Mathf.Min(0, _rb.velocity.y));
