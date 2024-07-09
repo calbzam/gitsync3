@@ -10,4 +10,5 @@ public static class Layers
     public static LayerMask GroundLayer = LayerMask.GetMask("Ground");
 
     public static LayerMask ClimbingRopeLayer = LayerMask.GetMask("ClimbingRope");
+    public static LayerMask DoNotRenderLayer = LayerMask.GetMask("Do Not Render");
 }

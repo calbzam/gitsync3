@@ -61,8 +61,6 @@ public class PlayerStats : ScriptableObject
 
     [Header("RESPAWN")]
 
-    public Vector3 respawnPoint = new Vector3(-4.5f, 3f, 0);
-
     [Tooltip("Respawn if player Y position is below this value")]
     public float deadPositionY = -6;
 }

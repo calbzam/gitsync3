@@ -22,7 +22,9 @@ public class PlayerController : MonoBehaviour
     private Transform playerTransform;
 
     [SerializeField] private PlayerStats _stats;
-    public PlayerStats Stats => _stats;
+    public PlayerStats Stats => _stats; // for public access
+
+    [SerializeField] private Transform _respawnPoint;
 
     private Rigidbody2D _rb;
     private CapsuleCollider2D _col;
@@ -45,7 +47,6 @@ public class PlayerController : MonoBehaviour
     private bool disableYVelocity = false;
     private bool swingingGroundHit = false;
 
-
     private void Awake()
     {
         input = new InputControls();
@@ -65,22 +66,22 @@ public class PlayerController : MonoBehaviour
         input.Enable();
     }
 
-    //private void Start()
-    //{
-    //
-    //}
-
     private void OnDisable()
     {
         input.Disable();
     }
+
+    //private void Start()
+    //{
+    //
+    //}
 
     private void Update()
     {
         _time += Time.deltaTime;
         GatherInput();
 
-        CheckDead();
+        CheckRespawn();
     }
 
     private void FixedUpdate()
@@ -271,10 +272,13 @@ public class PlayerController : MonoBehaviour
 
     #region Respawn
 
-    private void CheckDead()
+    private void CheckRespawn()
     {
         if (playerTransform.position.y < _stats.deadPositionY)
-            playerTransform.position = _stats.respawnPoint;
+        {
+            playerTransform.position = new Vector3(_respawnPoint.position.x, _respawnPoint.position.y, playerTransform.position.z);
+            _rb.velocity = Vector3.zero;
+        }
     }
 
     #endregion
