@@ -26,7 +26,7 @@ MonoBehaviour:
   HorizontalDeadZoneThreshold: 0.1
   MaxSpeed: 6
   Acceleration: 30
-  GroundDeceleration: 40
+  GroundDeceleration: 30
   AirDeceleration: 30
   GroundingForce: -1.5
   GrounderDistance: 0.12

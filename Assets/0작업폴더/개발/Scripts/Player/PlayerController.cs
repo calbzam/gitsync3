@@ -211,6 +211,7 @@ public class PlayerController : MonoBehaviour
 
     #region Horizontal
 
+    private float minSpeedX = 0.5f;
     private void HandleDirection()
     {
         if (_frameInput.Move.x == 0)
@@ -222,7 +223,7 @@ public class PlayerController : MonoBehaviour
 
                 float prevDir = Mathf.Sign(_rb.velocity.x);
                 _rb.AddForce(Vector2.left * prevDir * deceleration, ForceMode2D.Force);
-                if (Mathf.Sign(_rb.velocity.x) * prevDir < 0) _rb.velocity = new Vector2(0, _rb.velocity.y);
+                if (Mathf.Sign(_rb.velocity.x) * prevDir < 0 || MathF.Abs(_rb.velocity.x) < minSpeedX) _rb.AddForce(Vector2.left * _rb.totalForce.x, ForceMode2D.Force);
             }
         }
         else
