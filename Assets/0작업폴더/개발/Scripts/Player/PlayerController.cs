@@ -3,7 +3,7 @@ using System;
 using UnityEngine;
 
 
-// PlayerController.cs and ScriptableStats.cs EDITED from TarodevController on GitHub
+// PlayerController.cs and PlayerStats.cs EDITED from TarodevController on GitHub
 // github: https://github.com/Matthew-J-Spencer/Ultimate-2D-Controller/tree/main
 // license: https://github.com/Matthew-J-Spencer/Ultimate-2D-Controller/blob/main/LICENSE
 public struct FrameInput
@@ -21,7 +21,11 @@ public class PlayerController : MonoBehaviour
 
     private Transform playerTransform;
 
-    [SerializeField] private ScriptableStats _stats;
+    [SerializeField] private PlayerStats _stats;
+    public PlayerStats Stats => _stats; // for public access
+
+    [SerializeField] private Transform _respawnPoint;
+
     private Rigidbody2D _rb;
     private CapsuleCollider2D _col;
     private FrameInput _frameInput;
@@ -43,7 +47,6 @@ public class PlayerController : MonoBehaviour
     private bool disableYVelocity = false;
     private bool swingingGroundHit = false;
 
-
     private void Awake()
     {
         input = new InputControls();
@@ -63,22 +66,22 @@ public class PlayerController : MonoBehaviour
         input.Enable();
     }
 
-    //private void Start()
-    //{
-    //
-    //}
-
     private void OnDisable()
     {
         input.Disable();
     }
+
+    //private void Start()
+    //{
+    //
+    //}
 
     private void Update()
     {
         _time += Time.deltaTime;
         GatherInput();
 
-        CheckDead();
+        CheckRespawn();
     }
 
     private void FixedUpdate()
@@ -132,15 +135,15 @@ public class PlayerController : MonoBehaviour
 
         // add later: Enum groundHitType - static ground, moving ground
 
-        RaycastHit2D hit = Physics2D.CapsuleCast(_col.bounds.center, _stats.GroundCheckCapsuleSize, _col.direction, 0, Vector2.down, _stats.GrounderDistance, _stats.SwingingGroundLayer);
+        RaycastHit2D hit = Physics2D.CapsuleCast(_col.bounds.center, _stats.GroundCheckCapsuleSize, _col.direction, 0, Vector2.down, _stats.GrounderDistance, Layers.SwingingGroundLayer);
         if (hit)
         {
             swingingGroundHit = true;
             swingingGround = hit.collider.attachedRigidbody;
         }
 
-        bool groundHit = swingingGroundHit || Physics2D.CapsuleCast(_col.bounds.center, _stats.GroundCheckCapsuleSize, _col.direction, 0, Vector2.down, _stats.GrounderDistance, _stats.GroundLayer);
-        bool ceilingHit = Physics2D.CapsuleCast(_col.bounds.center, _stats.GroundCheckCapsuleSize, _col.direction, 0, Vector2.up, _stats.GrounderDistance, _stats.GroundLayer);
+        bool groundHit = swingingGroundHit || Physics2D.CapsuleCast(_col.bounds.center, _stats.GroundCheckCapsuleSize, _col.direction, 0, Vector2.down, _stats.GrounderDistance, Layers.GroundLayer);
+        bool ceilingHit = Physics2D.CapsuleCast(_col.bounds.center, _stats.GroundCheckCapsuleSize, _col.direction, 0, Vector2.up, _stats.GrounderDistance, Layers.GroundLayer);
 
         // Hit a Ceiling: cancel jumping from there
         if (ceilingHit) /*_frameVelocity.y = Mathf.Min(0, _frameVelocity.y);*/_rb.velocity = new Vector2(_rb.velocity.x, Mathf.Min(0, _rb.velocity.y));
@@ -217,20 +220,20 @@ public class PlayerController : MonoBehaviour
         {
             if (_rb.velocity.x != 0)
             {
-                var deceleration = _grounded ? _stats.GroundDeceleration : _stats.AirDeceleration;
-                //_frameVelocity.x = Mathf.MoveTowards(_frameVelocity.x, 0, deceleration * Time.fixedDeltaTime);
+                var decelerationX = _grounded ? _stats.GroundDecelerationX : _stats.AirDecelerationX;
+                //_frameVelocity.x = Mathf.MoveTowards(_frameVelocity.x, 0, decelerationX * Time.fixedDeltaTime);
 
                 float prevDir = Mathf.Sign(_rb.velocity.x);
-                _rb.AddForce(Vector2.left * prevDir * deceleration, ForceMode2D.Force);
-                if (Mathf.Sign(_rb.velocity.x) * prevDir < 0) _rb.velocity = new Vector2(0, _rb.velocity.y);
+                _rb.AddForce(Vector2.left * prevDir * decelerationX, ForceMode2D.Force);
+                if (Mathf.Sign(_rb.velocity.x) * prevDir < 0 || MathF.Abs(_rb.velocity.x) < _stats.MinSpeedX) _rb.AddForce(Vector2.left * _rb.totalForce.x, ForceMode2D.Force);
             }
         }
         else
         {
-            //_frameVelocity.x = Mathf.MoveTowards(_frameVelocity.x, _frameInput.Move.x * _stats.MaxSpeed, _stats.Acceleration * Time.fixedDeltaTime);
+            //_frameVelocity.x = Mathf.MoveTowards(_frameVelocity.x, _frameInput.Move.x * _stats.MaxSpeedX, _stats.AccelerationX * Time.fixedDeltaTime);
 
-            _rb.AddForce(Vector2.right * _frameInput.Move.x * _stats.Acceleration, ForceMode2D.Force);
-            if (Mathf.Abs(_rb.velocity.x) > _stats.MaxSpeed) _rb.velocity = new Vector2(Math.Sign(_rb.velocity.x) * _stats.MaxSpeed, _rb.velocity.y);
+            _rb.AddForce(Vector2.right * _frameInput.Move.x * _stats.AccelerationX, ForceMode2D.Force);
+            if (Mathf.Abs(_rb.velocity.x) > _stats.MaxSpeedX) _rb.velocity = new Vector2(Math.Sign(_rb.velocity.x) * _stats.MaxSpeedX, _rb.velocity.y);
         }
     }
 
@@ -249,19 +252,19 @@ public class PlayerController : MonoBehaviour
         //    var inAirGravity = _stats.FallAcceleration;
         //    if (_frameVelocity.y > 0)
         //    {
-        //        if (_endedJumpEarly) inAirGravity *= _stats.JumpEndEarlyGravityModifier;
-        //        else inAirGravity *= _stats.JumpUpGravityModifier;
+        //        if (_endedJumpEarly) inAirGravity *= _stats.FallDownGravityScale;
+        //        else inAirGravity *= _stats.JumpUpGravityScale;
         //    }
         //    _frameVelocity.y = Mathf.MoveTowards(_frameVelocity.y, -_stats.MaxFallSpeed, inAirGravity * Time.fixedDeltaTime);
         //}
 
         if (_rb.velocity.y > 0)
         {
-            _rb.gravityScale = 1.8f;
+            _rb.gravityScale = _stats.JumpUpGravityScale;
         }
         else
         {
-            _rb.gravityScale = 3f;
+            _rb.gravityScale = _stats.FallDownGravityScale;
         }
     }
 
@@ -269,10 +272,13 @@ public class PlayerController : MonoBehaviour
 
     #region Respawn
 
-    private void CheckDead()
+    private void CheckRespawn()
     {
         if (playerTransform.position.y < _stats.deadPositionY)
-            playerTransform.position = _stats.respawnPoint;
+        {
+            playerTransform.position = new Vector3(_respawnPoint.position.x, _respawnPoint.position.y, playerTransform.position.z);
+            _rb.velocity = Vector3.zero;
+        }
     }
 
     #endregion
