@@ -14,7 +14,7 @@ public class ClimbingRope : MonoBehaviour
     private int _attachedParticle;
     private ObiPinConstraintsBatch _playerBatch = null;
 
-    private float _jumpedEnoughDistance = 5f;
+    public float _jumpedEnoughDistance = 2f;
 
     //private bool[] particleHasCollision;
 
@@ -55,6 +55,20 @@ public class ClimbingRope : MonoBehaviour
 
     //}
 
+    private void EnableRopeCollision(bool enabled)
+    {
+        _rope.solver.particleCollisionConstraintParameters.enabled = enabled;
+        _rope.solver.collisionConstraintParameters.enabled = enabled;
+    }
+
+    private Vector3 getGlobalParticlePos(Vector3 particlePosition)
+    {
+        Vector3 childUpdated = transform.parent.rotation * Vector3.Scale(particlePosition, transform.parent.lossyScale);
+
+        return childUpdated + transform.parent.position;
+    }
+
+
     private void Solver_OnCollision(object sender, ObiSolver.ObiCollisionEventArgs e)
     {
         CheckRopePlayerDistance();
@@ -85,11 +99,9 @@ public class ClimbingRope : MonoBehaviour
     {
         if (_ropeAttached)
         {
-            detachFromParticle(_player);
             _ropeJumped = true;
-
-            _rope.solver.particleCollisionConstraintParameters.enabled = false;
-            _rope.solver.collisionConstraintParameters.enabled = false;
+            detachFromParticle(_player);
+            EnableRopeCollision(false);
         }
     }
 
@@ -98,17 +110,13 @@ public class ClimbingRope : MonoBehaviour
         if (_ropeAttached && _ropeJumped)
         {
             Vector3 particlePos = _rope.solver.positions[_attachedParticle];
+            particlePos = getGlobalParticlePos(particlePos);
+            bool awayFromRope = Vector2.Distance(particlePos, _player.transform.position) > _jumpedEnoughDistance;
 
-            //RaycastHit2D hit = Physics2D.Raycast(particlePos, _player.transform.position - particlePos, _jumpedEnoughDistance);
-            Ray ray = new Ray(particlePos, _player.transform.position - particlePos);
-            bool hit = _rope.solver.Raycast(ray, out QueryResult hitInfo, 0, _jumpedEnoughDistance);
-
-            if (!hit) // finally jumped enough distance away from rope
+            if (awayFromRope)
             {
                 _ropeAttached = _ropeJumped = false;
-
-                _rope.solver.particleCollisionConstraintParameters.enabled = true;
-                _rope.solver.collisionConstraintParameters.enabled = true;
+                EnableRopeCollision(true);
             }
         }
     }
