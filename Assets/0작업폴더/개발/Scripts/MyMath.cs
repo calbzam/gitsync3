@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using Math = System.Math;
 
 public static class MyMath
@@ -47,9 +48,9 @@ public static class MyMath
         return (anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f);
     }
 
-    // source: https://discussions.unity.com/t/check-if-layer-is-in-layermask/16007
+    // source: https://forum.unity.com/threads/checking-if-a-layer-is-in-a-layer-mask.1190230/#post-7613611
     public static bool IsInLayerMask(int layer, LayerMask layerMask)
     {
-        return layerMask == (layerMask | (1 << layer));
+        return (layerMask & (1 << layer)) != 0;
     }
 }
