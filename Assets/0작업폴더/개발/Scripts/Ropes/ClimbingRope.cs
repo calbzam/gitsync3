@@ -11,6 +11,7 @@ public class ClimbingRope : MonoBehaviour
 
     private bool _ropeAttached = false;
     private bool _ropeJumped = false;
+
     private int _attachedParticle;
     private ObiPinConstraintsBatch _playerBatch = null;
 
@@ -46,15 +47,10 @@ public class ClimbingRope : MonoBehaviour
         _input.Player.Jump.started -= DisconnectPlayer;
     }
 
-    //private void Start()
-    //{
-
-    //}
-
-    //private void Update()
-    //{
-
-    //}
+    private void FixedUpdate()
+    {
+        HandleRopeClimb();
+    }
 
     private void EnableRopeCollision(bool enabled)
     {
@@ -69,6 +65,17 @@ public class ClimbingRope : MonoBehaviour
         return childUpdated + transform.parent.position;
     }
 
+    private void HandleRopeClimb()
+    {
+        //if (InputReader.FrameInput.Move.y == 0)
+        //{
+        //
+        //}
+        //else
+        //{
+        //
+        //}
+    }
 
     private void Solver_OnCollision(object sender, ObiSolver.ObiCollisionEventArgs e)
     {
