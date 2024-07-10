@@ -1,24 +1,15 @@
-using Obi;
 using System;
 using UnityEngine;
+using Obi;
 
 
 // PlayerController.cs and PlayerStats.cs EDITED from TarodevController on GitHub
 // github: https://github.com/Matthew-J-Spencer/Ultimate-2D-Controller/tree/main
 // license: https://github.com/Matthew-J-Spencer/Ultimate-2D-Controller/blob/main/LICENSE
-public struct FrameInput
-{
-    public bool JumpDown;
-    public bool JumpHeld;
-    public Vector2 Move;
-}
 
 [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
 public class PlayerController : MonoBehaviour
 {
-    private InputControls input;
-    private bool JumpHolding, JumpTriggered, JumpTriggeredPrev;
-
     private Transform playerTransform;
 
     [SerializeField] private PlayerStats _stats;
@@ -28,7 +19,6 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody2D _rb;
     private CapsuleCollider2D _col;
-    private FrameInput _frameInput;
     //private Vector2 _frameVelocity;
     private bool _cachedQueryStartInColliders;
 
@@ -49,26 +39,11 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
-        input = new InputControls();
-        JumpTriggered = JumpTriggeredPrev = false;
-
         playerTransform = gameObject.GetComponent<Transform>();
         _rb = gameObject.GetComponent<Rigidbody2D>();
         _col = gameObject.GetComponent<CapsuleCollider2D>();
 
-        _frameInput = new FrameInput();
-
         _cachedQueryStartInColliders = Physics2D.queriesStartInColliders;
-    }
-
-    private void OnEnable()
-    {
-        input.Enable();
-    }
-
-    private void OnDisable()
-    {
-        input.Disable();
     }
 
     //private void Start()
@@ -79,7 +54,7 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         _time += Time.deltaTime;
-        GatherInput();
+        RefineInput();
 
         CheckRespawn();
     }
@@ -95,25 +70,16 @@ public class PlayerController : MonoBehaviour
         //ApplyMovement();
     }
 
-    private void GatherInput()
+    private void RefineInput()
     {
-        JumpHolding = input.Player.Jump.IsPressed();
-        JumpTriggered = !JumpTriggeredPrev && JumpHolding;
-        JumpTriggeredPrev = JumpHolding;
-
-        _frameInput.JumpDown = JumpTriggered;
-        _frameInput.JumpHeld = JumpHolding;
-        _frameInput.Move = input.Player.Movement.ReadValue<Vector2>();
-
-
         //// unneeded as arrow keys are automatically snapped
         //if (_stats.SnapInput)
         //{
-        //    _frameInput.Move.x = Mathf.Abs(_frameInput.Move.x) < _stats.HorizontalDeadZoneThreshold ? 0 : Mathf.Sign(_frameInput.Move.x);
-        //    _frameInput.Move.y = Mathf.Abs(_frameInput.Move.y) < _stats.VerticalDeadZoneThreshold ? 0 : Mathf.Sign(_frameInput.Move.y);
+        //    InputReader.FrameInput.Move.x = Mathf.Abs(InputReader.FrameInput.Move.x) < _stats.HorizontalDeadZoneThreshold ? 0 : Mathf.Sign(InputReader.FrameInput.Move.x);
+        //    InputReader.FrameInput.Move.y = Mathf.Abs(InputReader.FrameInput.Move.y) < _stats.VerticalDeadZoneThreshold ? 0 : Mathf.Sign(InputReader.FrameInput.Move.y);
         //}
 
-        if (_frameInput.JumpDown)
+        if (InputReader.FrameInput.JumpStarted)
         {
             _jumpToConsume = true;
             _timeJumpWasPressed = _time;
@@ -186,7 +152,7 @@ public class PlayerController : MonoBehaviour
     {
         //Debug.Log(_bufferedJumpUsable + " && ( " + _time + " < " + _timeJumpWasPressed + " + " + _stats.JumpBuffer + " )");
 
-        if (!_endedJumpEarly && !_grounded && !_frameInput.JumpHeld && _rb.velocity.y > 0) _endedJumpEarly = true;
+        if (!_endedJumpEarly && !_grounded && !InputReader.FrameInput.JumpHeld && _rb.velocity.y > 0) _endedJumpEarly = true;
 
         if (!_jumpToConsume && !HasBufferedJump) return;
 
@@ -216,7 +182,7 @@ public class PlayerController : MonoBehaviour
 
     private void HandleDirection()
     {
-        if (_frameInput.Move.x == 0)
+        if (InputReader.FrameInput.Move.x == 0)
         {
             if (_rb.velocity.x != 0)
             {
@@ -230,9 +196,9 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            //_frameVelocity.x = Mathf.MoveTowards(_frameVelocity.x, _frameInput.Move.x * _stats.MaxSpeedX, _stats.AccelerationX * Time.fixedDeltaTime);
+            //_frameVelocity.x = Mathf.MoveTowards(_frameVelocity.x, InputReader.FrameInput.Move.x * _stats.MaxSpeedX, _stats.AccelerationX * Time.fixedDeltaTime);
 
-            _rb.AddForce(Vector2.right * _frameInput.Move.x * _stats.AccelerationX, ForceMode2D.Force);
+            _rb.AddForce(Vector2.right * InputReader.FrameInput.Move.x * _stats.AccelerationX, ForceMode2D.Force);
             if (Mathf.Abs(_rb.velocity.x) > _stats.MaxSpeedX) _rb.velocity = new Vector2(Math.Sign(_rb.velocity.x) * _stats.MaxSpeedX, _rb.velocity.y);
         }
     }
