@@ -1,5 +1,3 @@
-#if UNITY_EDITOR
-
 using UnityEngine;
 
 [ExecuteAlways]
@@ -37,6 +35,7 @@ public class LockTransform : MonoBehaviour
     [Space(12)]
     public bool lockNonUniformScale;
 
+#if UNITY_EDITOR
     void OnGUI()
     {
         if (Application.isPlaying) return;
@@ -74,6 +73,5 @@ public class LockTransform : MonoBehaviour
             UnityEditor.Selection.activeTransform = changeSelectionTo.transform;
         }
     }
-}
-
 #endif
+}
