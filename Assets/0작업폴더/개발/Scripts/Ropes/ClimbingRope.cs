@@ -14,6 +14,9 @@ public class ClimbingRope : MonoBehaviour
     private bool _ropeAttached = false;
     private bool _ropeJumped = false;
 
+    public bool _playerOnOtherRope = false;
+    public event Action<int, bool> PlayerOnThisRope;
+
     private int _currentParticle = -1;
     private ObiPinConstraintsBatch _playerBatch;
 
@@ -105,9 +108,10 @@ public class ClimbingRope : MonoBehaviour
     private void Solver_OnCollision(object sender, ObiSolver.ObiCollisionEventArgs e)
     {
         CheckRopePlayerDistance();
+        
         //Debug.Log(_ropeAttached + ", " + _ropeJumped); // start from: false, false
-
         if (_ropeAttached) return;
+        if (_playerOnOtherRope) return;
 
         var world = ObiColliderWorld.GetInstance();
         foreach (var contact in e.contacts)
@@ -122,6 +126,7 @@ public class ClimbingRope : MonoBehaviour
                     /* do collsion of bodyA particles */
                     int particle = _rope.solver.simplices[contact.bodyA];
                     attachPlayerToParticle(particle);
+                    PlayerOnThisRope?.Invoke(gameObject.GetInstanceID(), true);
                     _ropeAttached = true;
 
                     break;
@@ -135,6 +140,7 @@ public class ClimbingRope : MonoBehaviour
         if (_ropeAttached)
         {
             _ropeJumped = true;
+            PlayerOnThisRope?.Invoke(gameObject.GetInstanceID(), false);
             detachPlayerFromParticle(_currentParticle);
             EnableRopeCollision(false);
         }
