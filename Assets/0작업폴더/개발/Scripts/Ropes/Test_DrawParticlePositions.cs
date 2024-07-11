@@ -4,7 +4,7 @@ using UnityEngine;
 using Obi;
 using System.Linq;
 
-public class MarkParticlePositions : MonoBehaviour
+public class Test_DrawParticlePositions : MonoBehaviour
 {
     private ObiRope rope;
 
@@ -22,7 +22,7 @@ public class MarkParticlePositions : MonoBehaviour
     private void Start()
     {
         rope = gameObject.GetComponent<ObiRope>();
-        GetParticlePositions();
+        GetEndParticlePositions();
 
         Debug.Log(firstParticle);
         Debug.Log(lastParticle);
@@ -32,7 +32,7 @@ public class MarkParticlePositions : MonoBehaviour
 
     private void Update()
     {
-        GetParticlePositions();
+        GetEndParticlePositions();
 
         SetLinePosition(lineStart, firstPos);
         SetLinePosition(lineEnd, lastPos);
@@ -61,7 +61,7 @@ public class MarkParticlePositions : MonoBehaviour
         //line.SetPosition(1, pos + lineHalfSize);
     }
 
-    private void GetParticlePositions()
+    private void GetEndParticlePositions()
     {
         // first particle in the rope is the first particle of the first element:
         // last particle in the rope is the second particle of the last element:

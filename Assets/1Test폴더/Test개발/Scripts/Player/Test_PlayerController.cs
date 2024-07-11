@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 
-// PlayerController.cs and ScriptableStats.cs EDITED from TarodevController on GitHub
+// PlayerController.cs and PlayerStats.cs EDITED from TarodevController on GitHub
 // github: https://github.com/Matthew-J-Spencer/Ultimate-2D-Controller/tree/main
 // license: https://github.com/Matthew-J-Spencer/Ultimate-2D-Controller/blob/main/LICENSE
 namespace TarodevController

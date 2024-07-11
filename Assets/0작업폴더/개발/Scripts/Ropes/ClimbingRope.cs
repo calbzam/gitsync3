@@ -1,215 +1,207 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 using Obi;
-using UnityEngine.Events;
-using Unity.Collections.LowLevel.Unsafe;
+using UnityEngine.InputSystem;
 
 public class ClimbingRope : MonoBehaviour
 {
-    private ObiRope rope;
+    private InputControls _input;
+    private ObiRope _rope;
 
-    private int firstParticle, lastParticle;
-    private Vector3 firstPos, lastPos;
+    private ObiCollider2D _player;
+    private ObiCollider2D _playerRopeRider;
 
-    private Vector3[] particlePositions;
+    private bool _ropeAttached = false;
+    private bool _ropeJumped = false;
 
-    [SerializeField] private ObiContactEventDispatcher contactEventDispatcher;
+    public bool _playerOnOtherRope = false;
+    public event Action<int, bool> PlayerOnThisRope;
+
+    private int _currentParticle = -1;
+    private ObiPinConstraintsBatch _playerBatch;
+
+    private float _jumpedEnoughDistance;
+
+    //private bool[] particleHasCollision;
 
     private void Awake()
     {
-        rope = gameObject.GetComponent<ObiRope>();
-        //contactEventDispatcher = gameObject.GetComponent<ObiContactEventDispatcher>();
-    }
+        _input = new InputControls();
+        _rope = gameObject.GetComponent<ObiRope>();
 
-    private void OnEnable()
-    {
-        //rope.solver.OnCollision += Solver_OnCollision;
-        contactEventDispatcher.onContactEnter.AddListener(OnContactEnter);
-        contactEventDispatcher.onContactExit.AddListener(OnContactExit);
-    }
-
-    private void OnDisable()
-    {
-        //rope.solver.OnCollision -= Solver_OnCollision;
-        contactEventDispatcher.onContactEnter.RemoveListener(OnContactEnter);
-        contactEventDispatcher.onContactExit.RemoveListener(OnContactExit);
+        //particleHasCollision = new bool[rope.particleCount];
     }
 
     private void Start()
     {
-        particlePositions = new Vector3[rope.elements.Count + 1];
-
-        GetEndPositions();
-
-        Debug.Log(firstParticle);
-        Debug.Log(lastParticle);
+        _player = GameObject.FindGameObjectWithTag("Player").GetComponent<ObiCollider2D>();
+        _playerRopeRider = GameObject.FindGameObjectWithTag("Player ropeRider").GetComponent<ObiCollider2D>();
+        _jumpedEnoughDistance = _player.GetComponent<PlayerController>().Stats.RopeJumpedDistance;
     }
 
-    private void Update()
+    private void OnEnable()
     {
-        GetParticlePositions();
-
-        //LogParticlePositions();
+        _input.Enable();
+        _rope.solver.OnCollision += Solver_OnCollision;
+        _input.Player.Jump.started += DisconnectPlayer;
     }
 
-    // ObiContactEventDispatcher oncontactexit not working correctly?
-    // http://obi.virtualmethodstudio.com/forum/thread-2485-post-7857.html#pid7857
-    private void OnContactEnter(ObiSolver solver, Oni.Contact contact)
+    private void OnDisable()
     {
-        var world = ObiColliderWorld.GetInstance();
-        var col = world.colliderHandles[contact.bodyB].owner;
-        if (col != null)
+        _input.Disable();
+        _rope.solver.OnCollision -= Solver_OnCollision;
+        _input.Player.Jump.started -= DisconnectPlayer;
+    }
+
+    private void FixedUpdate()
+    {
+        HandleRopeClimb();
+    }
+
+    private void EnableRopeCollision(bool enabled)
+    {
+        _rope.solver.particleCollisionConstraintParameters.enabled = enabled;
+        _rope.solver.collisionConstraintParameters.enabled = enabled;
+    }
+
+    private Vector3 getGlobalParticlePos(Vector3 particlePosition)
+    {
+        Vector3 childUpdated = transform.parent.rotation * Vector3.Scale(particlePosition, transform.parent.lossyScale);
+
+        return childUpdated + transform.parent.position;
+    }
+
+    private int getIndexInActor(int particle)
+    {
+        return _rope.solver.particleToActor[particle].indexInActor;
+    }
+
+    // indexInActor: https://obi.virtualmethodstudio.com/forum/thread-4019-post-14919.html#pid14919
+    private void HandleRopeClimb()
+    {
+        if (!_ropeAttached) return;
+
+        if (InputReader.FrameInput.Move.y > 0)
         {
-            // retrieve the offset and size of the simplex in the solver.simplices array:
-            int simplexStart = rope.solver.simplexCounts.GetSimplexStartAndSize(contact.bodyA, out int simplexSize);
-
-            // starting at simplexStart, iterate over all particles in the simplex:
-            for (int i = 0; i < simplexSize; ++i)
+            int indexInActor = getIndexInActor(_currentParticle);
+            if (indexInActor - 1 > 0 /* first particle in visible rope */)
             {
-                int particleIndex = rope.solver.simplices[simplexStart + i];
-                rope.solver.colors[particleIndex] = Color.red;
+                detachPlayerFromParticle(_currentParticle);
+                int prevParticle = _rope.solverIndices[indexInActor - 1];
+                _player.transform.position = getGlobalParticlePos(_rope.solver.positions[prevParticle]);
+                attachPlayerToParticle(prevParticle);
             }
         }
-
-
-        //rope.solver.colors[contact.bodyA] = Color.red;
-        //rope.solver.colors[contact.bodyB] = Color.red;
-
-
-        //// retrieve the offset and size of the simplex in the solver.simplices array:
-        //int simplexStart = rope.solver.simplexCounts.GetSimplexStartAndSize(contact.bodyA, out int simplexSize);
-        //
-        //// starting at simplexStart, iterate over all particles in the simplex:
-        //for (int i = 0; i < simplexSize; ++i)
-        //{
-        //    int particleIndex = rope.solver.simplices[simplexStart + i];
-        //    rope.solver.colors[particleIndex] = Color.red;
-        //}
-    }
-
-
-    //public void OnExit(ObiSolver solver, Oni.Contact c)
-    //{
-    //    var col = ObiColliderWorld.GetInstance().colliderHandles[c.other].owner;
-
-    //    var blinker = col.GetComponent<Blinker>();
-    //    blinker.highlightColor = Color.red;
-    //    blinker.Blink();
-    //}
-    private void OnContactExit(ObiSolver solver, Oni.Contact contact)
-    {
-        var world = ObiColliderWorld.GetInstance();
-        var col = world.colliderHandles[contact.bodyB].owner;
-        if (col != null)
+        else if (InputReader.FrameInput.Move.y < 0)
         {
-            // retrieve the offset and size of the simplex in the solver.simplices array:
-            int simplexStart = rope.solver.simplexCounts.GetSimplexStartAndSize(contact.bodyA, out int simplexSize);
-
-            // starting at simplexStart, iterate over all particles in the simplex:
-            for (int i = 0; i < simplexSize; ++i)
+            int indexInActor = getIndexInActor(_currentParticle);
+            if (indexInActor + 1 < _rope.elements.Count + 1 /* total number of particles in visible rope */)
             {
-                int particleIndex = rope.solver.simplices[simplexStart + i];
-                rope.solver.colors[particleIndex] = Color.white;
+                detachPlayerFromParticle(_currentParticle);
+                int nextParticle = _rope.solverIndices[indexInActor + 1];
+                _player.transform.position = getGlobalParticlePos(_rope.solver.positions[nextParticle]);
+                attachPlayerToParticle(nextParticle);
             }
         }
-
-
-
-        //rope.solver.colors[contact.bodyA] = Color.white;
-        //rope.solver.colors[contact.bodyB] = Color.white;
-
-
-        //// retrieve the offset and size of the simplex in the solver.simplices array:
-        //int simplexStart = rope.solver.simplexCounts.GetSimplexStartAndSize(contact.bodyA, out int simplexSize);
-        //
-        //// starting at simplexStart, iterate over all particles in the simplex:
-        //for (int i = 0; i < simplexSize; ++i)
-        //{
-        //    int particleIndex = rope.solver.simplices[simplexStart + i];
-        //    rope.solver.colors[particleIndex] = Color.white;
-        //}
     }
 
-
-    //ObiList<Oni.Contact> prevContacts;
-    //private void Solver_OnCollision(object sender, ObiSolver.ObiCollisionEventArgs e)
-    //{
-    //    if (prevContacts != null)
-    //    {
-    //        if (prevContacts.Count != e.contacts.Count) Debug.Log(prevContacts.Count);
-    //        foreach (Oni.Contact contact in prevContacts)
-    //        {
-    //            //Debug.Log(contact.bodyA);
-    //            if (!e.contacts.Contains(contact))
-    //            {
-    //                Debug.Log("gone");
-    //                rope.solver.colors[contact.bodyA] = Color.white;
-    //            }
-    //        }
-    //    }
-
-    //    //var world = ObiColliderWorld.GetInstance();
-    //    // just iterate over all contacts in the current frame:
-    //    foreach (Oni.Contact contact in e.contacts)
-    //    {
-    //        // retrieve the offset and size of the simplex in the solver.simplices array:
-    //        int simplexStart = rope.solver.simplexCounts.GetSimplexStartAndSize(contact.bodyA, out int simplexSize); // simplexSize = 2
-    //        rope.solver.colors[contact.bodyA] = Color.red;
-
-    //        //// starting at simplexStart, iterate over all particles in the simplex:
-    //        //for (int i = 0; i < simplexSize; ++i)
-    //        //{
-    //        //    int particleIndex = rope.solver.simplices[simplexStart + i];
-    //        //    rope.solver.colors[particleIndex] = Color.red;
-    //        //}
-
-    //        //// if this one is an actual collision:
-    //        //if (contact.distance < 0.01)
-    //        //{
-    //        //    ObiColliderBase col = world.colliderHandles[contact.bodyB].owner;
-    //        //    if (col != null)
-    //        //    {
-    //        //        // do something with the collider.
-    //        //    }
-    //        //}
-    //    }
-
-    //    prevContacts = e.contacts;
-    //}
-
-    private void GetEndPositions()
+    private void Solver_OnCollision(object sender, ObiSolver.ObiCollisionEventArgs e)
     {
-        // first particle in the rope is the first particle of the first element:
-        // last particle in the rope is the second particle of the last element:
-        firstParticle = rope.elements[0].particle1;
-        lastParticle = rope.elements[rope.elements.Count - 1].particle2;
+        CheckRopePlayerDistance();
+        
+        //Debug.Log(_ropeAttached + ", " + _ropeJumped); // start from: false, false
+        if (_ropeAttached) return;
+        if (_playerOnOtherRope) return;
 
-        // now get their positions (expressed in solver space):
-        firstPos = rope.solver.positions[firstParticle];
-        lastPos = rope.solver.positions[lastParticle];
-    }
-
-    private void GetParticlePositions()
-    {
-        particlePositions[0] = firstPos;
-        for (int i = 0; i < rope.elements.Count; ++i)
+        var world = ObiColliderWorld.GetInstance();
+        foreach (var contact in e.contacts)
         {
-            particlePositions[i + 1] = rope.solver.positions[rope.elements[i].particle2];
+            if (contact.distance < 0.01)
+            {
+                /* do collsion of bodyB */
+                var col = world.colliderHandles[contact.bodyB].owner;
+
+                if (col != null && col.tag.Equals("Player"))
+                {
+                    /* do collsion of bodyA particles */
+                    int particle = _rope.solver.simplices[contact.bodyA];
+                    attachPlayerToParticle(particle);
+                    PlayerOnThisRope?.Invoke(gameObject.GetInstanceID(), true);
+                    _ropeAttached = true;
+
+                    break;
+                }
+            }
         }
     }
 
-    private void LogParticlePositions()
+    private void DisconnectPlayer(InputAction.CallbackContext ctx)
     {
-        ClearConsole.ClearLog();
-        foreach (var pos in particlePositions)
+        if (_ropeAttached)
         {
-            Debug.Log(pos);
+            _ropeJumped = true;
+            PlayerOnThisRope?.Invoke(gameObject.GetInstanceID(), false);
+            detachPlayerFromParticle(_currentParticle);
+            EnableRopeCollision(false);
         }
     }
 
-    private void OnParticleCollision(GameObject other)
+    private void CheckRopePlayerDistance()
     {
-        Debug.Log(other);
+        if (_ropeAttached && _ropeJumped)
+        {
+            Vector3 particlePos = getGlobalParticlePos(_rope.solver.positions[_currentParticle]);
+            bool awayFromRope = Vector2.Distance(particlePos, _player.transform.position) > _jumpedEnoughDistance;
+
+            if (awayFromRope)
+            {
+                _ropeAttached = _ropeJumped = false;
+                EnableRopeCollision(true);
+                _currentParticle = -1;
+            }
+        }
+    }
+
+    // Scripting constraints http://obi.virtualmethodstudio.com/manual/6.3/scriptingconstraints.html
+
+    private void initPlayerBatch()
+    {
+        var pinConstraints = _rope.GetConstraintsByType(Oni.ConstraintType.Pin) as ObiConstraints<ObiPinConstraintsBatch>;
+        pinConstraints.Clear(); // remove all batches from the constraint type we want, so we start clean:
+
+        // add a new pin constraints batch
+        _playerBatch = new ObiPinConstraintsBatch();
+        pinConstraints.AddBatch(_playerBatch);
+    }
+
+    private void attachPlayerToParticle(int toParticle)
+    {
+        initPlayerBatch();
+
+        _playerBatch.AddConstraint(toParticle, _playerRopeRider, Vector3.zero, Quaternion.identity, 0, 0, float.PositiveInfinity);
+        _playerBatch.activeConstraintCount = 1;
+
+        // this will cause the solver to rebuild pin constraints at the beginning of the next frame:
+        _rope.SetConstraintsDirty(Oni.ConstraintType.Pin);
+        _currentParticle = toParticle;
+    }
+
+    private void detachPlayerFromParticle(int fromParticle)
+    {
+        var pinConstraints = _rope.GetConstraintsByType(Oni.ConstraintType.Pin) as ObiConstraints<ObiPinConstraintsBatch>;
+        pinConstraints.RemoveBatch(_playerBatch);
+
+        _rope.SetConstraintsDirty(Oni.ConstraintType.Pin);
+    }
+
+    private void repinPlayerToParticle(int fromParticle, int toParticle)
+    {
+        _playerBatch.RemoveConstraint(fromParticle);
+
+        _playerBatch.AddConstraint(toParticle, _player, Vector3.zero, Quaternion.identity, 0, 0, float.PositiveInfinity);
+        _playerBatch.activeConstraintCount = 1;
+
+        _rope.SetConstraintsDirty(Oni.ConstraintType.Pin);
+        _currentParticle = toParticle;
     }
 }
