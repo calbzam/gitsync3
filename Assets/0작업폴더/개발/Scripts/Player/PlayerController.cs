@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using Obi;
+using UnityEditor;
 
 
 // PlayerController.cs and PlayerStats.cs EDITED from TarodevController on GitHub
@@ -15,7 +16,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private PlayerStats _stats;
     public PlayerStats Stats => _stats; // for public access
 
-    [SerializeField] private Transform _respawnPoint;
+    [SerializeField] private Transform _initialSpawnPos;
+    private Vector3 _respawnPos;
+    public void SetRespawnPos(Vector3 position) { _respawnPos = position; }
 
     private Rigidbody2D _rb;
     private CapsuleCollider2D _col;
@@ -23,6 +26,11 @@ public class PlayerController : MonoBehaviour
     private bool _cachedQueryStartInColliders;
 
     private Rigidbody2D swingingGround;
+
+    private Vector3 groundCheckerPos;
+    private float groundCheckerRadius;
+    private Vector3 ceilCheckerPos;
+    private float ceilCheckerRadius;
 
     /* Time */
     private float _time = 1f; // 1f > 0 + 0.1:  prevent character from jumping without input at scene start
@@ -46,10 +54,16 @@ public class PlayerController : MonoBehaviour
         _cachedQueryStartInColliders = Physics2D.queriesStartInColliders;
     }
 
-    //private void Start()
-    //{
-    //
-    //}
+    private void Start()
+    {
+        SetRespawnPos(_initialSpawnPos.position);
+        drawGizmosEnabled = true;
+    }
+
+    private void OnDisable()
+    {
+        drawGizmosEnabled = false;
+    }
 
     private void Update()
     {
@@ -108,8 +122,17 @@ public class PlayerController : MonoBehaviour
             swingingGround = hit.collider.attachedRigidbody;
         }
 
-        bool groundHit = swingingGroundHit || Physics2D.CapsuleCast(_col.bounds.center, _stats.GroundCheckCapsuleSize, _col.direction, 0, Vector2.down, _stats.GrounderDistance, Layers.GroundLayer);
-        bool ceilingHit = Physics2D.CapsuleCast(_col.bounds.center, _stats.GroundCheckCapsuleSize, _col.direction, 0, Vector2.up, _stats.GrounderDistance, Layers.GroundLayer);
+
+        groundCheckerPos = _col.bounds.center + Vector3.down * (_col.size.y / 2 + _stats.GrounderDistance);
+        groundCheckerRadius = _col.size.x / 2 + _stats.GroundCheckerAddRadius;
+        ceilCheckerPos = _col.bounds.center + Vector3.up * (_col.size.y / 2 + _stats.GrounderDistance);
+        ceilCheckerRadius = groundCheckerRadius;
+
+        //bool groundHit = swingingGroundHit || Physics2D.CapsuleCast(_col.bounds.center, _stats.GroundCheckCapsuleSize, _col.direction, 0, Vector2.down, _stats.GrounderDistance, Layers.GroundLayer);
+        //bool ceilingHit = Physics2D.CapsuleCast(_col.bounds.center, _stats.GroundCheckCapsuleSize, _col.direction, 0, Vector2.up, _stats.GrounderDistance, Layers.GroundLayer);
+        bool groundHit = swingingGroundHit || Physics2D.OverlapCircle(groundCheckerPos, groundCheckerRadius, Layers.GroundLayer);
+        bool ceilingHit = Physics2D.OverlapCircle(ceilCheckerPos, ceilCheckerRadius, Layers.GroundLayer | Layers.SwingingGroundLayer);
+
 
         // Hit a Ceiling: cancel jumping from there
         if (ceilingHit) /*_frameVelocity.y = Mathf.Min(0, _frameVelocity.y);*/_rb.velocity = new Vector2(_rb.velocity.x, Mathf.Min(0, _rb.velocity.y));
@@ -242,7 +265,7 @@ public class PlayerController : MonoBehaviour
     {
         if (playerTransform.position.y < _stats.deadPositionY)
         {
-            playerTransform.position = new Vector3(_respawnPoint.position.x, _respawnPoint.position.y, playerTransform.position.z);
+            playerTransform.position = new Vector3(_respawnPos.x, _respawnPos.y, playerTransform.position.z);
             _rb.velocity = Vector3.zero;
         }
     }
@@ -263,7 +286,21 @@ public class PlayerController : MonoBehaviour
     //    //if (!disableYVelocity) _rb.velocity = new Vector2(_frameVelocity.x, _rb.velocity.y);
     //}
 
+
+    private bool drawGizmosEnabled = false;
 #if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        if (drawGizmosEnabled)
+        {
+            Handles.DrawWireDisc(groundCheckerPos, Vector3.back, groundCheckerRadius);
+            Handles.DrawWireDisc(ceilCheckerPos, Vector3.back, ceilCheckerRadius);
+
+            Gizmos.DrawWireCube(_col.bounds.center, _col.size);
+        }
+    }
+
+
     private void OnValidate()
     {
         if (_stats == null) Debug.LogWarning("Please assign a ScriptableStats asset to the Player Controller's Stats slot", this);
