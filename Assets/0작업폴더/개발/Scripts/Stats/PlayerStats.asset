@@ -12,31 +12,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f7b053d93e8a8b49bc28fe0047f7fef, type: 3}
   m_Name: PlayerStats
   m_EditorClassIdentifier: 
-  PlayerLayer:
-    serializedVersion: 2
-    m_Bits: 8
-  SwingingGroundLayer:
-    serializedVersion: 2
-    m_Bits: 512
-  GroundLayer:
-    serializedVersion: 2
-    m_Bits: 64
   SnapInput: 1
   VerticalDeadZoneThreshold: 0.3
   HorizontalDeadZoneThreshold: 0.1
-  MaxSpeed: 6
-  Acceleration: 30
-  GroundDeceleration: 30
-  AirDeceleration: 30
+  MaxSpeedX: 6
+  MinSpeedX: 0.5
+  AccelerationX: 30
+  GroundDecelerationX: 30
+  AirDecelerationX: 30
   GroundingForce: -1.5
-  GrounderDistance: 0.12
+  GrounderDistance: -0.144
   GroundCheckCapsuleSize: {x: 0.2, y: 1.2}
+  GroundCheckerAddRadius: 0.01
   JumpPower: 9
-  MaxFallSpeed: 40
-  FallAcceleration: 30
-  JumpUpGravityModifier: 0.6
-  JumpEndEarlyGravityModifier: 1
+  JumpUpGravityScale: 1.8
+  FallDownGravityScale: 3
   CoyoteTime: 0.15
   JumpBuffer: 0.1
-  respawnPoint: {x: -4.5, y: 3, z: 0}
+  RopeJumpedDistance: 2
   deadPositionY: -6

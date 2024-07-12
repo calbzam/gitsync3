@@ -27,10 +27,13 @@ public class PlayerStats : ScriptableObject
     [Tooltip("A constant downward force applied while grounded. Helps on slopes"), Range(0f, -10f)]
     public float GroundingForce = -1.5f;
 
-    [Tooltip("The detection distance for grounding and roof detection"), Range(0f, 0.5f)]
+    [Header("Ground Checker")]
+
+    [Tooltip("The detection distance for grounding and roof detection"), Range(-0.2f, 0.2f)]
     public float GrounderDistance = 0.12f;
 
     public Vector2 GroundCheckCapsuleSize = new Vector2(0.2f, 1.2f);
+    public float GroundCheckerAddRadius = 0.02f;
 
 
     [Header("MOVEMENT Y")]
