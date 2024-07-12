@@ -18,7 +18,6 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private Transform _initialSpawnPos;
     private Vector3 _respawnPos;
-    public void SetRespawnPos(Vector3 position) { _respawnPos = position; }
 
     private Rigidbody2D _rb;
     private CapsuleCollider2D _col;
@@ -261,11 +260,16 @@ public class PlayerController : MonoBehaviour
 
     #region Respawn
 
+    public void SetRespawnPos(Vector3 position)
+    {
+        _respawnPos = new Vector3(position.x, position.y, playerTransform.position.z);
+    }
+
     private void CheckRespawn()
     {
         if (playerTransform.position.y < _stats.deadPositionY)
         {
-            playerTransform.position = new Vector3(_respawnPos.x, _respawnPos.y, playerTransform.position.z);
+            playerTransform.position = _respawnPos;
             _rb.velocity = Vector3.zero;
         }
     }
