@@ -121,7 +121,7 @@ public class ClimbingRope : MonoBehaviour
                 /* do collsion of bodyB */
                 var col = world.colliderHandles[contact.bodyB].owner;
 
-                if (col != null && col.tag.Equals("Player"))
+                if (col != null && col.CompareTag("Player"))
                 {
                     /* do collsion of bodyA particles */
                     int particle = _rope.solver.simplices[contact.bodyA];

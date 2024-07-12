@@ -16,7 +16,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private PlayerStats _stats;
     public PlayerStats Stats => _stats; // for public access
 
-    [SerializeField] private Transform _respawnPoint;
+    [SerializeField] private Transform _initialSpawnPos;
+    private Vector3 _respawnPos;
+    public void SetRespawnPos(Vector3 position) { _respawnPos = position; }
 
     private Rigidbody2D _rb;
     private CapsuleCollider2D _col;
@@ -54,6 +56,7 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+        SetRespawnPos(_initialSpawnPos.position);
         drawGizmosEnabled = true;
     }
 
@@ -262,7 +265,7 @@ public class PlayerController : MonoBehaviour
     {
         if (playerTransform.position.y < _stats.deadPositionY)
         {
-            playerTransform.position = new Vector3(_respawnPoint.position.x, _respawnPoint.position.y, playerTransform.position.z);
+            playerTransform.position = new Vector3(_respawnPos.x, _respawnPos.y, playerTransform.position.z);
             _rb.velocity = Vector3.zero;
         }
     }

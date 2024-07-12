@@ -49,7 +49,7 @@ public class WoodenPanel : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag.Equals("Player"))
+        if (collision.gameObject.CompareTag("Player"))
         {
             timerEnabled = true;
             startTime = Time.time;
@@ -58,7 +58,7 @@ public class WoodenPanel : MonoBehaviour
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        if (collision.gameObject.tag.Equals("Player"))
+        if (collision.gameObject.CompareTag("Player"))
         {
             timerEnabled = false;
         }
