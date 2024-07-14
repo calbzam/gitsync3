@@ -227,8 +227,8 @@ public class PlayerController : MonoBehaviour
         else
         {
             //_frameVelocity.x = Mathf.MoveTowards(_frameVelocity.x, InputReader.FrameInput.Move.x * _stats.MaxSpeedX, _stats.AccelerationX * Time.fixedDeltaTime);
-            if (_grounded) _rb.AddForce(Vector2.right * InputReader.FrameInput.Move.x * _stats.GroundAccelerationX, ForceMode2D.Force);
-            else if (_isInWater) _rb.AddForce(Vector2.right * InputReader.FrameInput.Move.x * _stats.WaterAccelerationX, ForceMode2D.Force);
+            if (_isInWater) _rb.AddForce(Vector2.right * InputReader.FrameInput.Move.x * _stats.WaterAccelerationX, ForceMode2D.Force);
+            else _rb.AddForce(Vector2.right * InputReader.FrameInput.Move.x * _stats.GroundAccelerationX, ForceMode2D.Force);
             if (Mathf.Abs(_rb.velocity.x) > _stats.MaxSpeedX) _rb.velocity = new Vector2(Math.Sign(_rb.velocity.x) * _stats.MaxSpeedX, _rb.velocity.y);
         }
     }
