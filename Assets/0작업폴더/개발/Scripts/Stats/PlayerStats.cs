@@ -20,19 +20,26 @@ public class PlayerStats : ScriptableObject
     public float MaxSpeedX = 6;
     public float MinSpeedX = 0.5f;
 
-    public float AccelerationX = 30;
+    [Header("Acceleration")]
+
+    public float GroundAccelerationX = 30;
+    public float WaterAccelerationX = 30;
+
+    [Header("Deceleration")]
+
     public float GroundDecelerationX = 30;
+    public float WaterDecelerationX = 20;
     public float AirDecelerationX = 30;
 
-    [Tooltip("A constant downward force applied while grounded. Helps on slopes"), Range(0f, -10f)]
+    [Header("A constant downward force applied while grounded. Helps on slopes"), Range(0f, -10f)]
+    //[Tooltip("A constant downward force applied while grounded. Helps on slopes"), Range(0f, -10f)]
     public float GroundingForce = -1.5f;
 
     [Header("Ground Checker")]
 
     [Tooltip("The detection distance for grounding and roof detection"), Range(-0.2f, 0.2f)]
-    public float GrounderDistance = 0.12f;
-
-    public Vector2 GroundCheckCapsuleSize = new Vector2(0.2f, 1.2f);
+    public float GrounderDistance = -0.144f;
+    //public Vector2 GroundCheckCapsuleSize = new Vector2(0.2f, 1.2f);
     public float GroundCheckerAddRadius = 0.02f;
 
 
@@ -53,7 +60,7 @@ public class PlayerStats : ScriptableObject
     public float CoyoteTime = 0.15f;
 
     [Tooltip("The amount of time we buffer a jump. This allows jump input before actually hitting the ground")]
-    public float JumpBuffer = 0.2f;
+    public float JumpBuffer = 0.1f;
 
 
     [Header("ROPE")]
