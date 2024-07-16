@@ -102,7 +102,7 @@ Material:
     - _ClearCoatSmoothness: 0
     - _Cull: 2
     - _Cutoff: 0.5
-    - _DeepShallowContrast: 0.425
+    - _DeepShallowContrast: 0.768
     - _Depth: 7
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
@@ -122,8 +122,9 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
-    - _ShallowAmount: 5.37
-    - _ShallowDepth: 1
+    - _ShallowAmount: 6.44
+    - _ShallowBleed: 0.7
+    - _ShallowDepth: 6.44
     - _Smoothness: 1.322
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1

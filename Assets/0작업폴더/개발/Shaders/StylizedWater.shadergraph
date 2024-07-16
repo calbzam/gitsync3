@@ -1367,7 +1367,7 @@
     "m_Group": {
         "m_Id": "92d3401685ad4ec5bcc41b08cda1d8fc"
     },
-    "m_Name": "Movement",
+    "m_Name": "TextureMovement",
     "m_DrawState": {
         "m_Expanded": true,
         "m_Position": {
@@ -4053,7 +4053,7 @@
     "m_Group": {
         "m_Id": "0d430f7c6fbc470c8464bf34c68c1e78"
     },
-    "m_Name": "Movement",
+    "m_Name": "TextureMovement",
     "m_DrawState": {
         "m_Expanded": true,
         "m_Position": {
