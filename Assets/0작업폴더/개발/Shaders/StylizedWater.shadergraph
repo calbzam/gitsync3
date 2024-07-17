@@ -51,6 +51,15 @@
     "m_CategoryData": [
         {
             "m_Id": "2391c6a5586146d88da6d74942e4315b"
+        },
+        {
+            "m_Id": "36b487d81a7d42588d7aa2cc7337fbae"
+        },
+        {
+            "m_Id": "e9e4df344fd74dc29e5a7a5097df443c"
+        },
+        {
+            "m_Id": "ebca110737f948e985fe79fc8c7a8de8"
         }
     ],
     "m_Nodes": [
@@ -1179,9 +1188,9 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -169.00003051757813,
-            "y": 1185.0,
-            "width": 105.00001525878906,
+            "x": -169.00001525878907,
+            "y": 1177.0,
+            "width": 104.99996185302735,
             "height": 34.0
         }
     },
@@ -1470,9 +1479,9 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": 245.99996948242188,
-            "y": 1116.0,
-            "width": 140.00003051757813,
+            "x": 261.0,
+            "y": 1126.0,
+            "width": 139.99996948242188,
             "height": 142.0
         }
     },
@@ -1531,50 +1540,7 @@
     "m_Type": "UnityEditor.ShaderGraph.CategoryData",
     "m_ObjectId": "2391c6a5586146d88da6d74942e4315b",
     "m_Name": "",
-    "m_ChildObjectList": [
-        {
-            "m_Id": "4285e0716ab34f7c907e9003f91e3e78"
-        },
-        {
-            "m_Id": "2c38825692324b2d8799edfbf9cf8e7d"
-        },
-        {
-            "m_Id": "4e2e223395f6464db81195dde5da2243"
-        },
-        {
-            "m_Id": "736b9d7244e6437cabbd4465a3a7b218"
-        },
-        {
-            "m_Id": "4ddc9ad0b7764b8a8fcce9ad9cea5b0a"
-        },
-        {
-            "m_Id": "269dd238b3be4fdc8ec11c30ff3c60b1"
-        },
-        {
-            "m_Id": "5528f46437ff4ee8ac26ac1b5015edcc"
-        },
-        {
-            "m_Id": "04cb86d0dff34d6d92b87ccac9bb23e0"
-        },
-        {
-            "m_Id": "ba1b20d2b6dc455b8878a6a929cca67e"
-        },
-        {
-            "m_Id": "c930e79fc4b149a48d972d821b97f43c"
-        },
-        {
-            "m_Id": "fa0bfb92c7274055af9c12d85777e484"
-        },
-        {
-            "m_Id": "72c733feea83492f986def69d1639a1a"
-        },
-        {
-            "m_Id": "4698a4071a6646c99504d63d246b9e82"
-        },
-        {
-            "m_Id": "67410f8b93c6405a91989db1fccf9c3e"
-        }
-    ]
+    "m_ChildObjectList": []
 }
 
 {
@@ -2125,6 +2091,30 @@
 
 {
     "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.CategoryData",
+    "m_ObjectId": "36b487d81a7d42588d7aa2cc7337fbae",
+    "m_Name": "Color",
+    "m_ChildObjectList": [
+        {
+            "m_Id": "4285e0716ab34f7c907e9003f91e3e78"
+        },
+        {
+            "m_Id": "2c38825692324b2d8799edfbf9cf8e7d"
+        },
+        {
+            "m_Id": "4e2e223395f6464db81195dde5da2243"
+        },
+        {
+            "m_Id": "269dd238b3be4fdc8ec11c30ff3c60b1"
+        },
+        {
+            "m_Id": "5528f46437ff4ee8ac26ac1b5015edcc"
+        }
+    ]
+}
+
+{
+    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
     "m_ObjectId": "36e83fa935ac46228824cc650ac1904b",
     "m_Id": 0,
@@ -2421,8 +2411,8 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": 45.000003814697269,
-            "y": 1140.0,
+            "x": 25.999988555908204,
+            "y": 1126.0,
             "width": 125.99995422363281,
             "height": 118.0
         }
@@ -5180,6 +5170,51 @@
         "z": 0.0,
         "w": 0.0
     }
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.CategoryData",
+    "m_ObjectId": "e9e4df344fd74dc29e5a7a5097df443c",
+    "m_Name": "Refraction",
+    "m_ChildObjectList": [
+        {
+            "m_Id": "04cb86d0dff34d6d92b87ccac9bb23e0"
+        },
+        {
+            "m_Id": "ba1b20d2b6dc455b8878a6a929cca67e"
+        },
+        {
+            "m_Id": "736b9d7244e6437cabbd4465a3a7b218"
+        },
+        {
+            "m_Id": "4ddc9ad0b7764b8a8fcce9ad9cea5b0a"
+        }
+    ]
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.CategoryData",
+    "m_ObjectId": "ebca110737f948e985fe79fc8c7a8de8",
+    "m_Name": "Foam",
+    "m_ChildObjectList": [
+        {
+            "m_Id": "c930e79fc4b149a48d972d821b97f43c"
+        },
+        {
+            "m_Id": "fa0bfb92c7274055af9c12d85777e484"
+        },
+        {
+            "m_Id": "72c733feea83492f986def69d1639a1a"
+        },
+        {
+            "m_Id": "4698a4071a6646c99504d63d246b9e82"
+        },
+        {
+            "m_Id": "67410f8b93c6405a91989db1fccf9c3e"
+        }
+    ]
 }
 
 {
