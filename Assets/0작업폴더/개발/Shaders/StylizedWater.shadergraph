@@ -4771,10 +4771,10 @@
     "m_Guid": {
         "m_GuidSerialized": "0a574366-f1d0-4934-a605-589634ab665d"
     },
-    "m_Name": "FoamAmount",
+    "m_Name": "FoamDensity",
     "m_DefaultRefNameVersion": 1,
-    "m_RefNameGeneratedByDisplayName": "FoamAmount",
-    "m_DefaultReferenceName": "_FoamAmount",
+    "m_RefNameGeneratedByDisplayName": "FoamDensity",
+    "m_DefaultReferenceName": "_FoamDensity",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
     "m_UseCustomSlotLabel": false,
@@ -5402,10 +5402,10 @@
     "m_Guid": {
         "m_GuidSerialized": "325a4cb5-7953-45a5-99eb-00cecac32918"
     },
-    "m_Name": "FoamCutoff",
+    "m_Name": "FoamReduction",
     "m_DefaultRefNameVersion": 1,
-    "m_RefNameGeneratedByDisplayName": "FoamCutoff",
-    "m_DefaultReferenceName": "_FoamCutoff",
+    "m_RefNameGeneratedByDisplayName": "FoamReduction",
+    "m_DefaultReferenceName": "_FoamReduction",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
     "m_UseCustomSlotLabel": false,
