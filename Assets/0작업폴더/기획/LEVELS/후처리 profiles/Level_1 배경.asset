@@ -12,22 +12,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 899c54efeace73346a0a16faa3afe726, type: 3}
   m_Name: Vignette
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   color:
     m_OverrideState: 1
-    m_Value: {r: 0.33333334, g: 0.7647059, b: 1, a: 1}
+    m_Value: {r: 0.582, g: 0.61394906, b: 1, a: 1}
   center:
     m_OverrideState: 1
     m_Value: {x: 0.5, y: 0.5}
   intensity:
     m_OverrideState: 1
-    m_Value: 0.5
+    m_Value: 0.335
   smoothness:
-    m_OverrideState: 0
-    m_Value: 0.2
+    m_OverrideState: 1
+    m_Value: 1
   rounded:
-    m_OverrideState: 0
-    m_Value: 0
+    m_OverrideState: 1
+    m_Value: 1
 --- !u!114 &-551707563564287668
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -115,7 +115,7 @@ MonoBehaviour:
     m_Value: 0
   focusDistance:
     m_OverrideState: 1
-    m_Value: 25
+    m_Value: 6.5
   aperture:
     m_OverrideState: 1
     m_Value: 6.2
@@ -149,19 +149,19 @@ MonoBehaviour:
     m_Value: 1
   threshold:
     m_OverrideState: 1
-    m_Value: 0.16
+    m_Value: 0.48
   intensity:
     m_OverrideState: 1
-    m_Value: 1.39
+    m_Value: 0.69
   scatter:
     m_OverrideState: 1
-    m_Value: 0.744
+    m_Value: 0.973
   clamp:
     m_OverrideState: 1
     m_Value: 65472
   tint:
     m_OverrideState: 1
-    m_Value: {r: 0.5568628, g: 0.68927366, b: 0.87058824, a: 1}
+    m_Value: {r: 0.3756383, g: 0.44355923, b: 0.66, a: 1}
   highQualityFiltering:
     m_OverrideState: 1
     m_Value: 0

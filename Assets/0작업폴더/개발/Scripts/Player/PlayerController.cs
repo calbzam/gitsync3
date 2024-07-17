@@ -41,8 +41,11 @@ public class PlayerController : MonoBehaviour
     /* Collisions */
     private float _frameLeftGrounded = float.MinValue;
     private bool _grounded;
+    private bool _isInWater;
     private bool disableYVelocity = false;
     private bool swingingGroundHit = false;
+
+    public void SetPlayerIsInWater(bool inWater) { _isInWater = inWater; }
 
     private void Awake()
     {
@@ -114,11 +117,12 @@ public class PlayerController : MonoBehaviour
 
         // add later: Enum groundHitType - static ground, moving ground
 
-        RaycastHit2D hit = Physics2D.CapsuleCast(_col.bounds.center, _stats.GroundCheckCapsuleSize, _col.direction, 0, Vector2.down, _stats.GrounderDistance, Layers.SwingingGroundLayer);
-        if (hit)
+        //RaycastHit2D hit = Physics2D.CapsuleCast(_col.bounds.center, _stats.GroundCheckCapsuleSize, _col.direction, 0, Vector2.down, _stats.GrounderDistance, Layers.SwingingGroundLayer);
+        Collider2D col = Physics2D.OverlapCircle(groundCheckerPos, groundCheckerRadius, Layers.SwingingGroundLayer);
+        if (col)
         {
             swingingGroundHit = true;
-            swingingGround = hit.collider.attachedRigidbody;
+            swingingGround = col.attachedRigidbody;
         }
 
 
@@ -208,9 +212,13 @@ public class PlayerController : MonoBehaviour
         {
             if (_rb.velocity.x != 0)
             {
-                var decelerationX = _grounded ? _stats.GroundDecelerationX : _stats.AirDecelerationX;
-                //_frameVelocity.x = Mathf.MoveTowards(_frameVelocity.x, 0, decelerationX * Time.fixedDeltaTime);
+                //float decelerationX = _grounded ? _stats.GroundDecelerationX : _stats.AirDecelerationX;
+                float decelerationX;
+                if (_grounded) decelerationX = _stats.GroundDecelerationX;
+                else if (_isInWater) decelerationX = _stats.WaterDecelerationX;
+                else decelerationX = _stats.AirDecelerationX;
 
+                //_frameVelocity.x = Mathf.MoveTowards(_frameVelocity.x, 0, decelerationX * Time.fixedDeltaTime);
                 float prevDir = Mathf.Sign(_rb.velocity.x);
                 _rb.AddForce(Vector2.left * prevDir * decelerationX, ForceMode2D.Force);
                 if (Mathf.Sign(_rb.velocity.x) * prevDir < 0 || MathF.Abs(_rb.velocity.x) < _stats.MinSpeedX) _rb.AddForce(Vector2.left * _rb.totalForce.x, ForceMode2D.Force);
@@ -219,8 +227,8 @@ public class PlayerController : MonoBehaviour
         else
         {
             //_frameVelocity.x = Mathf.MoveTowards(_frameVelocity.x, InputReader.FrameInput.Move.x * _stats.MaxSpeedX, _stats.AccelerationX * Time.fixedDeltaTime);
-
-            _rb.AddForce(Vector2.right * InputReader.FrameInput.Move.x * _stats.AccelerationX, ForceMode2D.Force);
+            if (_isInWater) _rb.AddForce(Vector2.right * InputReader.FrameInput.Move.x * _stats.WaterAccelerationX, ForceMode2D.Force);
+            else _rb.AddForce(Vector2.right * InputReader.FrameInput.Move.x * _stats.GroundAccelerationX, ForceMode2D.Force);
             if (Mathf.Abs(_rb.velocity.x) > _stats.MaxSpeedX) _rb.velocity = new Vector2(Math.Sign(_rb.velocity.x) * _stats.MaxSpeedX, _rb.velocity.y);
         }
     }
