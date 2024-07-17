@@ -151,6 +151,7 @@ Material:
     - _TextureSpeed: 5.45
     - _TextureStrength: 0.64
     - _TimeSpeedMultiplier: 3.9
+    - _WaveCount: 2
     - _WaveSize: 1.77
     - _WaveSpeed: 0.37
     - _WaveSplit: 2.02
