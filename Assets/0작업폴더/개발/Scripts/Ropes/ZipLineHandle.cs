@@ -23,7 +23,7 @@ public class ZipLineHandle : RidableObject
     private void Start()
     {
         _pulleyRb = GetComponentInParent<Rigidbody>();
-        if (PlayerLogic.IsLoaded) _origPlayerConstraints = PlayerLogic.PlayerRb.constraints;
+        if (PlayerLogic.PlayerRb != null) _origPlayerConstraints = PlayerLogic.PlayerRb.constraints;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

@@ -11,8 +11,6 @@ public class PlayerLogic : MonoBehaviour
     public static ObiCollider2D PlayerObiCol { get; private set; }
     public static ObiCollider2D PlayerRopeRiderCol { get; private set; }
 
-    public static bool IsLoaded = false;
-
     private void Start()
     {
         Player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
@@ -21,8 +19,6 @@ public class PlayerLogic : MonoBehaviour
 
         PlayerObiCol = Player.GetComponent<ObiCollider2D>();
         PlayerRopeRiderCol = GameObject.FindGameObjectWithTag("Player ropeRider").GetComponent<ObiCollider2D>();
-
-        IsLoaded = true;
     }
 
     public static void DisconnectedPlayerAddJump()
