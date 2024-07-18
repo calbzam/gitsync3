@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using Obi;
 using UnityEditor;
 
 
@@ -18,6 +17,9 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private Transform _initialSpawnPos;
     private Vector3 _respawnPos;
+
+    private bool _InputDirEnabled = true;
+    public void InputDirSetActive(bool enabled) { _InputDirEnabled = enabled; }
 
     private Rigidbody2D _rb;
     private CapsuleCollider2D _col;
@@ -208,6 +210,8 @@ public class PlayerController : MonoBehaviour
 
     private void HandleDirection()
     {
+        if (!_InputDirEnabled) return;
+
         if (InputReader.FrameInput.Move.x == 0)
         {
             if (_rb.velocity.x != 0)
