@@ -8,8 +8,7 @@ public class ZipLineHandle : RidableObject
 
     private Rigidbody _pulleyRb;
 
-    private Rigidbody2D _playerRb;
-    private RigidbodyConstraints2D _origPlayerConstraints;
+    private static RigidbodyConstraints2D _origPlayerConstraints;
 
     private RigidbodyConstraints _lockXPos_PulleyConstraints;
     private RigidbodyConstraints _freeXPos_PulleyConstraints;
@@ -49,6 +48,7 @@ public class ZipLineHandle : RidableObject
 
         _pulleyRb.constraints = _freeXPos_PulleyConstraints;
         _pulleyRb.velocity = playerVelocity;
+        ConnectedAddForce();
 
         PlayerOnThisObject?.Invoke(gameObject.GetInstanceID(), true);
         _playerIsAttached = true;
@@ -69,5 +69,14 @@ public class ZipLineHandle : RidableObject
 
             PlayerLogic.DisconnectedPlayerAddJump();
         }
+    }
+
+    // Todo: change later so that AddForce direction follows the rope (next particle pos)
+    private void ConnectedAddForce()
+    {
+        if (PlayerLogic.PlayerRb.velocity.x < 0)
+            _pulleyRb.AddForce(Vector2.left * PlayerLogic.PlayerStats.PlayerAttachedObjectAddForce, ForceMode.Impulse);
+        else if (PlayerLogic.PlayerRb.velocity.x > 0)
+            _pulleyRb.AddForce(Vector2.right * PlayerLogic.PlayerStats.PlayerAttachedObjectAddForce, ForceMode.Impulse);
     }
 }

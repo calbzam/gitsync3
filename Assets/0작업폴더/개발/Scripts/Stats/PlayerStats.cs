@@ -71,6 +71,9 @@ public class PlayerStats : ScriptableObject
     [Tooltip("로프에서 뛰었을 때, 사용자가 좌우 방향키를 누르고 있는 방향으로 Player에 이만큼 힘을 추가로 가해 줌")]
     public float RopeJumpedPlayerAddForce = 2.5f;
 
+    [Tooltip("오브젝트에 연결되었을 때, 사용자가 좌우 방향키를 누르고 있는 방향으로 오프젝트에 이만큼 힘을 추가로 가해 줌")]
+    public float PlayerAttachedObjectAddForce = 2f;
+
 
     [Header("RESPAWN")]
 

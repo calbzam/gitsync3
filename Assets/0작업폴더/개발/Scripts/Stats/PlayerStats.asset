@@ -32,4 +32,5 @@ MonoBehaviour:
   JumpBuffer: 0.1
   RopeJumpedDistance: 2
   RopeJumpedPlayerAddForce: 2.5
+  PlayerAttachedObjectAddForce: 20
   deadPositionY: -6
