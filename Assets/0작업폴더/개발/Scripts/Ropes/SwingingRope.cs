@@ -3,53 +3,40 @@ using UnityEngine;
 using Obi;
 using UnityEngine.InputSystem;
 
-public class ClimbingRope : MonoBehaviour
+public class SwingingRope : RidableObject
 {
-    private static InputControls _input;
-    private ObiRope _rope;
-
-    //private static ObiCollider2D _playerObiCol;
-    //private static ObiCollider2D _playerRopeRiderCol;
+    protected ObiRope _rope;
     private static float _jumpedEnoughDistance;
 
-    private bool _ropeAttached = false;
-    private bool _ropeJumped = false;
-
-    public bool _playerOnOtherRope = false;
-    public event Action<int, bool> PlayerOnThisRope;
+    public override event Action<int, bool> PlayerOnThisObject;
 
     private int _currentParticle = -1;
     private ObiPinConstraintsBatch _playerBatch;
 
     //private bool[] particleHasCollision;
 
-    private void Awake()
+    protected override void Awake()
     {
-        _input = new InputControls();
+        base.Awake();
         _rope = gameObject.GetComponent<ObiRope>();
-
         //particleHasCollision = new bool[rope.particleCount];
     }
 
     private void Start()
     {
-        //_playerObiCol = PlayerLogic.PlayerObiCol;
-        //_playerRopeRiderCol = PlayerLogic.PlayerRopeRiderCol;
         _jumpedEnoughDistance = PlayerLogic.PlayerStats.RopeJumpedDistance;
     }
 
-    private void OnEnable()
+    protected override void OnEnable()
     {
-        _input.Enable();
+        base.OnEnable();
         _rope.solver.OnCollision += Solver_OnCollision;
-        _input.Player.Jump.started += DisconnectPlayer;
     }
 
-    private void OnDisable()
+    protected override void OnDisable()
     {
-        _input.Disable();
+        base.OnDisable();
         _rope.solver.OnCollision -= Solver_OnCollision;
-        _input.Player.Jump.started -= DisconnectPlayer;
     }
 
     private void FixedUpdate()
@@ -78,7 +65,7 @@ public class ClimbingRope : MonoBehaviour
     // indexInActor: https://obi.virtualmethodstudio.com/forum/thread-4019-post-14919.html#pid14919
     private void HandleRopeClimb()
     {
-        if (!_ropeAttached) return;
+        if (!_playerIsAttached) return;
 
         if (InputReader.FrameInput.Move.y > 0)
         {
@@ -109,8 +96,8 @@ public class ClimbingRope : MonoBehaviour
         CheckRopePlayerDisconnectedDistance();
         
         //Debug.Log(_ropeAttached + ", " + _ropeJumped); // start from: false, false
-        if (_ropeAttached) return;
-        if (_playerOnOtherRope) return;
+        if (_playerIsAttached) return;
+        if (_playerOnOtherObject) return;
 
         var world = ObiColliderWorld.GetInstance();
         foreach (var contact in e.contacts)
@@ -125,8 +112,8 @@ public class ClimbingRope : MonoBehaviour
                     /* do collsion of bodyA particles */
                     int particle = _rope.solver.simplices[contact.bodyA];
                     attachPlayerToParticle(particle);
-                    PlayerOnThisRope?.Invoke(gameObject.GetInstanceID(), true);
-                    _ropeAttached = true;
+                    PlayerOnThisObject?.Invoke(gameObject.GetInstanceID(), true);
+                    _playerIsAttached = true;
                     PlayerLogic.PlayerObiCol.enabled = false;
 
                     break;
@@ -135,12 +122,12 @@ public class ClimbingRope : MonoBehaviour
         }
     }
 
-    private void DisconnectPlayer(InputAction.CallbackContext ctx)
+    protected override void DisconnectPlayer(InputAction.CallbackContext ctx)
     {
-        if (_ropeAttached)
+        if (_playerIsAttached)
         {
-            _ropeJumped = true;
-            PlayerOnThisRope?.Invoke(gameObject.GetInstanceID(), false);
+            _playerHasJumped = true;
+            PlayerOnThisObject?.Invoke(gameObject.GetInstanceID(), false);
             detachPlayerFromParticle(_currentParticle);
             EnableRopeCollision(false);
 
@@ -151,14 +138,14 @@ public class ClimbingRope : MonoBehaviour
 
     private void CheckRopePlayerDisconnectedDistance()
     {
-        if (_ropeAttached && _ropeJumped)
+        if (_playerIsAttached && _playerHasJumped)
         {
             Vector3 particlePos = getGlobalParticlePos(_rope.solver.positions[_currentParticle]);
             bool awayFromRope = Vector2.Distance(particlePos, PlayerLogic.PlayerObiCol.transform.position) > _jumpedEnoughDistance;
 
             if (awayFromRope)
             {
-                _ropeAttached = _ropeJumped = false;
+                _playerIsAttached = _playerHasJumped = false;
                 EnableRopeCollision(true);
                 _currentParticle = -1;
             }

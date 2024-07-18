@@ -1,11 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class ZipLineHandle : MonoBehaviour
+public class ZipLineHandle : RidableObject
 {
-    private InputControls _input;
+    public override event Action<int, bool> PlayerOnThisObject;
+
     private Rigidbody _pulleyRb;
 
     private Rigidbody2D _playerRb;
@@ -14,11 +14,9 @@ public class ZipLineHandle : MonoBehaviour
     private RigidbodyConstraints _lockXPos_PulleyConstraints;
     private RigidbodyConstraints _freeXPos_PulleyConstraints;
 
-    private bool _playerIsAttached = false;
-
-    private void Awake()
+    protected override void Awake()
     {
-        _input = new InputControls();
+        base.Awake();
         _freeXPos_PulleyConstraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
         _lockXPos_PulleyConstraints = _freeXPos_PulleyConstraints | RigidbodyConstraints.FreezePositionX;
     }
@@ -26,23 +24,14 @@ public class ZipLineHandle : MonoBehaviour
     private void Start()
     {
         _pulleyRb = GetComponentInParent<Rigidbody>();
-        _origPlayerConstraints = PlayerLogic.PlayerRb.constraints;
-    }
-
-    private void OnEnable()
-    {
-        _input.Enable();
-        _input.Player.Jump.started += DisconnectPlayer;
-    }
-
-    private void OnDisable()
-    {
-        _input.Disable();
-        _input.Player.Jump.started -= DisconnectPlayer;
+        if (PlayerLogic.IsLoaded) _origPlayerConstraints = PlayerLogic.PlayerRb.constraints;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (_origPlayerConstraints == RigidbodyConstraints2D.None) _origPlayerConstraints = PlayerLogic.PlayerRb.constraints;
+        if (_playerOnOtherObject) return;
+
         if (collision.gameObject.CompareTag("Player"))
         {
             ConnectPlayer(collision);
@@ -60,10 +49,12 @@ public class ZipLineHandle : MonoBehaviour
 
         _pulleyRb.constraints = _freeXPos_PulleyConstraints;
         _pulleyRb.velocity = playerVelocity;
+
+        PlayerOnThisObject?.Invoke(gameObject.GetInstanceID(), true);
         _playerIsAttached = true;
     }
 
-    private void DisconnectPlayer(InputAction.CallbackContext ctx)
+    protected override void DisconnectPlayer(InputAction.CallbackContext ctx)
     {
         if (_playerIsAttached)
         {
@@ -72,6 +63,8 @@ public class ZipLineHandle : MonoBehaviour
             PlayerLogic.Player.InputDirSetActive(true);
 
             _pulleyRb.constraints = _lockXPos_PulleyConstraints;
+
+            PlayerOnThisObject?.Invoke(gameObject.GetInstanceID(), false);
             _playerIsAttached = false;
 
             PlayerLogic.DisconnectedPlayerAddJump();
