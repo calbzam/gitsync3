@@ -23,8 +23,8 @@ MonoBehaviour:
   WaterDecelerationX: 10
   AirDecelerationX: 30
   GroundingForce: -1.5
-  GrounderDistance: -0.144
-  GroundCheckerAddRadius: 0.04
+  GrounderDistance: -0.15
+  GroundCheckerAddRadius: 0.06
   JumpPower: 9
   JumpUpGravityScale: 1.8
   FallDownGravityScale: 3

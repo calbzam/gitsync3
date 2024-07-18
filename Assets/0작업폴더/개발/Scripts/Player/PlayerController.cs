@@ -136,11 +136,11 @@ public class PlayerController : MonoBehaviour
         //bool groundHit = swingingGroundHit || Physics2D.CapsuleCast(_col.bounds.center, _stats.GroundCheckCapsuleSize, _col.direction, 0, Vector2.down, _stats.GrounderDistance, Layers.GroundLayer);
         //bool ceilingHit = Physics2D.CapsuleCast(_col.bounds.center, _stats.GroundCheckCapsuleSize, _col.direction, 0, Vector2.up, _stats.GrounderDistance, Layers.GroundLayer);
         bool groundHit = swingingGroundHit || Physics2D.OverlapCircle(groundCheckerPos, groundCheckerRadius, Layers.GroundLayer);
-        bool ceilingHit = Physics2D.OverlapCircle(ceilCheckerPos, ceilCheckerRadius, Layers.GroundLayer | Layers.SwingingGroundLayer);
-
+        //bool ceilingHit = Physics2D.OverlapCircle(ceilCheckerPos, ceilCheckerRadius, Layers.GroundLayer | Layers.SwingingGroundLayer);
 
         // Hit a Ceiling: cancel jumping from there
-        if (ceilingHit) /*_frameVelocity.y = Mathf.Min(0, _frameVelocity.y);*/_rb.velocity = new Vector2(_rb.velocity.x, Mathf.Min(0, _rb.velocity.y));
+        //if (ceilingHit) /*_frameVelocity.y = Mathf.Min(0, _frameVelocity.y);*/_rb.velocity = new Vector2(_rb.velocity.x, Mathf.Min(0, _rb.velocity.y));
+
 
         // Landed on the Ground
         if (!_grounded && groundHit)
@@ -310,7 +310,7 @@ public class PlayerController : MonoBehaviour
         if (drawGizmosEnabled)
         {
             Handles.DrawWireDisc(groundCheckerPos, Vector3.back, groundCheckerRadius);
-            Handles.DrawWireDisc(ceilCheckerPos, Vector3.back, ceilCheckerRadius);
+            //Handles.DrawWireDisc(ceilCheckerPos, Vector3.back, ceilCheckerRadius);
 
             Gizmos.DrawWireCube(_col.bounds.center, _col.size);
         }
