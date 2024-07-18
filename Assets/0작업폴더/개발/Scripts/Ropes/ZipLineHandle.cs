@@ -11,16 +11,22 @@ public class ZipLineHandle : MonoBehaviour
     private Rigidbody2D _playerRb;
     private RigidbodyConstraints2D _origPlayerConstraints;
 
+    private RigidbodyConstraints _lockXPos_PulleyConstraints;
+    private RigidbodyConstraints _freeXPos_PulleyConstraints;
+
     private bool _playerIsAttached = false;
 
     private void Awake()
     {
         _input = new InputControls();
+        _freeXPos_PulleyConstraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
+        _lockXPos_PulleyConstraints = _freeXPos_PulleyConstraints | RigidbodyConstraints.FreezePositionX;
     }
 
     private void Start()
     {
         _pulleyRb = GetComponentInParent<Rigidbody>();
+        _origPlayerConstraints = PlayerLogic.PlayerRb.constraints;
     }
 
     private void OnEnable()
@@ -39,35 +45,36 @@ public class ZipLineHandle : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            _playerRb = collision.attachedRigidbody;
-            Vector2 playerVelocity = _playerRb.velocity;
-            _playerRb.transform.SetParent(transform);
-
-            _playerRb.transform.localPosition = Vector3.zero;
-            _origPlayerConstraints = _playerRb.constraints;
-            _playerRb.constraints |= RigidbodyConstraints2D.FreezePosition;
-            _playerRb.GetComponent<PlayerController>().InputDirSetActive(false);
-
-            SetPulleyConstraints(false);
-            _pulleyRb.velocity = playerVelocity;
-            _playerIsAttached = true;
+            ConnectPlayer(collision);
         }
     }
 
-    private void SetPulleyConstraints(bool lockXPos)
+    private void ConnectPlayer(Collider2D playerCollision)
     {
-        _pulleyRb.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotation;
-        if (lockXPos) _pulleyRb.constraints |= RigidbodyConstraints.FreezePositionX;
+        Vector2 playerVelocity = PlayerLogic.PlayerRb.velocity;
+        PlayerLogic.PlayerRb.transform.SetParent(transform);
+
+        PlayerLogic.PlayerRb.transform.localPosition = Vector3.zero;
+        PlayerLogic.PlayerRb.constraints |= RigidbodyConstraints2D.FreezePosition;
+        PlayerLogic.Player.InputDirSetActive(false);
+
+        _pulleyRb.constraints = _freeXPos_PulleyConstraints;
+        _pulleyRb.velocity = playerVelocity;
+        _playerIsAttached = true;
     }
 
     private void DisconnectPlayer(InputAction.CallbackContext ctx)
     {
         if (_playerIsAttached)
         {
-            _playerRb.transform.SetParent(null);
-            _playerRb.constraints = _origPlayerConstraints;
-            _playerRb.GetComponent<PlayerController>().InputDirSetActive(true);
+            PlayerLogic.PlayerRb.transform.SetParent(null);
+            PlayerLogic.PlayerRb.constraints = _origPlayerConstraints;
+            PlayerLogic.Player.InputDirSetActive(true);
+
+            _pulleyRb.constraints = _lockXPos_PulleyConstraints;
             _playerIsAttached = false;
+
+            PlayerLogic.DisconnectedPlayerAddJump();
         }
     }
 }

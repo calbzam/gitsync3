@@ -5,11 +5,12 @@ using UnityEngine.InputSystem;
 
 public class ClimbingRope : MonoBehaviour
 {
-    private InputControls _input;
+    private static InputControls _input;
     private ObiRope _rope;
 
-    private ObiCollider2D _playerObiCol;
-    private ObiCollider2D _playerRopeRiderCol;
+    //private static ObiCollider2D _playerObiCol;
+    //private static ObiCollider2D _playerRopeRiderCol;
+    private static float _jumpedEnoughDistance;
 
     private bool _ropeAttached = false;
     private bool _ropeJumped = false;
@@ -19,8 +20,6 @@ public class ClimbingRope : MonoBehaviour
 
     private int _currentParticle = -1;
     private ObiPinConstraintsBatch _playerBatch;
-
-    private float _jumpedEnoughDistance;
 
     //private bool[] particleHasCollision;
 
@@ -34,9 +33,9 @@ public class ClimbingRope : MonoBehaviour
 
     private void Start()
     {
-        _playerObiCol = GameObject.FindGameObjectWithTag("Player").GetComponent<ObiCollider2D>();
-        _playerRopeRiderCol = GameObject.FindGameObjectWithTag("Player ropeRider").GetComponent<ObiCollider2D>();
-        _jumpedEnoughDistance = _playerObiCol.GetComponent<PlayerController>().Stats.RopeJumpedDistance;
+        //_playerObiCol = PlayerLogic.PlayerObiCol;
+        //_playerRopeRiderCol = PlayerLogic.PlayerRopeRiderCol;
+        _jumpedEnoughDistance = PlayerLogic.PlayerStats.RopeJumpedDistance;
     }
 
     private void OnEnable()
@@ -88,7 +87,7 @@ public class ClimbingRope : MonoBehaviour
             {
                 detachPlayerFromParticle(_currentParticle);
                 int prevParticle = _rope.solverIndices[indexInActor - 1];
-                _playerObiCol.transform.position = getGlobalParticlePos(_rope.solver.positions[prevParticle]);
+                PlayerLogic.PlayerObiCol.transform.position = getGlobalParticlePos(_rope.solver.positions[prevParticle]);
                 attachPlayerToParticle(prevParticle);
             }
         }
@@ -99,7 +98,7 @@ public class ClimbingRope : MonoBehaviour
             {
                 detachPlayerFromParticle(_currentParticle);
                 int nextParticle = _rope.solverIndices[indexInActor + 1];
-                _playerObiCol.transform.position = getGlobalParticlePos(_rope.solver.positions[nextParticle]);
+                PlayerLogic.PlayerObiCol.transform.position = getGlobalParticlePos(_rope.solver.positions[nextParticle]);
                 attachPlayerToParticle(nextParticle);
             }
         }
@@ -107,7 +106,7 @@ public class ClimbingRope : MonoBehaviour
 
     private void Solver_OnCollision(object sender, ObiSolver.ObiCollisionEventArgs e)
     {
-        CheckRopePlayerDistance();
+        CheckRopePlayerDisconnectedDistance();
         
         //Debug.Log(_ropeAttached + ", " + _ropeJumped); // start from: false, false
         if (_ropeAttached) return;
@@ -128,7 +127,7 @@ public class ClimbingRope : MonoBehaviour
                     attachPlayerToParticle(particle);
                     PlayerOnThisRope?.Invoke(gameObject.GetInstanceID(), true);
                     _ropeAttached = true;
-                    _playerObiCol.enabled = false;
+                    PlayerLogic.PlayerObiCol.enabled = false;
 
                     break;
                 }
@@ -144,16 +143,18 @@ public class ClimbingRope : MonoBehaviour
             PlayerOnThisRope?.Invoke(gameObject.GetInstanceID(), false);
             detachPlayerFromParticle(_currentParticle);
             EnableRopeCollision(false);
-            _playerObiCol.enabled = true;
+
+            PlayerLogic.PlayerObiCol.enabled = true;
+            PlayerLogic.DisconnectedPlayerAddJump();
         }
     }
 
-    private void CheckRopePlayerDistance()
+    private void CheckRopePlayerDisconnectedDistance()
     {
         if (_ropeAttached && _ropeJumped)
         {
             Vector3 particlePos = getGlobalParticlePos(_rope.solver.positions[_currentParticle]);
-            bool awayFromRope = Vector2.Distance(particlePos, _playerObiCol.transform.position) > _jumpedEnoughDistance;
+            bool awayFromRope = Vector2.Distance(particlePos, PlayerLogic.PlayerObiCol.transform.position) > _jumpedEnoughDistance;
 
             if (awayFromRope)
             {
@@ -180,7 +181,7 @@ public class ClimbingRope : MonoBehaviour
     {
         initPlayerBatch();
 
-        _playerBatch.AddConstraint(toParticle, _playerRopeRiderCol, Vector3.zero, Quaternion.identity, 0, 0, float.PositiveInfinity);
+        _playerBatch.AddConstraint(toParticle, PlayerLogic.PlayerRopeRiderCol, Vector3.zero, Quaternion.identity, 0, 0, float.PositiveInfinity);
         _playerBatch.activeConstraintCount = 1;
 
         // this will cause the solver to rebuild pin constraints at the beginning of the next frame:
@@ -200,7 +201,7 @@ public class ClimbingRope : MonoBehaviour
     {
         _playerBatch.RemoveConstraint(fromParticle);
 
-        _playerBatch.AddConstraint(toParticle, _playerObiCol, Vector3.zero, Quaternion.identity, 0, 0, float.PositiveInfinity);
+        _playerBatch.AddConstraint(toParticle, PlayerLogic.PlayerObiCol, Vector3.zero, Quaternion.identity, 0, 0, float.PositiveInfinity);
         _playerBatch.activeConstraintCount = 1;
 
         _rope.SetConstraintsDirty(Oni.ConstraintType.Pin);
