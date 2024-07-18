@@ -68,7 +68,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 79.45, y: 5.52, z: -0.038581}
-  m_LocalScale: {x: 9.627188, y: 0.4375, z: 1}
+  m_LocalScale: {x: 10.830586, y: 0.4375, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1406214835880942790}
@@ -182,7 +182,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 11
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
@@ -213,7 +213,7 @@ HingeJoint2D:
   m_BreakAction: 3
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: 0, y: 0}
-  m_ConnectedAnchor: {x: -0.51615894, y: 0.5222458}
+  m_ConnectedAnchor: {x: -0.5161608, y: 0.5222431}
   m_UseMotor: 0
   m_Motor:
     m_MotorSpeed: 0

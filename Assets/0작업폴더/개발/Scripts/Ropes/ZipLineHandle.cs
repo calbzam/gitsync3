@@ -39,19 +39,31 @@ public class ZipLineHandle : RidableObject
 
     private void ConnectPlayer(Collider2D playerCollision)
     {
-        Vector2 playerVelocity = PlayerLogic.PlayerRb.velocity;
+        Vector2 playerVelocityNow = PlayerLogic.PlayerRb.velocity;
         PlayerLogic.PlayerRb.transform.SetParent(transform);
 
-        PlayerLogic.PlayerRb.transform.localPosition = Vector3.zero;
-        PlayerLogic.PlayerRb.constraints |= RigidbodyConstraints2D.FreezePosition;
-        PlayerLogic.Player.InputDirSetActive(false);
-
+        FreezePlayerDirInput();
         _pulleyRb.constraints = _freeXPos_PulleyConstraints;
-        _pulleyRb.velocity = playerVelocity;
-        ConnectedAddForce();
+        AddPulleyVelocity(playerVelocityNow);
 
         PlayerOnThisObject?.Invoke(gameObject.GetInstanceID(), true);
         _playerIsAttached = true;
+    }
+
+    private void FreezePlayerDirInput()
+    {
+        PlayerLogic.PlayerRb.transform.localPosition = Vector3.zero;
+        PlayerLogic.PlayerRb.constraints |= RigidbodyConstraints2D.FreezePosition;
+        PlayerLogic.Player.DirInputSetActive(false);
+    }
+
+    // Todo: change later so that the velocity/AddForce direction follows the rope (next particle pos)
+    private void AddPulleyVelocity(Vector2 playerVelocityNow)
+    {
+        if (playerVelocityNow.x < 0)
+            _pulleyRb.velocity = Vector2.left * PlayerLogic.PlayerStats.PlayerAttachedObjectAddVelocity;
+        else if (playerVelocityNow.x > 0)
+            _pulleyRb.velocity = Vector2.right * PlayerLogic.PlayerStats.PlayerAttachedObjectAddVelocity;
     }
 
     protected override void DisconnectPlayer(InputAction.CallbackContext ctx)
@@ -60,7 +72,7 @@ public class ZipLineHandle : RidableObject
         {
             PlayerLogic.PlayerRb.transform.SetParent(null);
             PlayerLogic.PlayerRb.constraints = _origPlayerConstraints;
-            PlayerLogic.Player.InputDirSetActive(true);
+            PlayerLogic.Player.DirInputSetActive(true);
 
             _pulleyRb.constraints = _lockXPos_PulleyConstraints;
 
@@ -69,14 +81,5 @@ public class ZipLineHandle : RidableObject
 
             PlayerLogic.DisconnectedPlayerAddJump();
         }
-    }
-
-    // Todo: change later so that AddForce direction follows the rope (next particle pos)
-    private void ConnectedAddForce()
-    {
-        if (PlayerLogic.PlayerRb.velocity.x < 0)
-            _pulleyRb.AddForce(Vector2.left * PlayerLogic.PlayerStats.PlayerAttachedObjectAddForce, ForceMode.Impulse);
-        else if (PlayerLogic.PlayerRb.velocity.x > 0)
-            _pulleyRb.AddForce(Vector2.right * PlayerLogic.PlayerStats.PlayerAttachedObjectAddForce, ForceMode.Impulse);
     }
 }
