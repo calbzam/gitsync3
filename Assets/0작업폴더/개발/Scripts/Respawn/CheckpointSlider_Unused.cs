@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [ExecuteInEditMode]
-public class CheckpointSlider : MonoBehaviour
+public class CheckpointSlider_Unused : MonoBehaviour
 {
     [SerializeField] private SpriteRenderer _checkpointTrigger;
     [SerializeField] private Transform _respawnPoint; // yellow circle sprite

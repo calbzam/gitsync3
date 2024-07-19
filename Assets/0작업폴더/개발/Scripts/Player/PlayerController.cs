@@ -15,8 +15,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private PlayerStats _stats;
     public PlayerStats Stats => _stats; // for public access
 
-    [SerializeField] private Transform _initialSpawnPos;
     private Vector3 _respawnPos;
+    public Vector3 RespawnPos => _respawnPos; // for public access
 
     private bool _DirInputEnabled = true;
     public void DirInputSetActive(bool enabled) { _DirInputEnabled = enabled; }
@@ -60,7 +60,6 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        SetRespawnPos(_initialSpawnPos.position);
         drawGizmosEnabled = true;
     }
 
@@ -277,12 +276,17 @@ public class PlayerController : MonoBehaviour
         _respawnPos = new Vector3(position.x, position.y, playerTransform.position.z);
     }
 
+    public void RespawnPlayer()
+    {
+        playerTransform.position = _respawnPos;
+        _rb.velocity = Vector3.zero;
+    }
+
     private void CheckRespawn()
     {
         if (playerTransform.position.y < _stats.deadPositionY)
         {
-            playerTransform.position = _respawnPos;
-            _rb.velocity = Vector3.zero;
+            RespawnPlayer();
         }
     }
 
