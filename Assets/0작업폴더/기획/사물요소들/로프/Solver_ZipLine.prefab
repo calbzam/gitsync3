@@ -521,9 +521,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playerOnOtherObject: 0
   _ropeCalculator: {fileID: 4081489736378474001}
-  _moveToPlayer_minDistance: 2
+  _moveToPlayer_minDistance: 3
   _moveToPlayer_maxDistance: 28
-  _moveToPlayer_speed: 2
+  _moveToPlayer_speed: 0.5
 --- !u!61 &550279705376468863
 BoxCollider2D:
   m_ObjectHideFlags: 0

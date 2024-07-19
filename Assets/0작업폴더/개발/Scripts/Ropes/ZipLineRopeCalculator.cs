@@ -5,7 +5,7 @@ public class ZipLineRopeCalculator : MonoBehaviour
 {
     private ObiRope _rope;
 
-    [Header("Stop moving if X-distance between currentParticle and first/lastParticle exceeds this value")]
+    [Header("If technique is _useVelocity: Stop moving if X-distance between currentParticle and first/lastParticle exceeds this value")]
     [SerializeField] private float _stopMargin = 2f;
 
     private Vector2 _currentParticlePos;
@@ -14,13 +14,13 @@ public class ZipLineRopeCalculator : MonoBehaviour
     private void Start()
     {
         _rope = gameObject.GetComponent<ObiRope>();
-        _rope.solver.OnCollision += Solver_OnCollision;
+        //_rope.solver.OnCollision += Solver_OnCollision;
         GetEndParticlePositions();
     }
 
     private void OnDisable()
     {
-        _rope.solver.OnCollision -= Solver_OnCollision;
+        //_rope.solver.OnCollision -= Solver_OnCollision;
     }
 
     private void GetEndParticlePositions()
@@ -50,9 +50,17 @@ public class ZipLineRopeCalculator : MonoBehaviour
         }
     }
 
+    public Vector2 GetFurtherRopeDir(float currentPosX)
+    {
+        if (currentPosX - _firstParticlePos.x < _lastParticlePos.x - currentPosX)
+            return Vector2.right;
+        else
+            return Vector2.left;
+    }
+
     // dir < 0: left
     // dir > 0: right
-    public Vector2 GetNextPulleyDir(float dir)
+    public Vector2 GetNextPulleyDir_useVelocity(float dir)
     {
         Vector2 leftEnd, rightEnd;
         bool firstIsLeft = false, rightIsLast = false;

@@ -8,9 +8,9 @@ public class ZipLineHandle : RidableObject
     [SerializeField] private ZipLineRopeCalculator _ropeCalculator;
 
     private Rigidbody _pulleyRb;
-    [SerializeField] private float _moveToPlayer_minDistance = 2f;
+    [SerializeField] private float _moveToPlayer_minDistance = 3f;
     [SerializeField] private float _moveToPlayer_maxDistance = 28f;
-    [SerializeField] private float _moveToPlayer_speed = 2f;
+    [SerializeField] private float _moveToPlayer_speed = 0.5f;
 
     private static RigidbodyConstraints2D _origPlayerConstraints;
 
@@ -30,7 +30,7 @@ public class ZipLineHandle : RidableObject
         if (PlayerLogic.PlayerRb != null) _origPlayerConstraints = PlayerLogic.PlayerRb.constraints;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         MoveTowardsPlayer();
     }
@@ -41,11 +41,30 @@ public class ZipLineHandle : RidableObject
         if (_playerIsAttached) return;
 
         float distance = PlayerLogic.Player.transform.position.x - transform.position.x;
-        Vector2 pulleyDir;
-        if (_moveToPlayer_minDistance < Mathf.Abs(distance) && Mathf.Abs(distance) < _moveToPlayer_maxDistance && (pulleyDir = _ropeCalculator.GetNextPulleyDir(distance)) != Vector2.zero)
+        if (_moveToPlayer_minDistance < Mathf.Abs(distance) && Mathf.Abs(distance) < _moveToPlayer_maxDistance)
         {
             _pulleyRb.constraints = _freeXPos_PulleyConstraints;
-            _pulleyRb.velocity = _moveToPlayer_speed * pulleyDir;
+            _pulleyRb.AddForce(_moveToPlayer_speed * (distance < 0 ? Vector2.left : Vector2.right), ForceMode.Force);
+        }
+        else
+        {
+            _pulleyRb.constraints = _lockXPos_PulleyConstraints;
+        }
+    }
+
+    // _useVelocity: unused
+    private void MoveTowardsPlayer_useVelocity_with_RopeCalculator()
+    {
+        if (PlayerLogic.PlayerRb == null) return;
+        if (_playerIsAttached) return;
+
+        float distance = PlayerLogic.Player.transform.position.x - transform.position.x;
+        Vector2 pulleyDir;
+        if (_moveToPlayer_minDistance < Mathf.Abs(distance) && Mathf.Abs(distance) < _moveToPlayer_maxDistance
+            && (pulleyDir = _ropeCalculator.GetNextPulleyDir_useVelocity(distance)) != Vector2.zero)
+        {
+            _pulleyRb.constraints = _freeXPos_PulleyConstraints;
+            _pulleyRb.velocity = _moveToPlayer_speed * pulleyDir; // [SerializeField] private float _moveToPlayer_speed = 2f;
         }
         else
         {
@@ -71,7 +90,7 @@ public class ZipLineHandle : RidableObject
 
         FreezePlayerDirInput();
         _pulleyRb.constraints = _freeXPos_PulleyConstraints;
-        AddPulleyVelocity(playerVelocityNow);
+        AddPulleyVelocity(playerVelocityNow.x);
 
         PlayerOnThisObject?.Invoke(gameObject.GetInstanceID(), true);
         _playerIsAttached = true;
@@ -85,14 +104,14 @@ public class ZipLineHandle : RidableObject
     }
 
     // Todo: change later so that the velocity/AddForce direction follows the rope (next particle pos)
-    private void AddPulleyVelocity(Vector2 playerVelocityNow)
+    private void AddPulleyVelocity(float moveDir)
     {
-        if (playerVelocityNow.x < 0)
+        if (moveDir < 0)
             _pulleyRb.velocity = PlayerLogic.PlayerStats.PlayerAttachedObjectAddVelocity * Vector2.left;
-        else if (playerVelocityNow.x > 0)
+        else if (moveDir > 0)
             _pulleyRb.velocity = PlayerLogic.PlayerStats.PlayerAttachedObjectAddVelocity * Vector2.right;
         else
-            _pulleyRb.velocity = PlayerLogic.PlayerStats.PlayerAttachedObjectAddVelocity * _ropeCalculator.GetFurtherRopeDir();
+            _pulleyRb.velocity = PlayerLogic.PlayerStats.PlayerAttachedObjectAddVelocity * _ropeCalculator.GetFurtherRopeDir(_pulleyRb.transform.position.x);
     }
 
     protected override void DisconnectPlayer(InputAction.CallbackContext ctx)
