@@ -316,7 +316,7 @@ public class PlayerController : MonoBehaviour
             Handles.DrawWireDisc(groundCheckerPos, Vector3.back, groundCheckerRadius);
             //Handles.DrawWireDisc(ceilCheckerPos, Vector3.back, ceilCheckerRadius);
 
-            Gizmos.DrawWireCube(_col.bounds.center, _col.size);
+            //Gizmos.DrawWireCube(_col.bounds.center, _col.size);
         }
     }
 
