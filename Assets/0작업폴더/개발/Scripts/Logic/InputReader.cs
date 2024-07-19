@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class InputReader : MonoBehaviour
 {
@@ -13,6 +14,8 @@ public class InputReader : MonoBehaviour
     private InputControls _input;
     private bool JumpHolding, JumpTriggered, JumpTriggeredPrev;
 
+    public static event Action JumpPressed;
+
     private void Awake()
     {
         _input = new InputControls();
@@ -22,16 +25,28 @@ public class InputReader : MonoBehaviour
     private void OnEnable()
     {
         _input.Enable();
+        _input.Player.Jump.started += JumpStartedAction;
     }
 
     private void OnDisable()
     {
         _input.Disable();
+        _input.Player.Jump.started -= JumpStartedAction;
     }
 
     private void Update()
     {
         GatherInput();
+    }
+
+    private void JumpStartedAction(InputAction.CallbackContext ctx)
+    {
+        TriggerJump();
+    }
+
+    public static void TriggerJump()
+    {
+        JumpPressed?.Invoke();
     }
 
     private void GatherInput()

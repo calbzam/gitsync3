@@ -114,7 +114,7 @@ public class ZipLineHandle : RidableObject
             _pulleyRb.velocity = PlayerLogic.PlayerStats.PlayerAttachedObjectAddVelocity * _ropeCalculator.GetFurtherRopeDir(_pulleyRb.transform.position.x);
     }
 
-    protected override void DisconnectPlayer(InputAction.CallbackContext ctx)
+    protected override void DisconnectPlayer()
     {
         if (_playerIsAttached)
         {

@@ -13,7 +13,7 @@ public abstract class RidableObject : MonoBehaviour
     protected bool _playerIsAttached = false;
     protected bool _playerHasJumped = false;
     
-    protected abstract void DisconnectPlayer(InputAction.CallbackContext ctx);
+    protected abstract void DisconnectPlayer();
 
     protected virtual void Awake()
     {
@@ -23,12 +23,12 @@ public abstract class RidableObject : MonoBehaviour
     protected virtual void OnEnable()
     {
         _input.Enable();
-        _input.Player.Jump.started += DisconnectPlayer;
+        InputReader.JumpPressed += DisconnectPlayer;
     }
 
     protected virtual void OnDisable()
     {
         _input.Disable();
-        _input.Player.Jump.started -= DisconnectPlayer;
+        InputReader.JumpPressed -= DisconnectPlayer;
     }
 }

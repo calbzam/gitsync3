@@ -44,7 +44,7 @@ public class PlayerController : MonoBehaviour
     private float _frameLeftGrounded = float.MinValue;
     private bool _grounded;
     private bool _isInWater;
-    private bool disableYVelocity = false;
+    //private bool disableYVelocity = false;
     private bool swingingGroundHit = false;
 
     public void SetPlayerIsInWater(bool inWater) { _isInWater = inWater; }
@@ -278,6 +278,7 @@ public class PlayerController : MonoBehaviour
 
     public void RespawnPlayer()
     {
+        InputReader.TriggerJump();
         playerTransform.position = _respawnPos;
         _rb.velocity = Vector3.zero;
     }
@@ -292,10 +293,10 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 
-    public void DisableYVelocity()
-    {
-        disableYVelocity = true;
-    }
+    //public void DisableYVelocity()
+    //{
+    //    disableYVelocity = true;
+    //}
 
     //private void ApplyMovement()
     //{

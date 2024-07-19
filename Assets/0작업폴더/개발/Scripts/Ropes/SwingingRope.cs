@@ -122,7 +122,7 @@ public class SwingingRope : RidableObject
         }
     }
 
-    protected override void DisconnectPlayer(InputAction.CallbackContext ctx)
+    protected override void DisconnectPlayer()
     {
         if (_playerIsAttached)
         {
