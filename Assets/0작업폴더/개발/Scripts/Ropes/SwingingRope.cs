@@ -174,6 +174,8 @@ public class SwingingRope : RidableObject
         // this will cause the solver to rebuild pin constraints at the beginning of the next frame:
         _rope.SetConstraintsDirty(Oni.ConstraintType.Pin);
         _currentParticle = toParticle;
+
+        PlayerLogic.SetPlayerZPosition(getGlobalParticlePos(_rope.solver.positions[toParticle]).z);
     }
 
     private void detachPlayerFromParticle(int fromParticle)

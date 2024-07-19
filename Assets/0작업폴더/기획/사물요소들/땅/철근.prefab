@@ -43,7 +43,7 @@ SpriteRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3147816522042886471}
   m_Enabled: 1
-  m_CastShadows: 0
+  m_CastShadows: 1
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -175,7 +175,7 @@ HingeJoint2D:
   m_BreakAction: 3
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: 0, y: 0}
-  m_ConnectedAnchor: {x: -0.51615834, y: 0.52224714}
+  m_ConnectedAnchor: {x: 116.59, y: 5.52}
   m_UseMotor: 0
   m_Motor:
     m_MotorSpeed: 0

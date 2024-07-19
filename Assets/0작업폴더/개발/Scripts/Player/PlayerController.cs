@@ -119,25 +119,25 @@ public class PlayerController : MonoBehaviour
 
         // add later: Enum groundHitType - static ground, moving ground
 
-        //RaycastHit2D hit = Physics2D.CapsuleCast(_col.bounds.center, _stats.GroundCheckCapsuleSize, _col.direction, 0, Vector2.down, _stats.GrounderDistance, Layers.SwingingGroundLayer);
-        Collider2D col = Physics2D.OverlapCircle(groundCheckerPos, groundCheckerRadius, Layers.SwingingGroundLayer | Layers.PushableBoxLayer);
-        if (col)
-        {
-            swingingGroundHit = true;
-            swingingGround = col.attachedRigidbody;
-        }
-
-
         groundCheckerPos = _col.bounds.center + Vector3.down * (_col.size.y / 2 + _stats.GrounderDistance);
         groundCheckerRadius = _col.size.x / 2 + _stats.GroundCheckerAddRadius;
         ceilCheckerPos = _col.bounds.center + Vector3.up * (_col.size.y / 2 + _stats.GrounderDistance);
         ceilCheckerRadius = groundCheckerRadius;
 
-        //bool groundHit = swingingGroundHit || Physics2D.CapsuleCast(_col.bounds.center, _stats.GroundCheckCapsuleSize, _col.direction, 0, Vector2.down, _stats.GrounderDistance, Layers.GroundLayer);
-        //bool ceilingHit = Physics2D.CapsuleCast(_col.bounds.center, _stats.GroundCheckCapsuleSize, _col.direction, 0, Vector2.up, _stats.GrounderDistance, Layers.GroundLayer);
-        bool groundHit = swingingGroundHit || Physics2D.OverlapCircle(groundCheckerPos, groundCheckerRadius, Layers.GroundLayer);
-        //bool ceilingHit = Physics2D.OverlapCircle(ceilCheckerPos, ceilCheckerRadius, Layers.GroundLayer | Layers.SwingingGroundLayer);
+        //Collider2D col = Physics2D.OverlapCircle(groundCheckerPos, groundCheckerRadius, Layers.SwingingGroundLayer);
+        //if (col) { swingingGroundHit = true; /*swingingGround = col.attachedRigidbody;*/ }
+        //bool groundHit = swingingGroundHit || normalGroundHit;
 
+        Collider2D col = Physics2D.OverlapCircle(groundCheckerPos, groundCheckerRadius, Layers.GroundLayer | Layers.SwingingGroundLayer | Layers.PushableBoxLayer);
+        bool groundHit = col;
+        if (col != null)
+        {
+            // Set Z-pos to the Z-pos of the ground that Player hit
+            PlayerLogic.SetPlayerZPosition(col.transform.position.z);
+            //transform.position = new Vector3(transform.position.x, transform.position.y, col.transform.position.z);
+        }
+
+        //bool ceilingHit = Physics2D.OverlapCircle(ceilCheckerPos, ceilCheckerRadius, Layers.GroundLayer | Layers.SwingingGroundLayer);
         // Hit a Ceiling: cancel jumping from there
         //if (ceilingHit) /*_frameVelocity.y = Mathf.Min(0, _frameVelocity.y);*/_rb.velocity = new Vector2(_rb.velocity.x, Mathf.Min(0, _rb.velocity.y));
 

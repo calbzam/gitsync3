@@ -28,4 +28,9 @@ public class PlayerLogic : MonoBehaviour
         else if (InputReader.FrameInput.Move.x > 0)
             PlayerRb.AddForce(new Vector2(1, 1) * PlayerStats.RopeJumpedPlayerAddForce, ForceMode2D.Impulse);
     }
+
+    public static void SetPlayerZPosition(float newZPos)
+    {
+        Player.transform.position = new Vector3(Player.transform.position.x, Player.transform.position.y, newZPos);
+    }
 }
