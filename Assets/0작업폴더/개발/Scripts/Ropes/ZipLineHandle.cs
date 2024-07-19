@@ -88,9 +88,9 @@ public class ZipLineHandle : RidableObject
     private void AddPulleyVelocity(Vector2 playerVelocityNow)
     {
         if (playerVelocityNow.x < 0)
-            _pulleyRb.velocity = PlayerLogic.PlayerStats.PlayerAttachedObjectAddVelocity * _ropeCalculator.GetNextPulleyDir(-1);
+            _pulleyRb.velocity = PlayerLogic.PlayerStats.PlayerAttachedObjectAddVelocity * Vector2.left;
         else if (playerVelocityNow.x > 0)
-            _pulleyRb.velocity = PlayerLogic.PlayerStats.PlayerAttachedObjectAddVelocity * _ropeCalculator.GetNextPulleyDir(1);
+            _pulleyRb.velocity = PlayerLogic.PlayerStats.PlayerAttachedObjectAddVelocity * Vector2.right;
         else
             _pulleyRb.velocity = PlayerLogic.PlayerStats.PlayerAttachedObjectAddVelocity * _ropeCalculator.GetFurtherRopeDir();
     }

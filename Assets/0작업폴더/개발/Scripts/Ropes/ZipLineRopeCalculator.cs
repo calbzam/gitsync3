@@ -9,50 +9,44 @@ public class ZipLineRopeCalculator : MonoBehaviour
     [SerializeField] private float _stopMargin = 2f;
 
     private Vector2 _currentParticlePos;
-    private Vector2 _firstParticlePos, /*_middleParticlePos,*/ _lastParticlePos;
-
-    private void Awake()
-    {
-        _rope = gameObject.GetComponent<ObiRope>();
-    }
+    private Vector2 _firstParticlePos, _middleParticlePos, _lastParticlePos;
 
     private void Start()
     {
+        _rope = gameObject.GetComponent<ObiRope>();
+        _rope.solver.OnCollision += Solver_OnCollision;
         GetEndParticlePositions();
+    }
+
+    private void OnDisable()
+    {
+        _rope.solver.OnCollision -= Solver_OnCollision;
     }
 
     private void GetEndParticlePositions()
     {
         int firstParticle = _rope.elements[0].particle1;
         int lastParticle = _rope.elements[_rope.elements.Count - 1].particle2;
-        //int middleParticle = _rope.elements[getParticleWithIndex((_rope.elements.Count - 1) / 2)].particle2;
+        int middleParticle = _rope.elements[getParticleWithIndex((_rope.elements.Count - 1) / 2)].particle2;
 
         _firstParticlePos = getGlobalParticlePos(_rope.solver.positions[firstParticle]);
-        //_middleParticlePos = getGlobalParticlePos(_rope.solver.positions[middleParticle]);
+        _middleParticlePos = getGlobalParticlePos(_rope.solver.positions[middleParticle]);
         _lastParticlePos = getGlobalParticlePos(_rope.solver.positions[lastParticle]);
-    }
-
-    private void OnEnable()
-    {
-        _rope.solver.OnCollision += Solver_OnCollision;
-    }
-
-    private void OnDisable()
-    {
-        _rope.solver.OnCollision += Solver_OnCollision;
     }
 
     public Vector2 GetFurtherRopeDir()
     {
         if (_currentParticlePos.x - _firstParticlePos.x < _lastParticlePos.x - _currentParticlePos.x)
         {
-            Vector2 diff = _lastParticlePos - _currentParticlePos;
-            return diff.normalized;
+            //Vector2 diff = _lastParticlePos - _currentParticlePos;
+            //return diff.normalized;
+            return Vector2.right;
         }
         else
         {
-            Vector2 diff = _firstParticlePos - _currentParticlePos;
-            return diff.normalized;
+            //Vector2 diff = _firstParticlePos - _currentParticlePos;
+            //return diff.normalized;
+            return Vector2.left;
         }
     }
 
@@ -60,16 +54,21 @@ public class ZipLineRopeCalculator : MonoBehaviour
     // dir > 0: right
     public Vector2 GetNextPulleyDir(float dir)
     {
+        Vector2 leftEnd, rightEnd;
+        bool firstIsLeft = false, rightIsLast = false;
+        if (_currentParticlePos.x < _middleParticlePos.x) { leftEnd = _firstParticlePos; rightEnd = _middleParticlePos; firstIsLeft = true; }
+        else { leftEnd = _middleParticlePos; rightEnd = _lastParticlePos; rightIsLast = true; }
+
         if (dir < 0)
         {
-            if (_currentParticlePos.x - _firstParticlePos.x < _stopMargin) return Vector2.zero;
-            Vector2 diff = _firstParticlePos - _currentParticlePos;
+            if (firstIsLeft && _currentParticlePos.x - leftEnd.x < _stopMargin) return Vector2.zero;
+            Vector2 diff = leftEnd - _currentParticlePos;
             return diff.normalized;
         }
         else if (dir > 0)
         {
-            if (_lastParticlePos.x - _currentParticlePos.x < _stopMargin) return Vector2.zero;
-            Vector2 diff = _lastParticlePos - _currentParticlePos;
+            if (rightIsLast && rightEnd.x - _currentParticlePos.x < _stopMargin) return Vector2.zero;
+            Vector2 diff = rightEnd - _currentParticlePos;
             return diff.normalized;
         }
         else
