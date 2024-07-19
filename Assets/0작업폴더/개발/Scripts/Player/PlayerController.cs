@@ -120,7 +120,7 @@ public class PlayerController : MonoBehaviour
         // add later: Enum groundHitType - static ground, moving ground
 
         //RaycastHit2D hit = Physics2D.CapsuleCast(_col.bounds.center, _stats.GroundCheckCapsuleSize, _col.direction, 0, Vector2.down, _stats.GrounderDistance, Layers.SwingingGroundLayer);
-        Collider2D col = Physics2D.OverlapCircle(groundCheckerPos, groundCheckerRadius, Layers.SwingingGroundLayer);
+        Collider2D col = Physics2D.OverlapCircle(groundCheckerPos, groundCheckerRadius, Layers.SwingingGroundLayer | Layers.PushableBoxLayer);
         if (col)
         {
             swingingGroundHit = true;
