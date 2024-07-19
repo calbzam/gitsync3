@@ -5,8 +5,12 @@ using UnityEngine.InputSystem;
 public class ZipLineHandle : RidableObject
 {
     public override event Action<int, bool> PlayerOnThisObject;
+    [SerializeField] private ZipLineRopeCalculator _ropeCalculator;
 
     private Rigidbody _pulleyRb;
+    [SerializeField] private float _moveToPlayer_minDistance = 2f;
+    [SerializeField] private float _moveToPlayer_maxDistance = 28f;
+    [SerializeField] private float _moveToPlayer_speed = 2f;
 
     private static RigidbodyConstraints2D _origPlayerConstraints;
 
@@ -26,10 +30,33 @@ public class ZipLineHandle : RidableObject
         if (PlayerLogic.PlayerRb != null) _origPlayerConstraints = PlayerLogic.PlayerRb.constraints;
     }
 
+    private void Update()
+    {
+        MoveTowardsPlayer();
+    }
+
+    private void MoveTowardsPlayer()
+    {
+        if (PlayerLogic.PlayerRb == null) return;
+        if (_playerIsAttached) return;
+
+        float distance = PlayerLogic.Player.transform.position.x - transform.position.x;
+        Vector2 pulleyDir;
+        if (_moveToPlayer_minDistance < Mathf.Abs(distance) && Mathf.Abs(distance) < _moveToPlayer_maxDistance && (pulleyDir = _ropeCalculator.GetNextPulleyDir(distance)) != Vector2.zero)
+        {
+            _pulleyRb.constraints = _freeXPos_PulleyConstraints;
+            _pulleyRb.velocity = _moveToPlayer_speed * pulleyDir;
+        }
+        else
+        {
+            _pulleyRb.constraints = _lockXPos_PulleyConstraints;
+        }
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (_origPlayerConstraints == RigidbodyConstraints2D.None) _origPlayerConstraints = PlayerLogic.PlayerRb.constraints;
         if (_playerOnOtherObject) return;
+        if (_origPlayerConstraints == RigidbodyConstraints2D.None) _origPlayerConstraints = PlayerLogic.PlayerRb.constraints;
 
         if (collision.gameObject.CompareTag("Player"))
         {
@@ -61,9 +88,11 @@ public class ZipLineHandle : RidableObject
     private void AddPulleyVelocity(Vector2 playerVelocityNow)
     {
         if (playerVelocityNow.x < 0)
-            _pulleyRb.velocity = Vector2.left * PlayerLogic.PlayerStats.PlayerAttachedObjectAddVelocity;
+            _pulleyRb.velocity = PlayerLogic.PlayerStats.PlayerAttachedObjectAddVelocity * _ropeCalculator.GetNextPulleyDir(-1);
         else if (playerVelocityNow.x > 0)
-            _pulleyRb.velocity = Vector2.right * PlayerLogic.PlayerStats.PlayerAttachedObjectAddVelocity;
+            _pulleyRb.velocity = PlayerLogic.PlayerStats.PlayerAttachedObjectAddVelocity * _ropeCalculator.GetNextPulleyDir(1);
+        else
+            _pulleyRb.velocity = PlayerLogic.PlayerStats.PlayerAttachedObjectAddVelocity * _ropeCalculator.GetFurtherRopeDir();
     }
 
     protected override void DisconnectPlayer(InputAction.CallbackContext ctx)

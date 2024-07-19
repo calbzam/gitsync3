@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 public class SwingingRope : RidableObject
 {
-    protected ObiRope _rope;
+    private ObiRope _rope;
     private static float _jumpedEnoughDistance;
 
     public override event Action<int, bool> PlayerOnThisObject;
