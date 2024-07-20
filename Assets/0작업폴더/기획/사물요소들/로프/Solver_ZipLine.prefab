@@ -9,6 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5106869892613989778}
+  - component: {fileID: 5318017239405970454}
+  - component: {fileID: 5928657347349642858}
   - component: {fileID: 6343183469957561058}
   - component: {fileID: 2336173997930309685}
   - component: {fileID: 4962533997360738355}
@@ -17,8 +19,7 @@ GameObject:
   - component: {fileID: 3810073881003952453}
   - component: {fileID: 1187451238914496105}
   - component: {fileID: 8618944186279787909}
-  - component: {fileID: 5171468376566415961}
-  - component: {fileID: 5928657347349642858}
+  - component: {fileID: 1844196090122166478}
   m_Layer: 10
   m_Name: Obi Rope
   m_TagString: Untagged
@@ -41,6 +42,42 @@ Transform:
   m_Children: []
   m_Father: {fileID: 6885496709168918951}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5318017239405970454
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 643713764935211441}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f18723921f89c0b4f80f4b8d9bd2eba0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _meshRenderer: {fileID: 2336173997930309685}
+  _rope: {fileID: 4962533997360738355}
+  _additionalChildObjectsToDisable:
+  - {fileID: 5590876485938196971}
+--- !u!114 &5928657347349642858
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 643713764935211441}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a0c3ae34d4ec1746a5014773ebe5fde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  changeSelectionTo: {fileID: 3975588994150216319}
+  lockScale: 1
+  baseScale: {x: 1, y: 1, z: 1}
+  lockRotation: 1
+  baseRot: {x: 0, y: 0, z: 0}
+  lockTranslation: 1
+  basePos: {x: 0, y: 0, z: 0}
+  lockNonUniformScale: 0
 --- !u!33 &6343183469957561058
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -223,7 +260,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   decimation: 0
-  smoothing: 1
+  smoothing: 0
   twist: 0
 --- !u!114 &3810073881003952453
 MonoBehaviour:
@@ -279,8 +316,8 @@ MonoBehaviour:
   uvScale: {x: 1, y: 1}
   normalizeV: 1
   section: {fileID: 11400000, guid: a0bc36a59515f413e90e10895929c938, type: 2}
-  thicknessScale: 0.98
---- !u!114 &5171468376566415961
+  thicknessScale: 1
+--- !u!114 &1844196090122166478
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -289,33 +326,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 643713764935211441}
   m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8b45ebbf86be4df6b0e6cd933812af2, type: 3}
+  m_Script: {fileID: 11500000, guid: 356b834afda224f73a26e39580b330f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   render: 1
-  shader: {fileID: 4800000, guid: 28641a0edd6e047c6af7e3c6b342c81a, type: 3}
-  particleColor: {r: 1, g: 1, b: 1, a: 1}
-  radiusScale: 7.27
---- !u!114 &5928657347349642858
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 643713764935211441}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a0c3ae34d4ec1746a5014773ebe5fde, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  changeSelectionTo: {fileID: 3975588994150216319}
-  lockScale: 1
-  baseScale: {x: 1, y: 1, z: 1}
-  lockRotation: 1
-  baseRot: {x: 0, y: 0, z: 0}
-  lockTranslation: 1
-  basePos: {x: 0, y: 0, z: 0}
-  lockNonUniformScale: 0
+  mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  material: {fileID: 2100000, guid: 8496b0c9483025a47ac6919b83c47b17, type: 2}
+  instanceScale: {x: 1.5, y: 1.5, z: 1}
 --- !u!1 &1517292908273761266
 GameObject:
   m_ObjectHideFlags: 0
@@ -871,7 +888,7 @@ MonoBehaviour:
     enabled: 1
   bendingConstraintParameters:
     evaluationOrder: 1
-    iterations: 4
+    iterations: 2
     SORFactor: 1
     enabled: 1
   particleCollisionConstraintParameters:
@@ -905,7 +922,7 @@ MonoBehaviour:
     SORFactor: 1
     enabled: 0
   shapeMatchingConstraintParameters:
-    evaluationOrder: 1
+    evaluationOrder: 0
     iterations: 2
     SORFactor: 2
     enabled: 1
