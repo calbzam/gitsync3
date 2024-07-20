@@ -171,6 +171,50 @@ MonoBehaviour:
   blendDistance: 0
   weight: 1
   sharedProfile: {fileID: 11400000, guid: 5414ca71101060d4baa4feb2635b66fb, type: 2}
+--- !u!1 &14423809
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 14423811}
+  - component: {fileID: 14423810}
+  m_Layer: 0
+  m_Name: LogicManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &14423810
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 14423809}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdd367f688096cb43a5990c1968a5f38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &14423811
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 14423809}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 170.99881, y: 7.184035, z: -0.15456536}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &109587550
 GameObject:
   m_ObjectHideFlags: 0
@@ -1662,7 +1706,7 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 5130093062548126547, guid: 2d31afeda0b3dcd4e96fd959662c6e47, type: 3}
-      insertIndex: 3
+      insertIndex: -1
       addedObject: {fileID: 974576545}
   m_SourcePrefab: {fileID: 100100000, guid: 2d31afeda0b3dcd4e96fd959662c6e47, type: 3}
 --- !u!1 &1198173218
@@ -2674,4 +2718,5 @@ SceneRoots:
   - {fileID: 188054733}
   - {fileID: 109587554}
   - {fileID: 2024980026}
+  - {fileID: 14423811}
   - {fileID: 1068627601}

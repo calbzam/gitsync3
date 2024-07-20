@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using Obi;
 using UnityEditor;
 
 
@@ -16,8 +15,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private PlayerStats _stats;
     public PlayerStats Stats => _stats; // for public access
 
-    [SerializeField] private Transform _initialSpawnPos;
     private Vector3 _respawnPos;
+    public Vector3 RespawnPos => _respawnPos; // for public access
+
+    private bool _DirInputEnabled = true;
+    public void DirInputSetActive(bool enabled) { _DirInputEnabled = enabled; }
 
     private Rigidbody2D _rb;
     private CapsuleCollider2D _col;
@@ -41,8 +43,11 @@ public class PlayerController : MonoBehaviour
     /* Collisions */
     private float _frameLeftGrounded = float.MinValue;
     private bool _grounded;
-    private bool disableYVelocity = false;
+    private bool _isInWater;
+    //private bool disableYVelocity = false;
     private bool swingingGroundHit = false;
+
+    public void SetPlayerIsInWater(bool inWater) { _isInWater = inWater; }
 
     private void Awake()
     {
@@ -55,7 +60,6 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        SetRespawnPos(_initialSpawnPos.position);
         drawGizmosEnabled = true;
     }
 
@@ -114,27 +118,28 @@ public class PlayerController : MonoBehaviour
 
         // add later: Enum groundHitType - static ground, moving ground
 
-        RaycastHit2D hit = Physics2D.CapsuleCast(_col.bounds.center, _stats.GroundCheckCapsuleSize, _col.direction, 0, Vector2.down, _stats.GrounderDistance, Layers.SwingingGroundLayer);
-        if (hit)
-        {
-            swingingGroundHit = true;
-            swingingGround = hit.collider.attachedRigidbody;
-        }
-
-
         groundCheckerPos = _col.bounds.center + Vector3.down * (_col.size.y / 2 + _stats.GrounderDistance);
         groundCheckerRadius = _col.size.x / 2 + _stats.GroundCheckerAddRadius;
         ceilCheckerPos = _col.bounds.center + Vector3.up * (_col.size.y / 2 + _stats.GrounderDistance);
         ceilCheckerRadius = groundCheckerRadius;
 
-        //bool groundHit = swingingGroundHit || Physics2D.CapsuleCast(_col.bounds.center, _stats.GroundCheckCapsuleSize, _col.direction, 0, Vector2.down, _stats.GrounderDistance, Layers.GroundLayer);
-        //bool ceilingHit = Physics2D.CapsuleCast(_col.bounds.center, _stats.GroundCheckCapsuleSize, _col.direction, 0, Vector2.up, _stats.GrounderDistance, Layers.GroundLayer);
-        bool groundHit = swingingGroundHit || Physics2D.OverlapCircle(groundCheckerPos, groundCheckerRadius, Layers.GroundLayer);
-        bool ceilingHit = Physics2D.OverlapCircle(ceilCheckerPos, ceilCheckerRadius, Layers.GroundLayer | Layers.SwingingGroundLayer);
+        //Collider2D col = Physics2D.OverlapCircle(groundCheckerPos, groundCheckerRadius, Layers.SwingingGroundLayer);
+        //if (col) { swingingGroundHit = true; /*swingingGround = col.attachedRigidbody;*/ }
+        //bool groundHit = swingingGroundHit || normalGroundHit;
 
+        Collider2D col = Physics2D.OverlapCircle(groundCheckerPos, groundCheckerRadius, Layers.GroundLayer | Layers.SwingingGroundLayer | Layers.PushableBoxLayer);
+        bool groundHit = col;
+        if (col != null)
+        {
+            // Set Z-pos to the Z-pos of the ground that Player hit
+            PlayerLogic.SetPlayerZPosition(col.transform.position.z);
+            //transform.position = new Vector3(transform.position.x, transform.position.y, col.transform.position.z);
+        }
 
+        //bool ceilingHit = Physics2D.OverlapCircle(ceilCheckerPos, ceilCheckerRadius, Layers.GroundLayer | Layers.SwingingGroundLayer);
         // Hit a Ceiling: cancel jumping from there
-        if (ceilingHit) /*_frameVelocity.y = Mathf.Min(0, _frameVelocity.y);*/_rb.velocity = new Vector2(_rb.velocity.x, Mathf.Min(0, _rb.velocity.y));
+        //if (ceilingHit) /*_frameVelocity.y = Mathf.Min(0, _frameVelocity.y);*/_rb.velocity = new Vector2(_rb.velocity.x, Mathf.Min(0, _rb.velocity.y));
+
 
         // Landed on the Ground
         if (!_grounded && groundHit)
@@ -204,13 +209,19 @@ public class PlayerController : MonoBehaviour
 
     private void HandleDirection()
     {
+        if (!_DirInputEnabled) return;
+
         if (InputReader.FrameInput.Move.x == 0)
         {
             if (_rb.velocity.x != 0)
             {
-                var decelerationX = _grounded ? _stats.GroundDecelerationX : _stats.AirDecelerationX;
-                //_frameVelocity.x = Mathf.MoveTowards(_frameVelocity.x, 0, decelerationX * Time.fixedDeltaTime);
+                //float decelerationX = _grounded ? _stats.GroundDecelerationX : _stats.AirDecelerationX;
+                float decelerationX;
+                if (_grounded) decelerationX = _stats.GroundDecelerationX;
+                else if (_isInWater) decelerationX = _stats.WaterDecelerationX;
+                else decelerationX = _stats.AirDecelerationX;
 
+                //_frameVelocity.x = Mathf.MoveTowards(_frameVelocity.x, 0, decelerationX * Time.fixedDeltaTime);
                 float prevDir = Mathf.Sign(_rb.velocity.x);
                 _rb.AddForce(Vector2.left * prevDir * decelerationX, ForceMode2D.Force);
                 if (Mathf.Sign(_rb.velocity.x) * prevDir < 0 || MathF.Abs(_rb.velocity.x) < _stats.MinSpeedX) _rb.AddForce(Vector2.left * _rb.totalForce.x, ForceMode2D.Force);
@@ -219,8 +230,8 @@ public class PlayerController : MonoBehaviour
         else
         {
             //_frameVelocity.x = Mathf.MoveTowards(_frameVelocity.x, InputReader.FrameInput.Move.x * _stats.MaxSpeedX, _stats.AccelerationX * Time.fixedDeltaTime);
-
-            _rb.AddForce(Vector2.right * InputReader.FrameInput.Move.x * _stats.AccelerationX, ForceMode2D.Force);
+            if (_isInWater) _rb.AddForce(Vector2.right * InputReader.FrameInput.Move.x * _stats.WaterAccelerationX, ForceMode2D.Force);
+            else _rb.AddForce(Vector2.right * InputReader.FrameInput.Move.x * _stats.GroundAccelerationX, ForceMode2D.Force);
             if (Mathf.Abs(_rb.velocity.x) > _stats.MaxSpeedX) _rb.velocity = new Vector2(Math.Sign(_rb.velocity.x) * _stats.MaxSpeedX, _rb.velocity.y);
         }
     }
@@ -265,21 +276,27 @@ public class PlayerController : MonoBehaviour
         _respawnPos = new Vector3(position.x, position.y, playerTransform.position.z);
     }
 
+    public void RespawnPlayer()
+    {
+        InputReader.TriggerJump();
+        playerTransform.position = _respawnPos;
+        _rb.velocity = Vector3.zero;
+    }
+
     private void CheckRespawn()
     {
         if (playerTransform.position.y < _stats.deadPositionY)
         {
-            playerTransform.position = _respawnPos;
-            _rb.velocity = Vector3.zero;
+            RespawnPlayer();
         }
     }
 
     #endregion
 
-    public void DisableYVelocity()
-    {
-        disableYVelocity = true;
-    }
+    //public void DisableYVelocity()
+    //{
+    //    disableYVelocity = true;
+    //}
 
     //private void ApplyMovement()
     //{
@@ -298,9 +315,9 @@ public class PlayerController : MonoBehaviour
         if (drawGizmosEnabled)
         {
             Handles.DrawWireDisc(groundCheckerPos, Vector3.back, groundCheckerRadius);
-            Handles.DrawWireDisc(ceilCheckerPos, Vector3.back, ceilCheckerRadius);
+            //Handles.DrawWireDisc(ceilCheckerPos, Vector3.back, ceilCheckerRadius);
 
-            Gizmos.DrawWireCube(_col.bounds.center, _col.size);
+            //Gizmos.DrawWireCube(_col.bounds.center, _col.size);
         }
     }
 
