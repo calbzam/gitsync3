@@ -154,15 +154,15 @@ GameObject:
   m_Component:
   - component: {fileID: 8163286425711514546}
   - component: {fileID: 8612660158870851936}
+  - component: {fileID: 3451459896291438397}
   - component: {fileID: 7306328875240057717}
   - component: {fileID: 8909498849510046010}
   - component: {fileID: 881971457722786287}
   - component: {fileID: 8308634432569987140}
   - component: {fileID: 3895967393270532167}
   - component: {fileID: 8496679337350745373}
-  - component: {fileID: 3451459896291438397}
   - component: {fileID: 6250444290528020628}
-  - component: {fileID: 4140385639599939371}
+  - component: {fileID: 6556449427558914667}
   m_Layer: 10
   m_Name: Obi Rope
   m_TagString: Untagged
@@ -200,6 +200,26 @@ MonoBehaviour:
   _meshRenderer: {fileID: 8909498849510046010}
   _rope: {fileID: 881971457722786287}
   _additionalChildObjectsToDisable: []
+--- !u!114 &3451459896291438397
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2181408558619098267}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a0c3ae34d4ec1746a5014773ebe5fde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  changeSelectionTo: {fileID: 1538128553822100911}
+  lockScale: 1
+  baseScale: {x: 1, y: 1, z: 1}
+  lockRotation: 1
+  baseRot: {x: 0, y: 0, z: 0}
+  lockTranslation: 1
+  basePos: {x: 0, y: 0, z: 0}
+  lockNonUniformScale: 0
 --- !u!33 &7306328875240057717
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -433,26 +453,6 @@ MonoBehaviour:
   m_ConstrainOrientation: 0
   m_Compliance: 0
   m_BreakThreshold: Infinity
---- !u!114 &3451459896291438397
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2181408558619098267}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a0c3ae34d4ec1746a5014773ebe5fde, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  changeSelectionTo: {fileID: 1538128553822100911}
-  lockScale: 1
-  baseScale: {x: 1, y: 1, z: 1}
-  lockRotation: 1
-  baseRot: {x: 0, y: 0, z: 0}
-  lockTranslation: 1
-  basePos: {x: 0, y: 0, z: 0}
-  lockNonUniformScale: 0
 --- !u!114 &6250444290528020628
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -469,8 +469,8 @@ MonoBehaviour:
   uvScale: {x: 1, y: 1}
   normalizeV: 1
   section: {fileID: 11400000, guid: a0bc36a59515f413e90e10895929c938, type: 2}
-  thicknessScale: 0.98
---- !u!114 &4140385639599939371
+  thicknessScale: 1
+--- !u!114 &6556449427558914667
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -479,10 +479,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2181408558619098267}
   m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8b45ebbf86be4df6b0e6cd933812af2, type: 3}
+  m_Script: {fileID: 11500000, guid: 356b834afda224f73a26e39580b330f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   render: 1
-  shader: {fileID: 4800000, guid: 28641a0edd6e047c6af7e3c6b342c81a, type: 3}
-  particleColor: {r: 1, g: 1, b: 1, a: 1}
-  radiusScale: 1.49
+  mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  material: {fileID: 2100000, guid: 8496b0c9483025a47ac6919b83c47b17, type: 2}
+  instanceScale: {x: 1.5, y: 1.5, z: 1}
