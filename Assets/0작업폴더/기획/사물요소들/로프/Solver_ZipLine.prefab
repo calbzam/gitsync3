@@ -260,7 +260,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   decimation: 0
-  smoothing: 1
+  smoothing: 0
   twist: 0
 --- !u!114 &3810073881003952453
 MonoBehaviour:
@@ -888,7 +888,7 @@ MonoBehaviour:
     enabled: 1
   bendingConstraintParameters:
     evaluationOrder: 1
-    iterations: 4
+    iterations: 2
     SORFactor: 1
     enabled: 1
   particleCollisionConstraintParameters:
@@ -922,7 +922,7 @@ MonoBehaviour:
     SORFactor: 1
     enabled: 0
   shapeMatchingConstraintParameters:
-    evaluationOrder: 1
+    evaluationOrder: 0
     iterations: 2
     SORFactor: 2
     enabled: 1
