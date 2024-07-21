@@ -4,13 +4,8 @@ using UnityEngine;
 
 public class WaterCollisions : MonoBehaviour
 {
-    private BoxCollider2D waterCol;
-    private BuoyancyEffector2D effector;
-
-    private void Start()
-    {
-        waterCol = gameObject.GetComponent<BoxCollider2D>();
-    }
+    [SerializeField] private BoxCollider2D _waterCol;
+    [SerializeField] private BuoyancyEffector2D _effector;
 
     private void OnTriggerEnter2D(Collider2D col)
     {
