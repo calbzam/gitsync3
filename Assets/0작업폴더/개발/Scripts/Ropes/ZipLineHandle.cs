@@ -12,10 +12,16 @@ public class ZipLineHandle : RidableObject
     [SerializeField] private float _moveToPlayer_maxDistance = 28f;
     [SerializeField] private float _moveToPlayer_speed = 0.5f;
 
-    private static RigidbodyConstraints2D _origPlayerConstraints;
+    [SerializeField] private Transform _startBlock;
+    [SerializeField] private Transform _endBlock;
 
     private RigidbodyConstraints _lockXPos_PulleyConstraints;
     private RigidbodyConstraints _freeXPos_PulleyConstraints;
+
+    private bool _stopMovingPulley = false;
+    public void StopMoving() { _stopMovingPulley = true; }
+
+    [SerializeField] private float _pulleyHitStopMargin = 1f;
 
     protected override void Awake()
     {
@@ -26,8 +32,8 @@ public class ZipLineHandle : RidableObject
 
     private void Start()
     {
+        _stopMovingPulley = false;
         _pulleyRb = GetComponentInParent<Rigidbody>();
-        if (PlayerLogic.PlayerRb != null) _origPlayerConstraints = PlayerLogic.PlayerRb.constraints;
     }
 
     private void FixedUpdate()
@@ -75,10 +81,10 @@ public class ZipLineHandle : RidableObject
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (_playerOnOtherObject) return;
-        if (_origPlayerConstraints == RigidbodyConstraints2D.None) _origPlayerConstraints = PlayerLogic.PlayerRb.constraints;
 
         if (collision.gameObject.CompareTag("Player"))
         {
+            _stopMovingPulley = false;
             ConnectPlayer(collision);
         }
     }
@@ -88,30 +94,32 @@ public class ZipLineHandle : RidableObject
         Vector2 playerVelocityNow = PlayerLogic.PlayerRb.velocity;
         PlayerLogic.PlayerRb.transform.SetParent(transform);
 
-        FreezePlayerDirInput();
+        PlayerLogic.LockPlayerPosition();
+        PlayerLogic.PlayerRb.transform.localPosition = Vector3.zero;
         _pulleyRb.constraints = _freeXPos_PulleyConstraints;
-        AddPulleyVelocity(playerVelocityNow.x);
+        MovePulley(playerVelocityNow.x);
 
         PlayerOnThisObject?.Invoke(gameObject.GetInstanceID(), true);
         _playerIsAttached = true;
     }
 
-    private void FreezePlayerDirInput()
+    private void MovePulley(float moveDir)
     {
-        PlayerLogic.PlayerRb.transform.localPosition = Vector3.zero;
-        PlayerLogic.PlayerRb.constraints |= RigidbodyConstraints2D.FreezePosition;
-        PlayerLogic.Player.DirInputSetActive(false);
-    }
+        if (moveDir < 0 && transform.position.x - _startBlock.position.x < _pulleyHitStopMargin) return;
+        if (moveDir > 0 && _endBlock.position.x - transform.position.x < _pulleyHitStopMargin) return;
 
-    // Todo: change later so that the velocity/AddForce direction follows the rope (next particle pos)
-    private void AddPulleyVelocity(float moveDir)
-    {
-        if (moveDir < 0)
-            _pulleyRb.velocity = PlayerLogic.PlayerStats.PlayerAttachedObjectAddVelocity * Vector2.left;
-        else if (moveDir > 0)
-            _pulleyRb.velocity = PlayerLogic.PlayerStats.PlayerAttachedObjectAddVelocity * Vector2.right;
-        else
-            _pulleyRb.velocity = PlayerLogic.PlayerStats.PlayerAttachedObjectAddVelocity * _ropeCalculator.GetFurtherRopeDir(_pulleyRb.transform.position.x);
+        if (!_stopMovingPulley)
+        {
+            if (moveDir < 0)
+            { _pulleyRb.velocity = PlayerLogic.PlayerStats.PlayerAttachedObjectAddVelocity * Vector2.left; }
+            else if (moveDir > 0)
+            { _pulleyRb.velocity = PlayerLogic.PlayerStats.PlayerAttachedObjectAddVelocity * Vector2.right; }
+            else
+            {
+                Vector2 pulleyDir = (_endBlock.position.x - transform.position.x > transform.position.x - _startBlock.position.x) ? Vector2.right : Vector2.left;
+                _pulleyRb.velocity = PlayerLogic.PlayerStats.PlayerAttachedObjectAddVelocity * pulleyDir;
+            }
+        }
     }
 
     protected override void DisconnectPlayer()
@@ -119,8 +127,7 @@ public class ZipLineHandle : RidableObject
         if (_playerIsAttached)
         {
             PlayerLogic.PlayerRb.transform.SetParent(null);
-            PlayerLogic.PlayerRb.constraints = _origPlayerConstraints;
-            PlayerLogic.Player.DirInputSetActive(true);
+            PlayerLogic.FreePlayerPosition();
 
             _pulleyRb.constraints = _lockXPos_PulleyConstraints;
 

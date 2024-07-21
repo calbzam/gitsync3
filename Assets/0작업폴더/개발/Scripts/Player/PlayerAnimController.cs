@@ -9,6 +9,9 @@ public class PlayerAnimController : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private Vector2 inputDir;
 
+    private bool _DirInputEnabled = true;
+    public void DirInputSetActive(bool enabled) { _DirInputEnabled = enabled; }
+
     private void Awake()
     {
         input = new InputControls();
@@ -30,10 +33,13 @@ public class PlayerAnimController : MonoBehaviour
     {
         inputDir = input.Player.Movement.ReadValue<Vector2>();
 
-        // flip sprite on x direction
-        if (inputDir.x > 0)
-            spriteRenderer.flipX = false;
-        else if (inputDir.x < 0)
-            spriteRenderer.flipX = true;
+        if (_DirInputEnabled)
+        {
+            // flip sprite on x direction
+            if (inputDir.x > 0)
+                spriteRenderer.flipX = false;
+            else if (inputDir.x < 0)
+                spriteRenderer.flipX = true;
+        }
     }
 }

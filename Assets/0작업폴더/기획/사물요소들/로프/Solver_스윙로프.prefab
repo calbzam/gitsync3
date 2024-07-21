@@ -51,7 +51,7 @@ MonoBehaviour:
     mode: 1
     interpolation: 0
     gravity: {x: 0, y: -9.81, z: 0}
-    damping: 0.2
+    damping: 0
     maxAnisotropy: 3
     sleepThreshold: 0.0001
     collisionMargin: 0.02
@@ -67,7 +67,7 @@ MonoBehaviour:
   distanceConstraintParameters:
     evaluationOrder: 0
     iterations: 2
-    SORFactor: 1
+    SORFactor: 1.4
     enabled: 1
   bendingConstraintParameters:
     evaluationOrder: 1
@@ -75,7 +75,7 @@ MonoBehaviour:
     SORFactor: 2
     enabled: 1
   particleCollisionConstraintParameters:
-    evaluationOrder: 1
+    evaluationOrder: 0
     iterations: 1
     SORFactor: 1
     enabled: 1
@@ -85,7 +85,7 @@ MonoBehaviour:
     SORFactor: 1
     enabled: 0
   collisionConstraintParameters:
-    evaluationOrder: 1
+    evaluationOrder: 0
     iterations: 1
     SORFactor: 1
     enabled: 1
@@ -454,7 +454,7 @@ MonoBehaviour:
   uvScale: {x: 1, y: 1}
   normalizeV: 1
   section: {fileID: 11400000, guid: a0bc36a59515f413e90e10895929c938, type: 2}
-  thicknessScale: 1
+  thicknessScale: 0.9
 --- !u!114 &6556449427558914667
 MonoBehaviour:
   m_ObjectHideFlags: 0

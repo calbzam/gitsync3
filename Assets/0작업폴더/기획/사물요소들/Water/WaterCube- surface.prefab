@@ -97,6 +97,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 4762088f1894fe843ab79c711d8c0673, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8048364635920942669}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 4762088f1894fe843ab79c711d8c0673, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3063617290152755272}
   m_SourcePrefab: {fileID: 100100000, guid: 4762088f1894fe843ab79c711d8c0673, type: 3}
 --- !u!1 &1428717563609754138 stripped
 GameObject:
@@ -115,6 +118,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f81305e50966bcc4d93c545b5a479d83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _waterCol: {fileID: 0}
+  _effector: {fileID: 0}
 --- !u!61 &2911471903328036738
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -179,3 +184,19 @@ BuoyancyEffector2D:
   m_FlowAngle: 225
   m_FlowMagnitude: 5
   m_FlowVariation: 2
+--- !u!114 &3063617290152755272
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1428717563609754138}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f6a9934a1a0f44e89ccbb25355461bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  thickness: 0
+  material: {fileID: 0}
+  filter: 65537
+  sourceCollider: {fileID: 2911471903328036738}
