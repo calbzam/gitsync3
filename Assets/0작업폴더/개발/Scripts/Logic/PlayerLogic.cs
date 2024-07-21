@@ -11,6 +11,9 @@ public class PlayerLogic : MonoBehaviour
     public static ObiCollider2D PlayerObiCol { get; private set; }
     public static ObiCollider2D PlayerRopeRiderCol { get; private set; }
 
+    private static PlayerAnimController _playerAnim;
+    private static RigidbodyConstraints2D _origPlayerConstraints;
+
     private void Start()
     {
         Player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
@@ -19,6 +22,9 @@ public class PlayerLogic : MonoBehaviour
 
         PlayerObiCol = Player.GetComponent<ObiCollider2D>();
         PlayerRopeRiderCol = GameObject.FindGameObjectWithTag("Player ropeRider").GetComponent<ObiCollider2D>();
+
+        _playerAnim = Player.GetComponentInChildren<PlayerAnimController>();
+        _origPlayerConstraints = PlayerRb.constraints;
     }
 
     public static void DisconnectedPlayerAddJump()
@@ -32,5 +38,19 @@ public class PlayerLogic : MonoBehaviour
     public static void SetPlayerZPosition(float newZPos)
     {
         Player.transform.position = new Vector3(Player.transform.position.x, Player.transform.position.y, newZPos);
+    }
+
+    public static void LockPlayerPosition()
+    {
+        PlayerRb.constraints = _origPlayerConstraints | RigidbodyConstraints2D.FreezePosition;
+        Player.DirInputSetActive(false);
+        _playerAnim.DirInputSetActive(false);
+    }
+
+    public static void FreePlayerPosition()
+    {
+        PlayerRb.constraints = _origPlayerConstraints;
+        Player.DirInputSetActive(true);
+        _playerAnim.DirInputSetActive(true);
     }
 }
