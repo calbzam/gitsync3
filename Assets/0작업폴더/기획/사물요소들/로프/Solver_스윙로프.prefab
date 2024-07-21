@@ -75,7 +75,7 @@ MonoBehaviour:
     SORFactor: 2
     enabled: 1
   particleCollisionConstraintParameters:
-    evaluationOrder: 1
+    evaluationOrder: 0
     iterations: 1
     SORFactor: 1
     enabled: 1
@@ -85,7 +85,7 @@ MonoBehaviour:
     SORFactor: 1
     enabled: 0
   collisionConstraintParameters:
-    evaluationOrder: 1
+    evaluationOrder: 0
     iterations: 1
     SORFactor: 1
     enabled: 1
