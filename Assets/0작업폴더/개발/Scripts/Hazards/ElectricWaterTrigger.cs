@@ -10,6 +10,7 @@ public class ElectricWaterTrigger : MonoBehaviour
 
     private void Start()
     {
+        PlayerLogic.PlayerElectrocutedText.gameObject.SetActive(false);
         _timerIsActive = false;
     }
 
@@ -26,6 +27,7 @@ public class ElectricWaterTrigger : MonoBehaviour
             {
                 PlayerLogic.FreePlayerPosition();
                 PlayerLogic.Player.RespawnPlayer();
+                PlayerLogic.PlayerElectrocutedText.gameObject.SetActive(false);
                 _timerIsActive = false;
             }
         }
@@ -36,6 +38,7 @@ public class ElectricWaterTrigger : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             PlayerLogic.LockPlayerPosition();
+            PlayerLogic.PlayerElectrocutedText.gameObject.SetActive(true);
             _respawnDelayTimer = Time.time;
             _timerIsActive = true;
         }

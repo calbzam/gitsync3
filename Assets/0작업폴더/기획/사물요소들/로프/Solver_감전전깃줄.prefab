@@ -240,7 +240,7 @@ GameObject:
   - component: {fileID: 2773215214774939201}
   - component: {fileID: 535716664326151289}
   m_Layer: 0
-  m_Name: totalArea
+  m_Name: total area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -665,8 +665,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2773215214774939201}
   - {fileID: 9191949737963212554}
+  - {fileID: 2773215214774939201}
   m_Father: {fileID: 6514404012615320872}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7330495528878699022

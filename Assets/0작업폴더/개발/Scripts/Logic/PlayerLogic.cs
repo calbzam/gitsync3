@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using Obi;
+using TMPro;
 
 public class PlayerLogic : MonoBehaviour
 {
@@ -10,6 +11,8 @@ public class PlayerLogic : MonoBehaviour
     
     public static ObiCollider2D PlayerObiCol { get; private set; }
     public static ObiCollider2D PlayerRopeRiderCol { get; private set; }
+
+    public static TMP_Text PlayerElectrocutedText { get; private set; }
 
     private static PlayerAnimController _playerAnim;
     private static RigidbodyConstraints2D _origPlayerConstraints;
@@ -22,6 +25,8 @@ public class PlayerLogic : MonoBehaviour
 
         PlayerObiCol = Player.GetComponent<ObiCollider2D>();
         PlayerRopeRiderCol = GameObject.FindGameObjectWithTag("Player ropeRider").GetComponent<ObiCollider2D>();
+
+        PlayerElectrocutedText = GameObject.FindGameObjectWithTag("Player electrocutedText").GetComponent<TMP_Text>();
 
         _playerAnim = Player.GetComponentInChildren<PlayerAnimController>();
         _origPlayerConstraints = PlayerRb.constraints;
