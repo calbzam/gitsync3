@@ -260,7 +260,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   decimation: 0
-  smoothing: 0
+  smoothing: 1
   twist: 0
 --- !u!114 &3810073881003952453
 MonoBehaviour:
@@ -875,7 +875,7 @@ MonoBehaviour:
     maxDepenetration: 10
     continuousCollisionDetection: 1
     shockPropagation: 0
-    surfaceCollisionIterations: 8
+    surfaceCollisionIterations: 4
     surfaceCollisionTolerance: 0.005
   gravity: {x: 0, y: -9.81, z: 0}
   gravitySpace: 0
