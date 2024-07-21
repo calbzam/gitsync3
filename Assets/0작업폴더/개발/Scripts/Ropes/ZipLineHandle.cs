@@ -84,8 +84,8 @@ public class ZipLineHandle : RidableObject
 
         if (collision.gameObject.CompareTag("Player"))
         {
-            ConnectPlayer(collision);
             _stopMovingPulley = false;
+            ConnectPlayer(collision);
         }
     }
 
