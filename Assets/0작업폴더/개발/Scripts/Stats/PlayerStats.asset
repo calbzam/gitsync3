@@ -31,6 +31,6 @@ MonoBehaviour:
   CoyoteTime: 0.15
   JumpBuffer: 0.1
   RopeJumpedDistance: 2
-  RopeJumpedPlayerAddForce: 2.5
+  RopeJumpedPlayerAddForce: 1.5
   PlayerAttachedObjectAddVelocity: 12
   deadPositionY: -6

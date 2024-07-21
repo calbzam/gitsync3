@@ -12,8 +12,16 @@ public class ZipLineHandle : RidableObject
     [SerializeField] private float _moveToPlayer_maxDistance = 28f;
     [SerializeField] private float _moveToPlayer_speed = 0.5f;
 
+    [SerializeField] private Transform _startBlock;
+    [SerializeField] private Transform _endBlock;
+
     private RigidbodyConstraints _lockXPos_PulleyConstraints;
     private RigidbodyConstraints _freeXPos_PulleyConstraints;
+
+    private bool _stopMovingPulley = false;
+    public void StopMoving() { _stopMovingPulley = true; }
+
+    [SerializeField] private float _pulleyHitStopMargin = 1f;
 
     protected override void Awake()
     {
@@ -24,6 +32,7 @@ public class ZipLineHandle : RidableObject
 
     private void Start()
     {
+        _stopMovingPulley = false;
         _pulleyRb = GetComponentInParent<Rigidbody>();
     }
 
@@ -76,6 +85,7 @@ public class ZipLineHandle : RidableObject
         if (collision.gameObject.CompareTag("Player"))
         {
             ConnectPlayer(collision);
+            _stopMovingPulley = false;
         }
     }
 
@@ -87,21 +97,29 @@ public class ZipLineHandle : RidableObject
         PlayerLogic.LockPlayerPosition();
         PlayerLogic.PlayerRb.transform.localPosition = Vector3.zero;
         _pulleyRb.constraints = _freeXPos_PulleyConstraints;
-        AddPulleyVelocity(playerVelocityNow.x);
+        MovePulley(playerVelocityNow.x);
 
         PlayerOnThisObject?.Invoke(gameObject.GetInstanceID(), true);
         _playerIsAttached = true;
     }
 
-    // Todo: change later so that the velocity/AddForce direction follows the rope (next particle pos)
-    private void AddPulleyVelocity(float moveDir)
+    private void MovePulley(float moveDir)
     {
-        if (moveDir < 0)
-            _pulleyRb.velocity = PlayerLogic.PlayerStats.PlayerAttachedObjectAddVelocity * Vector2.left;
-        else if (moveDir > 0)
-            _pulleyRb.velocity = PlayerLogic.PlayerStats.PlayerAttachedObjectAddVelocity * Vector2.right;
-        else
-            _pulleyRb.velocity = PlayerLogic.PlayerStats.PlayerAttachedObjectAddVelocity * _ropeCalculator.GetFurtherRopeDir(_pulleyRb.transform.position.x);
+        if (transform.position.x - _startBlock.position.x < _pulleyHitStopMargin || _endBlock.position.x - transform.position.x < _pulleyHitStopMargin)
+        {
+            Debug.Log("stopping true");
+            _stopMovingPulley = true;
+        }
+
+        if (!_stopMovingPulley)
+        {
+            if (moveDir < 0)
+                _pulleyRb.velocity = PlayerLogic.PlayerStats.PlayerAttachedObjectAddVelocity * Vector2.left;
+            else if (moveDir > 0)
+                _pulleyRb.velocity = PlayerLogic.PlayerStats.PlayerAttachedObjectAddVelocity * Vector2.right;
+            else
+                _pulleyRb.velocity = PlayerLogic.PlayerStats.PlayerAttachedObjectAddVelocity * _ropeCalculator.GetFurtherRopeDir(_pulleyRb.transform.position.x);
+        }
     }
 
     protected override void DisconnectPlayer()

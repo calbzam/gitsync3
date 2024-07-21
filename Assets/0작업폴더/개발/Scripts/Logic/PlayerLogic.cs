@@ -27,6 +27,7 @@ public class PlayerLogic : MonoBehaviour
         PlayerRopeRiderCol = GameObject.FindGameObjectWithTag("Player ropeRider").GetComponent<ObiCollider2D>();
 
         PlayerElectrocutedText = GameObject.FindGameObjectWithTag("Player electrocutedText").GetComponent<TMP_Text>();
+        PlayerElectrocutedText.gameObject.SetActive(false);
 
         _playerAnim = Player.GetComponentInChildren<PlayerAnimController>();
         _origPlayerConstraints = PlayerRb.constraints;

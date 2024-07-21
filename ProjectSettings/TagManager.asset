@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Player ropeRider
   - Player electrocutedText
+  - ZipLineStoppingBlock
   layers:
   - Default
   - TransparentFX

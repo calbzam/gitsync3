@@ -10,7 +10,6 @@ public class ElectricWaterTrigger : MonoBehaviour
 
     private void Start()
     {
-        PlayerLogic.PlayerElectrocutedText.gameObject.SetActive(false);
         _timerIsActive = false;
     }
 

@@ -157,7 +157,7 @@ MonoBehaviour:
   bendingConstraintParameters:
     evaluationOrder: 0
     iterations: 1
-    SORFactor: 1
+    SORFactor: 0.5
     enabled: 1
   particleCollisionConstraintParameters:
     evaluationOrder: 1
@@ -376,7 +376,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3380868675968154453}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1a0c3ae34d4ec1746a5014773ebe5fde, type: 3}
   m_Name: 
@@ -715,7 +715,7 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0.036293514, y: 0.011493531}
-  m_Size: {x: 4.584869, y: 0.7396066}
+  m_Size: {x: 4.584869, y: 0.8}
   m_Direction: 1
 --- !u!50 &3642180296604744947
 Rigidbody2D:

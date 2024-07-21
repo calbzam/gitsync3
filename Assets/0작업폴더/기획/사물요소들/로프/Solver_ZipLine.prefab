@@ -144,81 +144,81 @@ MonoBehaviour:
   m_CollisionMaterial: {fileID: 0}
   m_SurfaceCollisions: 1
   m_SelfCollisions: 0
-  restLength_: 17.838413
+  restLength_: 17.769318
   elements:
   - particle1: 0
     particle2: 1
-    restLength: 1.1887351
+    restLength: 1.1834934
     constraintForce: 0
     tearResistance: 1
   - particle1: 1
     particle2: 2
-    restLength: 1.1902223
+    restLength: 1.1843023
     constraintForce: 0
     tearResistance: 1
   - particle1: 2
     particle2: 3
-    restLength: 1.1903557
+    restLength: 1.1855406
     constraintForce: 0
     tearResistance: 1
   - particle1: 3
     particle2: 4
-    restLength: 1.1903306
+    restLength: 1.1840872
     constraintForce: 0
     tearResistance: 1
   - particle1: 4
     particle2: 5
-    restLength: 1.1900904
+    restLength: 1.1853433
     constraintForce: 0
     tearResistance: 1
   - particle1: 5
     particle2: 6
-    restLength: 1.189306
+    restLength: 1.1857195
     constraintForce: 0
     tearResistance: 1
   - particle1: 6
     particle2: 7
-    restLength: 1.1910776
+    restLength: 1.185601
     constraintForce: 0
     tearResistance: 1
   - particle1: 7
     particle2: 8
-    restLength: 1.1885003
+    restLength: 1.1859704
     constraintForce: 0
     tearResistance: 1
   - particle1: 8
     particle2: 9
-    restLength: 1.189916
+    restLength: 1.1850964
     constraintForce: 0
     tearResistance: 1
   - particle1: 9
     particle2: 10
-    restLength: 1.1880599
+    restLength: 1.1852626
     constraintForce: 0
     tearResistance: 1
   - particle1: 10
     particle2: 11
-    restLength: 1.1875776
+    restLength: 1.1871452
     constraintForce: 0
     tearResistance: 1
   - particle1: 11
     particle2: 12
-    restLength: 1.1876824
+    restLength: 1.1817995
     constraintForce: 0
     tearResistance: 1
   - particle1: 12
     particle2: 13
-    restLength: 1.1850674
+    restLength: 1.1885133
     constraintForce: 0
     tearResistance: 1
   - particle1: 13
     particle2: 14
-    restLength: 1.1872586
+    restLength: 1.1817912
     constraintForce: 0
     tearResistance: 1
   - particle1: 14
     particle2: 15
-    restLength: 1.1942354
+    restLength: 1.1796503
     constraintForce: 0
     tearResistance: 1
   m_RopeBlueprint: {fileID: 11400000, guid: 460f6f7dc3a708445af6a4996f3fbb06, type: 2}
@@ -347,7 +347,7 @@ GameObject:
   - component: {fileID: 6662491590786526102}
   m_Layer: 11
   m_Name: Endblocker
-  m_TagString: Untagged
+  m_TagString: ZipLineStoppingBlock
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -447,8 +447,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5661046333335051997}
-  - component: {fileID: 7212428324866021992}
   - component: {fileID: 7050922900893078421}
+  - component: {fileID: 7212428324866021992}
   - component: {fileID: 550279705376468863}
   m_Layer: 0
   m_Name: Handle
@@ -472,6 +472,26 @@ Transform:
   m_Children: []
   m_Father: {fileID: 3161455705367265161}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7050922900893078421
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2884802790826844546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a711f0dd0ec0e0343923e69e2c9c9784, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playerOnOtherObject: 0
+  _ropeCalculator: {fileID: 4081489736378474001}
+  _moveToPlayer_minDistance: 3
+  _moveToPlayer_maxDistance: 28
+  _moveToPlayer_speed: 0.5
+  _startBlock: {fileID: 7105507610189804426}
+  _endBlock: {fileID: 6501697808794217608}
+  _pulleyHitStopMargin: 1
 --- !u!212 &7212428324866021992
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -524,23 +544,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &7050922900893078421
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2884802790826844546}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a711f0dd0ec0e0343923e69e2c9c9784, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _playerOnOtherObject: 0
-  _ropeCalculator: {fileID: 4081489736378474001}
-  _moveToPlayer_minDistance: 3
-  _moveToPlayer_maxDistance: 28
-  _moveToPlayer_speed: 0.5
 --- !u!61 &550279705376468863
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -600,7 +603,7 @@ GameObject:
   - component: {fileID: 8614136305637135201}
   m_Layer: 11
   m_Name: Startblocker
-  m_TagString: Untagged
+  m_TagString: ZipLineStoppingBlock
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -970,6 +973,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3161455705367265161}
+  - component: {fileID: 6667250113109061496}
   - component: {fileID: 4081789491335586428}
   - component: {fileID: 5803692526210172533}
   - component: {fileID: 7025967164443711655}
@@ -1000,6 +1004,19 @@ Transform:
   - {fileID: 5661046333335051997}
   m_Father: {fileID: 6885496709168918951}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6667250113109061496
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5590876485938196971}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 293f24e3e486ff741b74a8bf64738973, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _zipLineHandle: {fileID: 7050922900893078421}
 --- !u!33 &4081789491335586428
 MeshFilter:
   m_ObjectHideFlags: 0

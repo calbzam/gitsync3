@@ -454,7 +454,7 @@ MonoBehaviour:
   uvScale: {x: 1, y: 1}
   normalizeV: 1
   section: {fileID: 11400000, guid: a0bc36a59515f413e90e10895929c938, type: 2}
-  thicknessScale: 1
+  thicknessScale: 0.8
 --- !u!114 &6556449427558914667
 MonoBehaviour:
   m_ObjectHideFlags: 0
