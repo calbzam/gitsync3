@@ -376,17 +376,17 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3380868675968154453}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1a0c3ae34d4ec1746a5014773ebe5fde, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  changeSelectionTo: {fileID: 764789563069213605}
+  changeSelectionTo: {fileID: 0}
   lockScale: 1
   baseScale: {x: 1, y: 1, z: 1}
-  lockRotation: 1
+  lockRotation: 0
   baseRot: {x: 0, y: 0, z: 0}
-  lockTranslation: 1
+  lockTranslation: 0
   basePos: {x: 0, y: 0, z: 0}
   lockNonUniformScale: 0
 --- !u!33 &8434971815602455472
