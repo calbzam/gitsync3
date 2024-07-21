@@ -105,10 +105,8 @@ public class ZipLineHandle : RidableObject
 
     private void MovePulley(float moveDir)
     {
-        if (moveDir < 0 && transform.position.x - _startBlock.position.x < _pulleyHitStopMargin)
-        { _stopMovingPulley = true; return;  }
-        if (moveDir > 0 && _endBlock.position.x - transform.position.x < _pulleyHitStopMargin)
-        { _stopMovingPulley = true; return; }
+        if (moveDir < 0 && transform.position.x - _startBlock.position.x < _pulleyHitStopMargin) return;
+        if (moveDir > 0 && _endBlock.position.x - transform.position.x < _pulleyHitStopMargin) return;
 
         if (!_stopMovingPulley)
         {
@@ -118,8 +116,8 @@ public class ZipLineHandle : RidableObject
             { _pulleyRb.velocity = PlayerLogic.PlayerStats.PlayerAttachedObjectAddVelocity * Vector2.right; }
             else
             {
-                Vector2 furtherRopeDir = (_endBlock.position.x - transform.position.x > transform.position.x - _startBlock.position.x) ? Vector2.right : Vector2.left;
-                _pulleyRb.velocity = PlayerLogic.PlayerStats.PlayerAttachedObjectAddVelocity * furtherRopeDir;
+                Vector2 pulleyDir = (_endBlock.position.x - transform.position.x > transform.position.x - _startBlock.position.x) ? Vector2.right : Vector2.left;
+                _pulleyRb.velocity = PlayerLogic.PlayerStats.PlayerAttachedObjectAddVelocity * pulleyDir;
             }
         }
     }
