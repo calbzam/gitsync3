@@ -78,18 +78,18 @@ public class ZipLineHandle : RidableObject
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D col)
     {
         if (_playerOnOtherObject) return;
 
-        if (collision.gameObject.CompareTag("Player"))
+        if (col.CompareTag("Player"))
         {
             _stopMovingPulley = false;
-            ConnectPlayer(collision);
+            ConnectPlayer();
         }
     }
 
-    private void ConnectPlayer(Collider2D playerCollision)
+    private void ConnectPlayer()
     {
         Vector2 playerVelocityNow = PlayerLogic.PlayerRb.velocity;
         PlayerLogic.PlayerRb.transform.SetParent(transform);
