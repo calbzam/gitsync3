@@ -16,6 +16,7 @@ public class BatteryPickup : MonoBehaviour
 
     public RigidbodyConstraints2D OrigRbConstraints { get; private set; } // unused at the moment
 
+    public bool IsPickable { get; set; }
     public bool PlayerInPickupRange { get; set; }
     public bool IsHeldByPlayer { get; private set; }
     public bool BatteryIsInBox { get; private set; }
@@ -44,6 +45,7 @@ public class BatteryPickup : MonoBehaviour
         _leftRotation = Quaternion.Euler(new Vector3(0, 0, -_zRotation));
         _rightRotation = Quaternion.Euler(new Vector3(0, 0, _zRotation));
 
+        IsPickable = true;
         PlayerInPickupRange = false;
         IsHeldByPlayer = false;
         BatteryIsInBox = true;
@@ -57,7 +59,7 @@ public class BatteryPickup : MonoBehaviour
 
     private void PickUpItemStarted(InputAction.CallbackContext ctx)
     {
-        ToggleAttachBatteryToPlayer();
+        if (IsPickable) ToggleAttachBatteryToPlayer();
     }
 
     public void SetBatteryParent(Transform toParent)
@@ -66,18 +68,19 @@ public class BatteryPickup : MonoBehaviour
         transform.SetParent(toParent);
     }
 
+    public void SetLocalTransform(Vector3 offset, Quaternion quatRot)
+    {
+        transform.localPosition = offset;
+        transform.rotation = quatRot;
+    }
+
     private void SetBatteryFacingDir()
     {
         if (InputReader.FrameInput.Move.x < 0)
-        {
-            transform.localPosition = _leftOffset;
-            transform.rotation = _leftRotation;
-        }
+            SetLocalTransform(_leftOffset, _leftRotation);
+
         else if (InputReader.FrameInput.Move.x > 0)
-        {
-            transform.localPosition = _rightOffset;
-            transform.rotation = _rightRotation;
-        }
+            SetLocalTransform(_rightOffset, _rightRotation);
     }
 
     public void ToggleAttachBatteryToPlayer()
