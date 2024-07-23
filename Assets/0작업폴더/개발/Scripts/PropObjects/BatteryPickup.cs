@@ -15,76 +15,78 @@ public class BatteryPickup : MonoBehaviour
 
     private bool _isHeldByPlayer = false;
     public bool IsHeldByPlayer => _isHeldByPlayer; // for public access
-    private bool _batteryIsInBox = true;
-    public bool BatteryIsInBox => _batteryIsInBox; // for public access
+    public bool BatteryIsInBox = true;
 
     [SerializeField] private Vector2 _offset;
     [SerializeField] private float _rotation;
     //[SerializeField] private float _pickupRangeRadius = 1.1f;
 
-    private void Awake()
-    {
-        _input = new InputControls();
-    }
+    //private void Awake()
+    //{
+    //    _input = new InputControls();
+    //}
 
     private void Start()
     {
         _isHeldByPlayer = false;
-        _batteryIsInBox = true;
+        BatteryIsInBox = true;
     }
 
-    private void OnEnable()
-    {
-        _input.Enable();
-        _input.Player.PickUpItem.started += PickUpItemStarted;
-    }
+    //private void OnEnable()
+    //{
+    //    _input.Enable();
+    //    _input.Player.PickUpItem.started += PickUpItemStarted;
+    //}
 
-    private void OnDisable()
-    {
-        _input.Disable();
-        _input.Player.PickUpItem.started -= PickUpItemStarted;
-    }
+    //private void OnDisable()
+    //{
+    //    _input.Disable();
+    //    _input.Player.PickUpItem.started -= PickUpItemStarted;
+    //}
 
-    private void PickUpItemStarted(InputAction.CallbackContext ctx)
-    {
-        if (!_batteryIsInBox)
-        {
-            ToggleAttachBatteryToPlayer();
-        }
-    }
+    //private void PickUpItemStarted(InputAction.CallbackContext ctx)
+    //{
+    //    if (!BatteryIsInBox)
+    //    {
+    //        ToggleAttachBatteryToPlayer();
+    //    }
+    //}
 
-    public void ToggleAttachBatteryToPlayer()
-    {
-        if (_isHeldByPlayer)
-        {
-            DetachBatteryFromPlayer();
-        }
-        else
-        {
-            if (_batteryPickupRangeChecker.PlayerInPickupRange)
-                AttachBatteryToPlayer();
-        }
+    //public void ToggleAttachBatteryToPlayer()
+    //{
+    //    if (_isHeldByPlayer)
+    //    {
+    //        DetachBatteryFromPlayer();
+    //    }
+    //    else
+    //    {
+    //        if (_batteryPickupRangeChecker.PlayerInPickupRange)
+    //            AttachBatteryToPlayer();
+    //    }
 
-        _isHeldByPlayer = !_isHeldByPlayer;
-    }
+    //    _isHeldByPlayer = !_isHeldByPlayer;
+    //}
 
-    public void AttachBatteryToPlayer()
-    {
-        Debug.Log("attached");
-        _batteryCase.SetBatteryParent(PlayerLogic.Player.transform);
+    //public void AttachBatteryToPlayer()
+    //{
+    //    Debug.Log("attached");
+    //    _batteryCase.SetBatteryParent(PlayerLogic.Player.transform);
 
-        transform.localPosition = Vector2.zero + _offset;
-        transform.rotation = Quaternion.Euler(new Vector3(0, 0, _rotation));
+    //    transform.localPosition = Vector2.zero + _offset;
+    //    transform.rotation = Quaternion.Euler(new Vector3(0, 0, _rotation));
 
-        if (_batteryIsInBox) _batteryIsInBox = false;
-        _isHeldByPlayer = true;
-    }
+    //    if (BatteryIsInBox) BatteryIsInBox = false;
+    //    _isHeldByPlayer = true;
+    //}
 
-    public void DetachBatteryFromPlayer()
-    {
-        Debug.Log("detached");
-        _batteryCase.SetBatteryParent(null);
-    }
+    //public void DetachBatteryFromPlayer()
+    //{
+    //    Debug.Log("detached");
+    //    _batteryCase.SetBatteryParent(null);
+    //}
+
+
+
 
     //private bool PlayerInPickupRange()
     //{
