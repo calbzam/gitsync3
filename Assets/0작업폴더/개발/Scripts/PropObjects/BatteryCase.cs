@@ -50,8 +50,8 @@ public class BatteryCase : MonoBehaviour
     {
         _battery.transform.SetParent(parent);
 
-        if (parent == null) _batteryRb.constraints = _origRbConstraints;
-        else _batteryRb.constraints = _origRbConstraints | RigidbodyConstraints2D.FreezePosition;
+        if (parent == null) _batteryRb.simulated = true;
+        else _batteryRb.simulated = false;
     }
 
     private void OnTriggerEnter2D(Collider2D col)
