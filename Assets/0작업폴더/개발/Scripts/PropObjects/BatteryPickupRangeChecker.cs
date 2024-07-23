@@ -4,19 +4,14 @@ using UnityEngine;
 
 public class BatteryPickupRangeChecker : MonoBehaviour
 {
-    private bool _playerInPickupRange = false;
-    public bool PlayerInPickupRange => _playerInPickupRange; // for public access
-
-    private void Start()
-    {
-        _playerInPickupRange = false;
-    }
+    [SerializeField] private BatteryPickup _battery;
+    //public bool PlayerInPickupRange { get; private set; }
 
     private void OnTriggerEnter2D(Collider2D col)
     {
         if (col.CompareTag("Player"))
         {
-            _playerInPickupRange = true;
+            _battery.PlayerInPickupRange = true;
         }
     }
 
@@ -24,7 +19,7 @@ public class BatteryPickupRangeChecker : MonoBehaviour
     {
         if (col.CompareTag("Player"))
         {
-            _playerInPickupRange = false;
+            _battery.PlayerInPickupRange = false;
         }
     }
 }

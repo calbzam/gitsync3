@@ -9,18 +9,15 @@ public class BatteryPickup : MonoBehaviour
     private InputControls _input;
 
     [SerializeField] private Rigidbody2D _rb;
-
-    [SerializeField] private BatteryCase _batteryCase;
-    [SerializeField] private BatteryPickupRangeChecker _batteryPickupRangeChecker;
-
-    private bool _isHeldByPlayer = false;
-    public bool IsHeldByPlayer => _isHeldByPlayer; // for public access
-    private bool _batteryIsInBox = true;
-    public bool BatteryIsInBox => _batteryIsInBox; // for public access
-
     [SerializeField] private Vector2 _offset;
     [SerializeField] private float _rotation;
-    //[SerializeField] private float _pickupRangeRadius = 1.1f;
+
+    public RigidbodyConstraints2D OrigRbConstraints { get; private set; } // unused at the moment
+
+    public bool PlayerInPickupRange { get; set; }
+
+    public bool IsHeldByPlayer { get; private set; }
+    public bool BatteryIsInBox { get; private set; }
 
     private void Awake()
     {
@@ -29,8 +26,12 @@ public class BatteryPickup : MonoBehaviour
 
     private void Start()
     {
-        _isHeldByPlayer = false;
-        _batteryIsInBox = true;
+        _rb.simulated = false;
+
+        PlayerInPickupRange = false;
+        IsHeldByPlayer = false;
+        BatteryIsInBox = true;
+        OrigRbConstraints = _rb.constraints;
     }
 
     private void OnEnable()
@@ -47,54 +48,40 @@ public class BatteryPickup : MonoBehaviour
 
     private void PickUpItemStarted(InputAction.CallbackContext ctx)
     {
-        if (!_batteryIsInBox)
-        {
-            ToggleAttachBatteryToPlayer();
-        }
+        ToggleAttachBatteryToPlayer();
+    }
+
+    public void SetBatteryParent(Transform toParent)
+    {
+        _rb.simulated = (toParent == null) ? true : false;
+        transform.SetParent(toParent);
     }
 
     public void ToggleAttachBatteryToPlayer()
     {
-        if (_isHeldByPlayer)
+        if (IsHeldByPlayer)
         {
-            DetachBatteryFromPlayer();
+            DetachFromPlayer();
         }
         else
         {
-            if (_batteryPickupRangeChecker.PlayerInPickupRange)
-                AttachBatteryToPlayer();
+            if (PlayerInPickupRange) AttachToPlayer();
         }
-
-        _isHeldByPlayer = !_isHeldByPlayer;
     }
 
-    public void AttachBatteryToPlayer()
+    public void DetachFromPlayer()
     {
-        Debug.Log("attached");
-        _batteryCase.SetBatteryParent(PlayerLogic.Player.transform);
+        SetBatteryParent(null);
+        IsHeldByPlayer = false;
+    }
 
+    public void AttachToPlayer()
+    {
+        SetBatteryParent(PlayerLogic.Player.transform);
         transform.localPosition = Vector2.zero + _offset;
         transform.rotation = Quaternion.Euler(new Vector3(0, 0, _rotation));
 
-        if (_batteryIsInBox) _batteryIsInBox = false;
-        _isHeldByPlayer = true;
+        if (BatteryIsInBox) BatteryIsInBox = false;
+        IsHeldByPlayer = true;
     }
-
-    public void DetachBatteryFromPlayer()
-    {
-        Debug.Log("detached");
-        _batteryCase.SetBatteryParent(null);
-    }
-
-    //private bool PlayerInPickupRange()
-    //{
-    //    return Physics2D.OverlapCircle(transform.position, _pickupRangeRadius, Layers.PlayerLayer);
-    //}
-
-    //#if UNITY_EDITOR
-    //    private void OnDrawGizmos()
-    //    {
-    //        Handles.DrawWireDisc(transform.position, Vector3.back, _pickupRangeRadius);
-    //    }
-    //#endif
 }
