@@ -6,84 +6,31 @@ using UnityEngine.InputSystem;
 
 public class BatteryPickup : MonoBehaviour
 {
-    private InputControls _input;
+    //private InputControls _input;
 
     [SerializeField] private Rigidbody2D _rb;
+    private RigidbodyConstraints2D _origRbConstraints;
+    private RigidbodyConstraints2D _lockedRbConstraints;
 
-    [SerializeField] private BatteryCase _batteryCase;
-    [SerializeField] private BatteryPickupRangeChecker _batteryPickupRangeChecker;
+    public Rigidbody2D Rb => _rb; // for public access: not editable by external
+    public RigidbodyConstraints2D OrigRbConstraints => _origRbConstraints;
+    public RigidbodyConstraints2D LockedRbConstraints => _lockedRbConstraints;
 
-    private bool _isHeldByPlayer = false;
-    public bool IsHeldByPlayer => _isHeldByPlayer; // for public access
-    private bool _batteryIsInBox = true;
-    public bool BatteryIsInBox => _batteryIsInBox; // for public access
+    public bool PlayerInPickupRange { get; set; }
+    public bool IsHeldByPlayer { get; set; }
+    public bool IsInBox { get; set; }
 
-    [SerializeField] private Vector2 _offset;
-    [SerializeField] private float _rotation;
-    //[SerializeField] private float _pickupRangeRadius = 1.1f;
-
-    private void Awake()
-    {
-        _input = new InputControls();
-    }
+    public Vector2 AttachOffset = new Vector2(0, 0.3f);
+    public float AttachRotation;
 
     private void Start()
     {
-        _isHeldByPlayer = false;
-        _batteryIsInBox = true;
-    }
+        PlayerInPickupRange = false;
+        IsHeldByPlayer = false;
+        IsInBox = true;
 
-    private void OnEnable()
-    {
-        _input.Enable();
-        _input.Player.PickUpItem.started += PickUpItemStarted;
-    }
-
-    private void OnDisable()
-    {
-        _input.Disable();
-        _input.Player.PickUpItem.started -= PickUpItemStarted;
-    }
-
-    private void PickUpItemStarted(InputAction.CallbackContext ctx)
-    {
-        if (!_batteryIsInBox)
-        {
-            ToggleAttachBatteryToPlayer();
-        }
-    }
-
-    public void ToggleAttachBatteryToPlayer()
-    {
-        if (_isHeldByPlayer)
-        {
-            DetachBatteryFromPlayer();
-        }
-        else
-        {
-            if (_batteryPickupRangeChecker.PlayerInPickupRange)
-                AttachBatteryToPlayer();
-        }
-
-        _isHeldByPlayer = !_isHeldByPlayer;
-    }
-
-    public void AttachBatteryToPlayer()
-    {
-        Debug.Log("attached");
-        _batteryCase.SetBatteryParent(PlayerLogic.Player.transform);
-
-        transform.localPosition = Vector2.zero + _offset;
-        transform.rotation = Quaternion.Euler(new Vector3(0, 0, _rotation));
-
-        if (_batteryIsInBox) _batteryIsInBox = false;
-        _isHeldByPlayer = true;
-    }
-
-    public void DetachBatteryFromPlayer()
-    {
-        Debug.Log("detached");
-        _batteryCase.SetBatteryParent(null);
+        _origRbConstraints = _rb.constraints;
+        _lockedRbConstraints = _origRbConstraints | RigidbodyConstraints2D.FreezePosition;
     }
 
     //private bool PlayerInPickupRange()
