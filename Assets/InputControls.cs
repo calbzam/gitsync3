@@ -82,7 +82,7 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""PickUpItem"",
+                    ""name"": ""PickupActivate"",
                     ""type"": ""Button"",
                     ""id"": ""965fd3e4-66a9-4983-99d5-e664cd5fe6ac"",
                     ""expectedControlType"": ""Button"",
@@ -209,7 +209,7 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""PickUpItem"",
+                    ""action"": ""PickupActivate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -330,7 +330,7 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
         m_Player_Swap = m_Player.FindAction("Swap", throwIfNotFound: true);
         m_Player_Activate = m_Player.FindAction("Activate", throwIfNotFound: true);
-        m_Player_PickUpItem = m_Player.FindAction("PickUpItem", throwIfNotFound: true);
+        m_Player_PickupActivate = m_Player.FindAction("PickupActivate", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Pause = m_UI.FindAction("Pause", throwIfNotFound: true);
@@ -408,7 +408,7 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Jump;
     private readonly InputAction m_Player_Swap;
     private readonly InputAction m_Player_Activate;
-    private readonly InputAction m_Player_PickUpItem;
+    private readonly InputAction m_Player_PickupActivate;
     public struct PlayerActions
     {
         private @InputControls m_Wrapper;
@@ -419,7 +419,7 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
         public InputAction @Swap => m_Wrapper.m_Player_Swap;
         public InputAction @Activate => m_Wrapper.m_Player_Activate;
-        public InputAction @PickUpItem => m_Wrapper.m_Player_PickUpItem;
+        public InputAction @PickupActivate => m_Wrapper.m_Player_PickupActivate;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -447,9 +447,9 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
             @Activate.started += instance.OnActivate;
             @Activate.performed += instance.OnActivate;
             @Activate.canceled += instance.OnActivate;
-            @PickUpItem.started += instance.OnPickUpItem;
-            @PickUpItem.performed += instance.OnPickUpItem;
-            @PickUpItem.canceled += instance.OnPickUpItem;
+            @PickupActivate.started += instance.OnPickupActivate;
+            @PickupActivate.performed += instance.OnPickupActivate;
+            @PickupActivate.canceled += instance.OnPickupActivate;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -472,9 +472,9 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
             @Activate.started -= instance.OnActivate;
             @Activate.performed -= instance.OnActivate;
             @Activate.canceled -= instance.OnActivate;
-            @PickUpItem.started -= instance.OnPickUpItem;
-            @PickUpItem.performed -= instance.OnPickUpItem;
-            @PickUpItem.canceled -= instance.OnPickUpItem;
+            @PickupActivate.started -= instance.OnPickupActivate;
+            @PickupActivate.performed -= instance.OnPickupActivate;
+            @PickupActivate.canceled -= instance.OnPickupActivate;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -646,7 +646,7 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
         void OnJump(InputAction.CallbackContext context);
         void OnSwap(InputAction.CallbackContext context);
         void OnActivate(InputAction.CallbackContext context);
-        void OnPickUpItem(InputAction.CallbackContext context);
+        void OnPickupActivate(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

@@ -5,7 +5,6 @@ using UnityEngine.Windows;
 
 public class PlayerAnimController : MonoBehaviour
 {
-    private InputControls input;
     private SpriteRenderer spriteRenderer;
     private Vector2 inputDir;
 
@@ -14,24 +13,12 @@ public class PlayerAnimController : MonoBehaviour
 
     private void Awake()
     {
-        input = new InputControls();
-
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
-    }
-
-    private void OnEnable()
-    {
-        input.Enable();
-    }
-
-    private void OnDisable()
-    {
-        input.Disable();
     }
 
     private void Update()
     {
-        inputDir = input.Player.Movement.ReadValue<Vector2>();
+        inputDir = CentralInputReader.Input.Player.Movement.ReadValue<Vector2>();
 
         if (_DirInputEnabled)
         {

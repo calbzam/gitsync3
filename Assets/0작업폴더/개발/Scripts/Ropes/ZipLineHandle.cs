@@ -23,9 +23,8 @@ public class ZipLineHandle : RidableObject
 
     [SerializeField] private float _pulleyHitStopMargin = 1f;
 
-    protected override void Awake()
+    private void Awake()
     {
-        base.Awake();
         _freeXPos_PulleyConstraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
         _lockXPos_PulleyConstraints = _freeXPos_PulleyConstraints | RigidbodyConstraints.FreezePositionX;
     }

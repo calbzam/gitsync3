@@ -35,9 +35,9 @@ public class PlayerLogic : MonoBehaviour
 
     public static void DisconnectedPlayerAddJump()
     {
-        if (InputReader.FrameInput.Move.x < 0)
+        if (FrameInputReader.FrameInput.Move.x < 0)
             PlayerRb.AddForce(new Vector2(-1, 1) * PlayerStats.RopeJumpedPlayerAddForce, ForceMode2D.Impulse);
-        else if (InputReader.FrameInput.Move.x > 0)
+        else if (FrameInputReader.FrameInput.Move.x > 0)
             PlayerRb.AddForce(new Vector2(1, 1) * PlayerStats.RopeJumpedPlayerAddForce, ForceMode2D.Impulse);
     }
 

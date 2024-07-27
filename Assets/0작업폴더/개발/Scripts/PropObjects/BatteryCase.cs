@@ -12,7 +12,7 @@ public class BatteryCase : MonoBehaviour
         if (_battery.BatteryIsInBox)
         {
             if (col.CompareTag("Player"))
-                _battery.PlayerInPickupRange = true;
+                _battery.PlayerIsInRange = true;
         }
     }
 
@@ -21,7 +21,7 @@ public class BatteryCase : MonoBehaviour
         if (_battery.BatteryIsInBox)
         {
             if (col.CompareTag("Player"))
-                _battery.PlayerInPickupRange = false;
+                _battery.PlayerIsInRange = false;
         }
     }
 }

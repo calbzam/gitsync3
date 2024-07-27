@@ -6,8 +6,6 @@ using UnityEngine.InputSystem;
 
 public class BatteryPickup : MonoBehaviour
 {
-    private InputControls _input;
-
     [SerializeField] private Rigidbody2D _rb;
     [SerializeField] private Vector2 _rightOffset = new Vector2(0, 0.6f);
     [SerializeField] private float _zRotation = 8;
@@ -17,25 +15,18 @@ public class BatteryPickup : MonoBehaviour
     public RigidbodyConstraints2D OrigRbConstraints { get; private set; } // unused at the moment
 
     public bool IsPickable { get; set; }
-    public bool PlayerInPickupRange { get; set; }
+    public bool PlayerIsInRange { get; set; }
     public bool IsHeldByPlayer { get; private set; }
     public bool BatteryIsInBox { get; private set; }
 
-    private void Awake()
-    {
-        _input = new InputControls();
-    }
-
     private void OnEnable()
     {
-        _input.Enable();
-        _input.Player.PickUpItem.started += PickUpItemStarted;
+        CentralInputReader.Input.Player.PickupActivate.started += PickupActivateStarted;
     }
 
     private void OnDisable()
     {
-        _input.Disable();
-        _input.Player.PickUpItem.started -= PickUpItemStarted;
+        CentralInputReader.Input.Player.PickupActivate.started -= PickupActivateStarted;
     }
 
     private void Start()
@@ -46,7 +37,7 @@ public class BatteryPickup : MonoBehaviour
         _rightRotation = Quaternion.Euler(new Vector3(0, 0, _zRotation));
 
         IsPickable = true;
-        PlayerInPickupRange = false;
+        PlayerIsInRange = false;
         IsHeldByPlayer = false;
         BatteryIsInBox = true;
         OrigRbConstraints = _rb.constraints;
@@ -57,7 +48,7 @@ public class BatteryPickup : MonoBehaviour
         if (IsHeldByPlayer) SetBatteryFacingDir();
     }
 
-    private void PickUpItemStarted(InputAction.CallbackContext ctx)
+    private void PickupActivateStarted(InputAction.CallbackContext ctx)
     {
         if (IsPickable) ToggleAttachBatteryToPlayer();
     }
@@ -76,10 +67,10 @@ public class BatteryPickup : MonoBehaviour
 
     private void SetBatteryFacingDir()
     {
-        if (InputReader.FrameInput.Move.x < 0)
+        if (FrameInputReader.FrameInput.Move.x < 0)
             SetLocalTransform(_leftOffset, _leftRotation);
 
-        else if (InputReader.FrameInput.Move.x > 0)
+        else if (FrameInputReader.FrameInput.Move.x > 0)
             SetLocalTransform(_rightOffset, _rightRotation);
     }
 
@@ -91,7 +82,7 @@ public class BatteryPickup : MonoBehaviour
         }
         else
         {
-            if (PlayerInPickupRange) AttachToPlayer();
+            if (PlayerIsInRange) AttachToPlayer();
         }
     }
 
