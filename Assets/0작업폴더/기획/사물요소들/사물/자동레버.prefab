@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _leverActivate: {fileID: 7007069745677971743}
+  _leverHandle: {fileID: 8241648026004698592}
   _batteryInsertPoint: {fileID: 5369158633189701915}
   _insertedZRotation: 45
 --- !u!58 &9205665760017977375
@@ -219,6 +220,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _connectedObject: {fileID: 0}
   _checkPointToActivate: {fileID: 0}
+  IsAutomatic: 1
 --- !u!1 &5116138111894926902
 GameObject:
   m_ObjectHideFlags: 0

@@ -32,7 +32,7 @@ public class LeverHandle_useHingeJointMotor : MonoBehaviour
 
     private void PickupActivateStarted(InputAction.CallbackContext ctx)
     {
-        if (_batteryReader.BatteryInserted && _leverHandleReader.PlayerIsInRange)
+        if (!_leverActivate.IsAutomatic && _batteryReader.BatteryInserted && _leverHandleReader.PlayerIsInRange)
         {
             ToggleActivateLeverHandle();
         }

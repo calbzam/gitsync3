@@ -42,13 +42,13 @@ public class LeverHandle_useQuatRot : MonoBehaviour
 
     private void PickupActivateStarted(InputAction.CallbackContext ctx)
     {
-        if (_batteryReader.BatteryInserted && _leverHandleReader.PlayerIsInRange)
+        if (!_leverActivate.IsAutomatic && _batteryReader.BatteryInserted && _leverHandleReader.PlayerIsInRange)
         {
             ToggleActivateLeverHandle();
         }
     }
 
-    private void ToggleActivateLeverHandle()
+    public void ToggleActivateLeverHandle()
     {
         _leverActivate.ToggleActivate();
         ToggleRotateLeverHandle();

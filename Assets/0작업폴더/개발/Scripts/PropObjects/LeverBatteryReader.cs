@@ -5,6 +5,7 @@ using UnityEngine;
 public class LeverBatteryReader : MonoBehaviour
 {
     [SerializeField] private LeverActivate _leverActivate;
+    [SerializeField] private LeverHandle_useQuatRot _leverHandle;
 
     [Header("")]
     [SerializeField] private Transform _batteryInsertPoint;
@@ -30,7 +31,8 @@ public class LeverBatteryReader : MonoBehaviour
             {
                 BatteryPickup battery = col.GetComponent<BatteryPickup>();
                 if (!battery.IsHeldByPlayer) InsertBatteryToLever(battery);
-                _leverActivate.BatteryInsertedAction();
+                if (_leverActivate.IsAutomatic) _leverHandle.ToggleActivateLeverHandle();
+                _leverActivate.UpdateCheckpoint();
             }
         }
     }
