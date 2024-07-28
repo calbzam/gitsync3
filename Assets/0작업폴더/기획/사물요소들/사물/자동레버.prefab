@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67a0fafa11df5894988f62eb72f9c4b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _leverActivate: {fileID: 7007069745677971743}
   _batteryInsertPoint: {fileID: 5369158633189701915}
   _insertedZRotation: 45
 --- !u!58 &9205665760017977375
@@ -124,7 +125,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5932876964294647258}
-  - component: {fileID: 5265273245370183518}
+  - component: {fileID: 8241648026004698592}
   m_Layer: 0
   m_Name: "\uC190\uC7A1\uC774"
   m_TagString: Untagged
@@ -149,7 +150,7 @@ Transform:
   - {fileID: 510513352497683237}
   m_Father: {fileID: 4760592617884603308}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 38.328}
---- !u!114 &5265273245370183518
+--- !u!114 &8241648026004698592
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -217,6 +218,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _connectedObject: {fileID: 0}
+  _checkPointToActivate: {fileID: 0}
 --- !u!1 &5116138111894926902
 GameObject:
   m_ObjectHideFlags: 0
@@ -612,7 +614,7 @@ Transform:
   m_GameObject: {fileID: 8953670211366058406}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.367, y: -0.86, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -663,5 +665,5 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0.094768055, y: -0.0000011143561}
-  m_Size: {x: 1.4, y: 10}
+  m_Size: {x: 2, y: 10}
   m_Direction: 1

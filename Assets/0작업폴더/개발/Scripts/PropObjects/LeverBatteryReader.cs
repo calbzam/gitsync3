@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class LeverBatteryReader : MonoBehaviour
 {
+    [SerializeField] private LeverActivate _leverActivate;
+
+    [Header("")]
     [SerializeField] private Transform _batteryInsertPoint;
     [SerializeField] private float _insertedZRotation = -45;
     private Vector3 _offsetVec3;
@@ -21,10 +24,14 @@ public class LeverBatteryReader : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.CompareTag("Battery"))
+        if (!BatteryInserted)
         {
-            BatteryPickup battery = col.GetComponent<BatteryPickup>();
-            if (!battery.IsHeldByPlayer) InsertBatteryToLever(battery);
+            if (col.CompareTag("Battery"))
+            {
+                BatteryPickup battery = col.GetComponent<BatteryPickup>();
+                if (!battery.IsHeldByPlayer) InsertBatteryToLever(battery);
+                _leverActivate.BatteryInsertedAction();
+            }
         }
     }
 

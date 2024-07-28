@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class LeverHandle : MonoBehaviour
+public class LeverHandle_useQuatRot : MonoBehaviour
 {
     [SerializeField] private LeverActivate _leverActivate;
 
@@ -12,7 +12,7 @@ public class LeverHandle : MonoBehaviour
     [SerializeField] private LeverHandleReader _leverHandleReader;
     [SerializeField] private LeverBatteryReader _batteryReader;
 
-    [Header("")]
+    [Header("")] // useQuatRot variables
     [SerializeField] private float _activatedRot = 0f;
     [SerializeField] private float _deactivatedRot = 45f;
     [SerializeField] private float _rotationSpeed = 100f;
@@ -52,6 +52,7 @@ public class LeverHandle : MonoBehaviour
     {
         _leverActivate.ToggleActivate();
         ToggleRotateLeverHandle();
+        _leverActivate.ActivatedAction();
     }
 
     private void ToggleRotateLeverHandle()

@@ -4,14 +4,13 @@ using UnityEngine;
 
 public class CheckpointTrigger : MonoBehaviour
 {
-    [SerializeField] private Transform _respawnPoint; // yellow circle sprite
-    public Transform RespawnPoint => _respawnPoint; // for public access
+    [SerializeField] private Checkpoint _checkPoint;
 
     private void OnTriggerEnter2D(Collider2D col)
     {
         if (col.CompareTag("Player"))
         {
-            col.GetComponent<PlayerController>().SetRespawnPos(_respawnPoint.position);
+            col.GetComponent<PlayerController>().SetRespawnPos(_checkPoint.RespawnPoint.position);
         }
     }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class NearestPlayerRespawn_UseDuringDevelopmentOnly : MonoBehaviour
 {
-    private CheckpointTrigger[] _checkpointTriggers;
+    private Checkpoint[] _checkpoints;
 
     [SerializeField] private Transform _initialSpawnPoint;
 
@@ -12,7 +12,7 @@ public class NearestPlayerRespawn_UseDuringDevelopmentOnly : MonoBehaviour
 
     private void Start()
     {
-        _checkpointTriggers = gameObject.GetComponentsInChildren<CheckpointTrigger>();
+        _checkpoints = gameObject.GetComponentsInChildren<Checkpoint>();
 
         _player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
 
@@ -25,7 +25,7 @@ public class NearestPlayerRespawn_UseDuringDevelopmentOnly : MonoBehaviour
         Vector3 playerPos = _player.transform.position;
         Vector3 currentRespawnPos = _player.RespawnPos;
 
-        foreach (CheckpointTrigger trigger in _checkpointTriggers)
+        foreach (Checkpoint trigger in _checkpoints)
         {
             if (trigger.RespawnPoint.position.x < playerPos.x)
                 if (Vector2.Distance(trigger.RespawnPoint.position, playerPos) < Vector2.Distance(currentRespawnPos, playerPos))
