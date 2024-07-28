@@ -28,9 +28,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 263894947568513617}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.95, y: 0, z: 0}
-  m_LocalScale: {x: 1.9000001, y: 0.5, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.94999605, y: 0, z: 0}
+  m_LocalScale: {x: 1.8999999, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 248712606818513003}
@@ -173,7 +173,7 @@ HingeJoint2D:
   m_BreakAction: 3
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: -0.50006014, y: 0.00020774239}
-  m_ConnectedAnchor: {x: 199.64989, y: -0.01989613}
+  m_ConnectedAnchor: {x: 490.99097, y: 5.897051}
   m_UseMotor: 0
   m_Motor:
     m_MotorSpeed: 0
@@ -191,7 +191,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7675510115753431451}
-  - component: {fileID: 6422745796601376834}
+  - component: {fileID: 3168084165810365014}
   - component: {fileID: 1502462883573293889}
   - component: {fileID: 8617684009985133475}
   m_Layer: 6
@@ -216,7 +216,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 248712606818513003}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6422745796601376834
+--- !u!114 &3168084165810365014
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -228,9 +228,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26f49f46c759dd142a2089dda2f8d875, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leftHalf: {fileID: 263894947568513617}
-  rightHalf: {fileID: 2023337132940576558}
-  durationToBreak: 4
+  _parentRb: {fileID: 5946375037720789125}
+  _wholePanel: {fileID: 1164977784716440153}
+  _leftHalf: {fileID: 263894947568513617}
+  _rightHalf: {fileID: 2023337132940576558}
+  DurationToBreak: 3
 --- !u!212 &1502462883573293889
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -356,9 +358,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2023337132940576558}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.95, y: 0, z: 0}
-  m_LocalScale: {x: 1.9, y: 0.5, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.94999605, y: 0, z: 0}
+  m_LocalScale: {x: 1.8999999, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 248712606818513003}
@@ -501,7 +503,7 @@ HingeJoint2D:
   m_BreakAction: 3
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: 0.5000141, y: 0.000077724864}
-  m_ConnectedAnchor: {x: 203.45003, y: -0.019961137}
+  m_ConnectedAnchor: {x: 506.2887, y: 6.7830715}
   m_UseMotor: 0
   m_Motor:
     m_MotorSpeed: 0
@@ -519,6 +521,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 248712606818513003}
+  - component: {fileID: 7035172402979226230}
+  - component: {fileID: 5946375037720789125}
   m_Layer: 6
   m_Name: "\uB098\uBB34\uD310\uB12C"
   m_TagString: Untagged
@@ -544,3 +548,43 @@ Transform:
   - {fileID: 3532597065794268874}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7035172402979226230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5481177010536955079}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5719355dc192cda41a5491fa9b38e358, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _: 0
+--- !u!50 &5946375037720789125
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5481177010536955079}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
