@@ -4,14 +4,15 @@ using UnityEngine;
 
 public class PanelBreak : MonoBehaviour
 {
+    [Header("나무판넬이 부서지기까지 걸리는 시간 (초)")]
+    public float DurationToBreak = 3f;
+
+    [Header("")]
     [SerializeField] private Rigidbody2D _parentRb;
     [SerializeField] private PanelWholepanelTimer _wholePanelTimer;
     [SerializeField] private GameObject _wholePanel;
     [SerializeField] private GameObject _leftHalf;
     [SerializeField] private GameObject _rightHalf;
-
-    [Header("나무판넬이 부서지기까지 걸리는 시간 (초)")]
-    public float DurationToBreak = 3f;
 
     private void Start()
     {

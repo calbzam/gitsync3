@@ -161,6 +161,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7406e61a3862614d9ae0135a8f1924b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _leverActivate: {fileID: 7007069745677971743}
   _leverHandleTransform: {fileID: 5932876964294647258}
   _leverHandleReader: {fileID: 396108350270058034}
   _batteryReader: {fileID: 8869093379455646044}
@@ -176,6 +177,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4760592617884603308}
+  - component: {fileID: 7007069745677971743}
   m_Layer: 0
   m_Name: "\uC790\uB3D9\uB808\uBC84"
   m_TagString: Untagged
@@ -202,6 +204,19 @@ Transform:
   - {fileID: 624787514860622337}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7007069745677971743
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4777669523145685090}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d721f65813cef164ba6f8403a6a2c233, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _connectedObject: {fileID: 0}
 --- !u!1 &5116138111894926902
 GameObject:
   m_ObjectHideFlags: 0
