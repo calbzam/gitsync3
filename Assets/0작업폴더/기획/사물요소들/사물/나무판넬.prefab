@@ -228,11 +228,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26f49f46c759dd142a2089dda2f8d875, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _parentRb: {fileID: 5946375037720789125}
-  _wholePanel: {fileID: 1164977784716440153}
-  _leftHalf: {fileID: 263894947568513617}
-  _rightHalf: {fileID: 2023337132940576558}
-  DurationToBreak: 3
 --- !u!212 &1502462883573293889
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -521,6 +516,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 248712606818513003}
+  - component: {fileID: 8923340521180096210}
   - component: {fileID: 7035172402979226230}
   - component: {fileID: 5946375037720789125}
   m_Layer: 6
@@ -548,6 +544,24 @@ Transform:
   - {fileID: 3532597065794268874}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8923340521180096210
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5481177010536955079}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a4cd52eb96674149a43b829b2d43b92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _parentRb: {fileID: 5946375037720789125}
+  _wholePanelTimer: {fileID: 3168084165810365014}
+  _wholePanel: {fileID: 1164977784716440153}
+  _leftHalf: {fileID: 263894947568513617}
+  _rightHalf: {fileID: 2023337132940576558}
+  DurationToBreak: 3
 --- !u!114 &7035172402979226230
 MonoBehaviour:
   m_ObjectHideFlags: 0
