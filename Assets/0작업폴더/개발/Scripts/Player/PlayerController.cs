@@ -44,6 +44,8 @@ public class PlayerController : MonoBehaviour
     private float _frameLeftGrounded = float.MinValue;
     private bool _grounded;
     public bool IsInWater { get; set; }
+    public bool IsInLadderRange { get; set; }
+    public bool IsOnLadder { get; set; }
     //private bool disableYVelocity = false;
     private bool swingingGroundHit = false;
 
@@ -79,6 +81,7 @@ public class PlayerController : MonoBehaviour
         CheckCollisions();
 
         HandleJump();
+        HandleLadderClimb();
         HandleDirection();
         HandleGravity();
 
@@ -125,12 +128,12 @@ public class PlayerController : MonoBehaviour
         //if (col) { swingingGroundHit = true; /*swingingGround = col.attachedRigidbody;*/ }
         //bool groundHit = swingingGroundHit || normalGroundHit;
 
-        Collider2D col = Physics2D.OverlapCircle(groundCheckerPos, groundCheckerRadius, Layers.GroundLayer | Layers.SwingingGroundLayer | Layers.PushableBoxLayer);
-        bool groundHit = col;
-        if (col != null)
+        Collider2D groundCol = Physics2D.OverlapCircle(groundCheckerPos, groundCheckerRadius, Layers.GroundLayer.MaskValue | Layers.SwingingGroundLayer.MaskValue | Layers.PushableBoxLayer.MaskValue);
+        bool groundHit = groundCol;
+        if (!IsOnLadder && groundCol != null)
         {
             // Set Z-pos to the Z-pos of the ground that Player hit
-            PlayerLogic.SetPlayerZPosition(col.transform.position.z);
+            PlayerLogic.SetPlayerZPosition(groundCol.transform.position.z);
             //transform.position = new Vector3(transform.position.x, transform.position.y, col.transform.position.z);
         }
 
@@ -203,7 +206,42 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 
-    #region Horizontal
+    #region Input Movement
+
+    private void HandleLadderClimb()
+    {
+        if (!_DirInputEnabled) return;
+
+        if (IsInLadderRange)
+        {
+            if (FrameInputReader.FrameInput.Move.y != 0)
+            {
+                if (!IsOnLadder)
+                {
+                    IsOnLadder = true; // 사다리에서 방향키를 처음 눌렀을 때
+                    transform.position = new Vector3(transform.position.x, transform.position.y, -1f);
+                }
+                transform.position += 0.1f * Mathf.Sign(FrameInputReader.FrameInput.Move.y) * Vector3.up;
+            }
+            else
+            {
+                //
+            }
+        }
+        else
+        {
+            IsOnLadder = false; // 사다리에서 완전히 벗어났을 때
+        }
+
+        if (IsOnLadder)
+        {
+            Physics2D.IgnoreLayerCollision(Layers.PlayerLayer.LayerValue, Layers.GroundLayer.LayerValue, true);
+        }
+        else
+        {
+            Physics2D.IgnoreLayerCollision(Layers.PlayerLayer.LayerValue, Layers.GroundLayer.LayerValue, false);
+        }
+    }
 
     private void HandleDirection()
     {
@@ -255,7 +293,11 @@ public class PlayerController : MonoBehaviour
         //    _frameVelocity.y = Mathf.MoveTowards(_frameVelocity.y, -_stats.MaxFallSpeed, inAirGravity * Time.fixedDeltaTime);
         //}
 
-        if (_rb.velocity.y > 0)
+        if (IsOnLadder)
+        {
+            _rb.gravityScale = 0;
+        }
+        else if (_rb.velocity.y > 0)
         {
             _rb.gravityScale = _stats.JumpUpGravityScale;
         }
