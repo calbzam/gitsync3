@@ -285,6 +285,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 213735394323038302}
+  - component: {fileID: 1626739838516702604}
   m_Layer: 11
   m_Name: "\uCCB4\uD06C\uD3EC\uC778\uD2B8"
   m_TagString: Untagged
@@ -310,6 +311,19 @@ Transform:
   - {fileID: 8632735029311757125}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1626739838516702604
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8614345402642779958}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8110aa9ca3a01734f9b8a5be1746c14a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _respawnPoint: {fileID: 940220403576652409}
 --- !u!1 &8896896535680000868
 GameObject:
   m_ObjectHideFlags: 0
@@ -319,9 +333,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6118860539489118862}
+  - component: {fileID: 6468210411223949385}
   - component: {fileID: 7829290456670122947}
   - component: {fileID: 7007121341277044239}
-  - component: {fileID: 6468210411223949385}
   m_Layer: 11
   m_Name: "\uC778\uC2DD \uB9C9\uB300"
   m_TagString: Untagged
@@ -344,6 +358,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 213735394323038302}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6468210411223949385
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8896896535680000868}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65202026d9c19704b870b659858d856b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _checkPoint: {fileID: 1626739838516702604}
 --- !u!212 &7829290456670122947
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -441,16 +468,3 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &6468210411223949385
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8896896535680000868}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65202026d9c19704b870b659858d856b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _respawnPoint: {fileID: 940220403576652409}
