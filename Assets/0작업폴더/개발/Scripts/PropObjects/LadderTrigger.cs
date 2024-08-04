@@ -5,20 +5,18 @@ using UnityEngine.InputSystem;
 
 public class LadderTrigger : MonoBehaviour
 {
+    [SerializeField] private LadderSettings _ladderSettings;
     [SerializeField] private Transform _topPoint;
     [SerializeField] private Transform _bottomPoint;
-
-    [Header("공중에서 사다리에 닿으면 자동으로 사다리 탑승")]
-    public bool AutoClimbWhenJumpedOn = true;
-
-    [Header("사다리에 타고 있을 때는 땅과의 충돌 무시")]
-    public bool BypassGroundCollision = true;
 
     public Transform TopPoint => _topPoint; // for public access
     public Transform BottomPoint => _bottomPoint;
 
-    public float ClimbSpeed { get; set; } = 0.05f;
-    public float StepSize { get; set; } = 0.5f;
+    public bool AutoClimbWhenJumpedOn { get; set; }
+    public bool BypassGroundCollision { get; set; }
+
+    public float ClimbSpeed { get; set; }
+    public float StepSize { get; set; }
     public float StepProgress { get; set; }
 
     public bool JumpingFromLadder { get; set; }
@@ -26,6 +24,10 @@ public class LadderTrigger : MonoBehaviour
     private void Start()
     {
         JumpingFromLadder = false;
+        AutoClimbWhenJumpedOn = _ladderSettings.AutoClimbWhenJumpedOn;
+        BypassGroundCollision = _ladderSettings.BypassGroundCollision;
+        ClimbSpeed = _ladderSettings.ClimbSpeed;
+        StepSize = _ladderSettings.StepSize;
     }
 
     private void OnEnable()
