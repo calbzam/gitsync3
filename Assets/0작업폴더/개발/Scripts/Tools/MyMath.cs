@@ -47,10 +47,4 @@ public static class MyMath
     {
         return (anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f);
     }
-
-    // source: https://forum.unity.com/threads/checking-if-a-layer-is-in-a-layer-mask.1190230/#post-7613611
-    public static bool IsInLayerMask(int layer, LayerMask layerMask)
-    {
-        return (layerMask & (1 << layer)) != 0;
-    }
 }
