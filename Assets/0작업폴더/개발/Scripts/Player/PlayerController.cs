@@ -42,10 +42,13 @@ public class PlayerController : MonoBehaviour
 
     /* Collisions */
     private float _frameLeftGrounded = float.MinValue;
-    private bool _grounded;
+    public bool OnGround { get; private set; }
     public bool IsInWater { get; set; }
+
     public bool IsInLadderRange { get; set; }
     public bool IsOnLadder { get; set; }
+    public LadderTrigger CurrentLadder { get; set; }
+
     //private bool disableYVelocity = false;
     private bool swingingGroundHit = false;
 
@@ -82,6 +85,7 @@ public class PlayerController : MonoBehaviour
 
         HandleJump();
         HandleLadderClimb();
+
         HandleDirection();
         HandleGravity();
 
@@ -143,18 +147,18 @@ public class PlayerController : MonoBehaviour
 
 
         // Landed on the Ground
-        if (!_grounded && groundHit)
+        if (!OnGround && groundHit)
         {
-            _grounded = true;
+            OnGround = true;
             _coyoteUsable = true;
             _bufferedJumpUsable = true;
             _endedJumpEarly = false;
             GroundedChanged?.Invoke(true, Mathf.Abs(/*_frameVelocity.y*/_rb.velocity.y));
         }
         // Left the Ground
-        else if (_grounded && !groundHit)
+        else if (OnGround && !groundHit)
         {
-            _grounded = false;
+            OnGround = false;
             _frameLeftGrounded = _time;
             GroundedChanged?.Invoke(false, 0);
         }
@@ -174,17 +178,17 @@ public class PlayerController : MonoBehaviour
     private float _timeJumpWasPressed;
 
     private bool HasBufferedJump => _bufferedJumpUsable && (_time < _timeJumpWasPressed + _stats.JumpBuffer);
-    private bool CanUseCoyote => _coyoteUsable && !_grounded && (_time < _frameLeftGrounded + _stats.CoyoteTime);
+    private bool CanUseCoyote => _coyoteUsable && !OnGround && (_time < _frameLeftGrounded + _stats.CoyoteTime);
 
     private void HandleJump()
     {
         //Debug.Log(_bufferedJumpUsable + " && ( " + _time + " < " + _timeJumpWasPressed + " + " + _stats.JumpBuffer + " )");
 
-        if (!_endedJumpEarly && !_grounded && !FrameInputReader.FrameInput.JumpHeld && _rb.velocity.y > 0) _endedJumpEarly = true;
+        if (!_endedJumpEarly && !OnGround && !FrameInputReader.FrameInput.JumpHeld && _rb.velocity.y > 0) _endedJumpEarly = true;
 
         if (!_jumpToConsume && !HasBufferedJump) return;
 
-        if (_grounded || CanUseCoyote) ExecuteJump();
+        if (OnGround || CanUseCoyote) ExecuteJump();
 
         _jumpToConsume = false;
     }
@@ -206,42 +210,67 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 
-    #region Input Movement
+    #region Ladder Climb
+
+    public void SetPlayerOnLadder(bool onLadder)
+    {
+        if (onLadder)
+        {
+            IsOnLadder = true; // 사다리에서 방향키를 처음 눌렀을 때
+            CurrentLadder.StepProgress = CurrentLadder.StepSize;
+
+            transform.position = new Vector3(CurrentLadder.transform.position.x, transform.position.y, CurrentLadder.transform.position.z - 0.1f);
+            _rb.velocity = Vector2.zero;
+
+            if (CurrentLadder.BypassGroundCollision) PlayerLogic.IgnorePlayerGroundCollision(true);
+            DirInputSetActive(false);
+        }
+        else
+        {
+            IsOnLadder = false;
+
+            PlayerLogic.IgnorePlayerGroundCollision(false);
+            DirInputSetActive(true);
+        }
+    }
+
+    private bool PlayerAtLadderEnd()
+    {
+        return (FrameInputReader.FrameInput.Move.y > 0 && _rb.position.y > CurrentLadder.TopPoint.position.y)
+            || (FrameInputReader.FrameInput.Move.y < 0 && _rb.position.y < CurrentLadder.BottomPoint.position.y);
+    }
 
     private void HandleLadderClimb()
     {
-        if (!_DirInputEnabled) return;
-
         if (IsInLadderRange)
         {
             if (FrameInputReader.FrameInput.Move.y != 0)
             {
                 if (!IsOnLadder)
                 {
-                    IsOnLadder = true; // 사다리에서 방향키를 처음 눌렀을 때
-                    transform.position = new Vector3(transform.position.x, transform.position.y, -1f);
+                    if (PlayerAtLadderEnd()) return;
+                    SetPlayerOnLadder(true);
                 }
-                transform.position += 0.1f * Mathf.Sign(FrameInputReader.FrameInput.Move.y) * Vector3.up;
-            }
-            else
-            {
-                //
-            }
-        }
-        else
-        {
-            IsOnLadder = false; // 사다리에서 완전히 벗어났을 때
-        }
 
-        if (IsOnLadder)
-        {
-            Physics2D.IgnoreLayerCollision(Layers.PlayerLayer.LayerValue, Layers.GroundLayer.LayerValue, true);
-        }
-        else
-        {
-            Physics2D.IgnoreLayerCollision(Layers.PlayerLayer.LayerValue, Layers.GroundLayer.LayerValue, false);
+                CurrentLadder.StepProgress += CurrentLadder.ClimbSpeed;
+                if (CurrentLadder.StepProgress > CurrentLadder.StepSize)
+                {
+                    _rb.MovePosition((Vector2)transform.position + CurrentLadder.StepSize * Mathf.Sign(FrameInputReader.FrameInput.Move.y) * Vector2.up);
+                    if (PlayerAtLadderEnd()) CurrentLadder.JumpFromLadder();
+                    CurrentLadder.StepProgress = 0;
+                }
+            }
+
+            else // no climbing input
+            {
+                CurrentLadder.StepProgress = CurrentLadder.StepSize;
+            }
         }
     }
+
+    #endregion
+
+    #region Horizontal Movement
 
     private void HandleDirection()
     {
@@ -251,9 +280,9 @@ public class PlayerController : MonoBehaviour
         {
             if (_rb.velocity.x != 0)
             {
-                //float decelerationX = _grounded ? _stats.GroundDecelerationX : _stats.AirDecelerationX;
+                //float decelerationX = OnGround ? _stats.GroundDecelerationX : _stats.AirDecelerationX;
                 float decelerationX;
-                if (_grounded) decelerationX = _stats.GroundDecelerationX;
+                if (OnGround) decelerationX = _stats.GroundDecelerationX;
                 else if (IsInWater) decelerationX = _stats.WaterDecelerationX;
                 else decelerationX = _stats.AirDecelerationX;
 
@@ -278,7 +307,7 @@ public class PlayerController : MonoBehaviour
 
     private void HandleGravity()
     {
-        //if (_grounded && _frameVelocity.y <= 0f) // on ground and falling
+        //if (OnGround && _frameVelocity.y <= 0f) // on ground and falling
         //{
         //    _frameVelocity.y = _stats.GroundingForce;
         //}

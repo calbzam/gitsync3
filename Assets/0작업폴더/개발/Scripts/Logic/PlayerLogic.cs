@@ -59,4 +59,9 @@ public class PlayerLogic : MonoBehaviour
         Player.DirInputSetActive(true);
         _playerAnim.DirInputSetActive(true);
     }
+
+    public static void IgnorePlayerGroundCollision(bool bypass)
+    {
+        Physics2D.IgnoreLayerCollision(Layers.PlayerLayer.LayerValue, Layers.GroundLayer.LayerValue, bypass);
+    }
 }
