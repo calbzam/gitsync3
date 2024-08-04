@@ -188,7 +188,7 @@ public class PlayerController : MonoBehaviour
 
         if (!_jumpToConsume && !HasBufferedJump) return;
 
-        if (OnGround || CanUseCoyote) ExecuteJump();
+        if (!IsOnLadder && (OnGround || CanUseCoyote)) ExecuteJump();
 
         _jumpToConsume = false;
     }
@@ -232,6 +232,8 @@ public class PlayerController : MonoBehaviour
             PlayerLogic.IgnorePlayerGroundCollision(false);
             DirInputSetActive(true);
         }
+
+        Physics2D.SyncTransforms();
     }
 
     private bool PlayerAtLadderEnd()
@@ -249,13 +251,14 @@ public class PlayerController : MonoBehaviour
                 if (!IsOnLadder)
                 {
                     if (PlayerAtLadderEnd()) return;
+                    if (CurrentLadder.JumpingFromLadder) CurrentLadder.JumpingFromLadder = false;
                     SetPlayerOnLadder(true);
                 }
 
                 CurrentLadder.StepProgress += CurrentLadder.ClimbSpeed;
                 if (CurrentLadder.StepProgress > CurrentLadder.StepSize)
                 {
-                    _rb.MovePosition((Vector2)transform.position + CurrentLadder.StepSize * Mathf.Sign(FrameInputReader.FrameInput.Move.y) * Vector2.up);
+                    _rb.MovePosition(_rb.position + CurrentLadder.StepSize * Mathf.Sign(FrameInputReader.FrameInput.Move.y) * Vector2.up);
                     if (PlayerAtLadderEnd()) CurrentLadder.JumpFromLadder();
                     CurrentLadder.StepProgress = 0;
                 }

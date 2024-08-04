@@ -21,11 +21,11 @@ public class LadderTrigger : MonoBehaviour
     public float StepSize { get; set; } = 0.5f;
     public float StepProgress { get; set; }
 
-    private bool _jumpingFromLadder;
+    public bool JumpingFromLadder { get; set; }
 
     private void Start()
     {
-        _jumpingFromLadder = false;
+        JumpingFromLadder = false;
     }
 
     private void OnEnable()
@@ -48,7 +48,7 @@ public class LadderTrigger : MonoBehaviour
         if (PlayerLogic.Player.IsOnLadder && PlayerLogic.Player.CurrentLadder == this)
         {
             PlayerLogic.Player.SetPlayerOnLadder(false);
-            _jumpingFromLadder = true;
+            JumpingFromLadder = true;
         }
     }
 
@@ -61,7 +61,7 @@ public class LadderTrigger : MonoBehaviour
         }
 
         if (AutoClimbWhenJumpedOn)
-            if (!PlayerLogic.Player.IsOnLadder && !_jumpingFromLadder && !PlayerLogic.Player.OnGround)
+            if (!PlayerLogic.Player.IsOnLadder && !JumpingFromLadder && !PlayerLogic.Player.OnGround)
                 PlayerLogic.Player.SetPlayerOnLadder(true);
     }
 
@@ -71,7 +71,7 @@ public class LadderTrigger : MonoBehaviour
         {
             PlayerLogic.Player.IsInLadderRange = false;
             PlayerLogic.Player.SetPlayerOnLadder(false);
-            _jumpingFromLadder = false; // player sufficiently away from ladder
+            JumpingFromLadder = false; // player sufficiently away from ladder
         }
     }
 }
