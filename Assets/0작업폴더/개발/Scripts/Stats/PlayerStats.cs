@@ -37,7 +37,7 @@ public class PlayerStats : ScriptableObject
 
     [Header("Ground Checker")]
 
-    [Tooltip("The detection distance for grounding and roof detection"), Range(-0.2f, 0.2f)]
+    [Tooltip("The detection distance for grounding and roof detection"), Range(-0.3f, 0.3f)]
     public float GrounderDistance = -0.144f;
     //public Vector2 GroundCheckCapsuleSize = new Vector2(0.2f, 1.2f);
     public float GroundCheckerAddRadius = 0.02f;
@@ -67,6 +67,12 @@ public class PlayerStats : ScriptableObject
 
     [Tooltip("The minimum distance threshold between the player and the position where the player jumped from the rope, until the player can interact with rope again.")]
     public float RopeJumpedDistance = 2f;
+
+    [Tooltip("로프에서 뛰었을 때, 사용자가 좌우 방향키를 누르고 있는 방향으로 Player에 이만큼 힘을 추가로 가해 줌")]
+    public float RopeJumpedPlayerAddForce = 2.5f;
+
+    [Tooltip("오브젝트에 연결되었을 때, 사용자가 좌우 방향키를 누르고 있는 방향으로 오프젝트에 이만큼 힘을 추가로 가해 줌")]
+    public float PlayerAttachedObjectAddVelocity = 10f;
 
 
     [Header("RESPAWN")]

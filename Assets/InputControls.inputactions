@@ -58,6 +58,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "PickupActivate",
+                    "type": "Button",
+                    "id": "965fd3e4-66a9-4983-99d5-e664cd5fe6ac",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -74,7 +83,7 @@
                 },
                 {
                     "name": "up",
-                    "id": "0206dcdb-c304-4284-ac2d-b3d5ef0b23e3",
+                    "id": "6fcc621a-82ea-41e1-b559-330e0b083125",
                     "path": "<Keyboard>/upArrow",
                     "interactions": "",
                     "processors": "",
@@ -85,7 +94,7 @@
                 },
                 {
                     "name": "down",
-                    "id": "6fcc621a-82ea-41e1-b559-330e0b083125",
+                    "id": "e0ee953a-20fe-48b4-91bc-3922d2128885",
                     "path": "<Keyboard>/downArrow",
                     "interactions": "",
                     "processors": "",
@@ -168,6 +177,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b9d13e14-e0f6-4a9d-b680-47443905c4ac",
+                    "path": "<Keyboard>/z",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PickupActivate",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

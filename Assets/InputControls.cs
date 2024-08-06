@@ -80,6 +80,15 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PickupActivate"",
+                    ""type"": ""Button"",
+                    ""id"": ""965fd3e4-66a9-4983-99d5-e664cd5fe6ac"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -96,7 +105,7 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""up"",
-                    ""id"": ""0206dcdb-c304-4284-ac2d-b3d5ef0b23e3"",
+                    ""id"": ""6fcc621a-82ea-41e1-b559-330e0b083125"",
                     ""path"": ""<Keyboard>/upArrow"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -107,7 +116,7 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""down"",
-                    ""id"": ""6fcc621a-82ea-41e1-b559-330e0b083125"",
+                    ""id"": ""e0ee953a-20fe-48b4-91bc-3922d2128885"",
                     ""path"": ""<Keyboard>/downArrow"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -190,6 +199,17 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b9d13e14-e0f6-4a9d-b680-47443905c4ac"",
+                    ""path"": ""<Keyboard>/z"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PickupActivate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -310,6 +330,7 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
         m_Player_Swap = m_Player.FindAction("Swap", throwIfNotFound: true);
         m_Player_Activate = m_Player.FindAction("Activate", throwIfNotFound: true);
+        m_Player_PickupActivate = m_Player.FindAction("PickupActivate", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Pause = m_UI.FindAction("Pause", throwIfNotFound: true);
@@ -387,6 +408,7 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Jump;
     private readonly InputAction m_Player_Swap;
     private readonly InputAction m_Player_Activate;
+    private readonly InputAction m_Player_PickupActivate;
     public struct PlayerActions
     {
         private @InputControls m_Wrapper;
@@ -397,6 +419,7 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
         public InputAction @Swap => m_Wrapper.m_Player_Swap;
         public InputAction @Activate => m_Wrapper.m_Player_Activate;
+        public InputAction @PickupActivate => m_Wrapper.m_Player_PickupActivate;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -424,6 +447,9 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
             @Activate.started += instance.OnActivate;
             @Activate.performed += instance.OnActivate;
             @Activate.canceled += instance.OnActivate;
+            @PickupActivate.started += instance.OnPickupActivate;
+            @PickupActivate.performed += instance.OnPickupActivate;
+            @PickupActivate.canceled += instance.OnPickupActivate;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -446,6 +472,9 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
             @Activate.started -= instance.OnActivate;
             @Activate.performed -= instance.OnActivate;
             @Activate.canceled -= instance.OnActivate;
+            @PickupActivate.started -= instance.OnPickupActivate;
+            @PickupActivate.performed -= instance.OnPickupActivate;
+            @PickupActivate.canceled -= instance.OnPickupActivate;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -617,6 +646,7 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
         void OnJump(InputAction.CallbackContext context);
         void OnSwap(InputAction.CallbackContext context);
         void OnActivate(InputAction.CallbackContext context);
+        void OnPickupActivate(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

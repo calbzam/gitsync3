@@ -1,0 +1,16 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class CheckpointTrigger : MonoBehaviour
+{
+    [SerializeField] private Checkpoint _checkPoint;
+
+    private void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.CompareTag("Player"))
+        {
+            col.GetComponent<PlayerController>().SetRespawnPos(_checkPoint.RespawnPoint.position);
+        }
+    }
+}

@@ -45,20 +45,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d174fab52f0c4b8399f25d5c3ea524c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  simulateWhenInvisible: 1
+  simulateWhenInvisible: 0
   m_Backend: 1
   parameters:
     mode: 1
     interpolation: 0
     gravity: {x: 0, y: -9.81, z: 0}
-    damping: 0.2
+    damping: 0
     maxAnisotropy: 3
     sleepThreshold: 0.0001
     collisionMargin: 0.02
     maxDepenetration: 10
     continuousCollisionDetection: 1
     shockPropagation: 0
-    surfaceCollisionIterations: 8
+    surfaceCollisionIterations: 4
     surfaceCollisionTolerance: 0.005
   gravity: {x: 0, y: -9.81, z: 0}
   gravitySpace: 0
@@ -67,15 +67,15 @@ MonoBehaviour:
   distanceConstraintParameters:
     evaluationOrder: 0
     iterations: 2
-    SORFactor: 1
+    SORFactor: 1.4
     enabled: 1
   bendingConstraintParameters:
     evaluationOrder: 1
-    iterations: 4
+    iterations: 2
     SORFactor: 2
     enabled: 1
   particleCollisionConstraintParameters:
-    evaluationOrder: 1
+    evaluationOrder: 0
     iterations: 1
     SORFactor: 1
     enabled: 1
@@ -85,7 +85,7 @@ MonoBehaviour:
     SORFactor: 1
     enabled: 0
   collisionConstraintParameters:
-    evaluationOrder: 1
+    evaluationOrder: 0
     iterations: 1
     SORFactor: 1
     enabled: 1
@@ -105,7 +105,7 @@ MonoBehaviour:
     SORFactor: 1
     enabled: 0
   shapeMatchingConstraintParameters:
-    evaluationOrder: 1
+    evaluationOrder: 0
     iterations: 2
     SORFactor: 2
     enabled: 1
@@ -153,15 +153,16 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8163286425711514546}
+  - component: {fileID: 8612660158870851936}
+  - component: {fileID: 3451459896291438397}
   - component: {fileID: 7306328875240057717}
   - component: {fileID: 8909498849510046010}
   - component: {fileID: 881971457722786287}
   - component: {fileID: 8308634432569987140}
   - component: {fileID: 3895967393270532167}
   - component: {fileID: 8496679337350745373}
-  - component: {fileID: 3451459896291438397}
   - component: {fileID: 6250444290528020628}
-  - component: {fileID: 4140385639599939371}
+  - component: {fileID: 6556449427558914667}
   m_Layer: 10
   m_Name: Obi Rope
   m_TagString: Untagged
@@ -184,6 +185,41 @@ Transform:
   m_Children: []
   m_Father: {fileID: 8809153672535143712}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8612660158870851936
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2181408558619098267}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f18723921f89c0b4f80f4b8d9bd2eba0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _meshRenderer: {fileID: 8909498849510046010}
+  _rope: {fileID: 881971457722786287}
+  _additionalChildObjectsToDisable: []
+--- !u!114 &3451459896291438397
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2181408558619098267}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a0c3ae34d4ec1746a5014773ebe5fde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  changeSelectionTo: {fileID: 1538128553822100911}
+  lockScale: 1
+  baseScale: {x: 1, y: 1, z: 1}
+  lockRotation: 1
+  baseRot: {x: 0, y: 0, z: 0}
+  lockTranslation: 1
+  basePos: {x: 0, y: 0, z: 0}
+  lockNonUniformScale: 0
 --- !u!33 &7306328875240057717
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -246,75 +282,100 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61104f33a3f344db9b7e0d0cda41a9fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  solverIndices: 000000000100000002000000030000000400000005000000060000000700000008000000090000000a0000000b0000000c0000000d0000000e0000000f000000100000001100000012000000130000001400000015000000160000001700000018000000190000001a0000001b0000001c0000001d0000001e0000001f000000200000002100000022000000230000002400000025000000260000002700000028000000290000002a0000002b0000002c0000002d0000002e0000002f000000300000003100000032000000330000003400000035000000360000003700000038000000390000003a0000003b0000003c0000003d0000003e0000003f000000400000004100000042000000430000004400000045000000460000004700000048000000490000004a0000004b0000004c0000004d0000004e0000004f000000500000005100000052000000530000005400000055000000560000005700000058000000590000005a0000005b0000005c0000005d0000005e0000005f000000600000006100000062000000630000006400000065000000660000006700000068000000690000006a0000006b0000006c0000006d0000006e0000006f0000007000000071000000
+  solverIndices: 000000000100000002000000030000000400000005000000060000000700000008000000090000000a0000000b0000000c0000000d0000000e0000000f000000100000001100000012000000130000001400000015000000160000001700000018000000190000001a0000001b0000001c0000001d0000001e0000001f000000200000002100000022000000230000002400000025000000260000002700000028000000290000002a0000002b0000002c0000002d0000002e0000002f000000300000003100000032000000330000003400000035000000360000003700000038000000390000003a0000003b0000003c0000003d0000003e0000003f000000400000004100000042000000430000004400000045000000460000004700000048000000490000004a0000004b0000004c0000004d0000004e0000004f000000500000005100000052000000530000005400000055000000560000005700000058000000590000005a0000005b0000005c0000005d0000005e0000005f000000600000006100000062000000630000006400000065000000660000006700000068000000690000006a0000006b0000006c0000006d0000006e0000006f00000070000000710000007200000073000000740000007500000076000000
   m_CollisionMaterial: {fileID: 0}
   m_SurfaceCollisions: 0
   m_SelfCollisions: 1
-  restLength_: 3.1019099
+  restLength_: 5.0352864
   elements:
   - particle1: 0
     particle2: 1
-    restLength: 0.23685254
+    restLength: 0.2770921
     constraintForce: 0
     tearResistance: 1
   - particle1: 1
     particle2: 2
-    restLength: 0.23990113
+    restLength: 0.27860272
     constraintForce: 0
     tearResistance: 1
   - particle1: 2
     particle2: 3
-    restLength: 0.23791437
+    restLength: 0.2812204
     constraintForce: 0
     tearResistance: 1
   - particle1: 3
     particle2: 4
-    restLength: 0.23976034
+    restLength: 0.28049755
     constraintForce: 0
     tearResistance: 1
   - particle1: 4
     particle2: 5
-    restLength: 0.23823068
+    restLength: 0.2799226
     constraintForce: 0
     tearResistance: 1
   - particle1: 5
     particle2: 6
-    restLength: 0.23885055
+    restLength: 0.27983928
     constraintForce: 0
     tearResistance: 1
   - particle1: 6
     particle2: 7
-    restLength: 0.23880158
+    restLength: 0.28002578
     constraintForce: 0
     tearResistance: 1
   - particle1: 7
     particle2: 8
-    restLength: 0.23893666
+    restLength: 0.2802307
     constraintForce: 0
     tearResistance: 1
   - particle1: 8
     particle2: 9
-    restLength: 0.23912004
+    restLength: 0.28028256
     constraintForce: 0
     tearResistance: 1
   - particle1: 9
     particle2: 10
-    restLength: 0.23794504
+    restLength: 0.28010532
     constraintForce: 0
     tearResistance: 1
   - particle1: 10
     particle2: 11
-    restLength: 0.2400611
+    restLength: 0.27972254
     constraintForce: 0
     tearResistance: 1
   - particle1: 11
     particle2: 12
-    restLength: 0.23895617
+    restLength: 0.27936238
     constraintForce: 0
     tearResistance: 1
   - particle1: 12
     particle2: 13
-    restLength: 0.23657973
+    restLength: 0.2802509
+    constraintForce: 0
+    tearResistance: 1
+  - particle1: 13
+    particle2: 14
+    restLength: 0.28006682
+    constraintForce: 0
+    tearResistance: 1
+  - particle1: 14
+    particle2: 15
+    restLength: 0.27933896
+    constraintForce: 0
+    tearResistance: 1
+  - particle1: 15
+    particle2: 16
+    restLength: 0.2814261
+    constraintForce: 0
+    tearResistance: 1
+  - particle1: 16
+    particle2: 17
+    restLength: 0.28199396
+    constraintForce: 0
+    tearResistance: 1
+  - particle1: 17
+    particle2: 18
+    restLength: 0.27530584
     constraintForce: 0
     tearResistance: 1
   m_RopeBlueprint: {fileID: 11400000, guid: 1917f673530f7a845a02b0c74b44b66a, type: 2}
@@ -342,7 +403,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49203ec79639d7747aff9a8611c937d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerOnOtherRope: 0
+  _playerOnOtherObject: 0
 --- !u!114 &3895967393270532167
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -356,7 +417,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   decimation: 0
-  smoothing: 1
+  smoothing: 0
   twist: 0
 --- !u!114 &8496679337350745373
 MonoBehaviour:
@@ -377,26 +438,6 @@ MonoBehaviour:
   m_ConstrainOrientation: 0
   m_Compliance: 0
   m_BreakThreshold: Infinity
---- !u!114 &3451459896291438397
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2181408558619098267}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a0c3ae34d4ec1746a5014773ebe5fde, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  changeSelectionTo: {fileID: 1538128553822100911}
-  lockScale: 1
-  baseScale: {x: 1, y: 1, z: 1}
-  lockRotation: 1
-  baseRot: {x: 0, y: 0, z: 0}
-  lockTranslation: 1
-  basePos: {x: 0, y: 0, z: 0}
-  lockNonUniformScale: 0
 --- !u!114 &6250444290528020628
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -413,8 +454,8 @@ MonoBehaviour:
   uvScale: {x: 1, y: 1}
   normalizeV: 1
   section: {fileID: 11400000, guid: a0bc36a59515f413e90e10895929c938, type: 2}
-  thicknessScale: 0.98
---- !u!114 &4140385639599939371
+  thicknessScale: 0.9
+--- !u!114 &6556449427558914667
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -423,10 +464,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2181408558619098267}
   m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8b45ebbf86be4df6b0e6cd933812af2, type: 3}
+  m_Script: {fileID: 11500000, guid: 356b834afda224f73a26e39580b330f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   render: 1
-  shader: {fileID: 4800000, guid: 28641a0edd6e047c6af7e3c6b342c81a, type: 3}
-  particleColor: {r: 1, g: 1, b: 1, a: 1}
-  radiusScale: 1.49
+  mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  material: {fileID: 2100000, guid: 8496b0c9483025a47ac6919b83c47b17, type: 2}
+  instanceScale: {x: 1.5, y: 1.5, z: 1}

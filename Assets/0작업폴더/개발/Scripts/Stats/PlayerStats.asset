@@ -17,18 +17,20 @@ MonoBehaviour:
   HorizontalDeadZoneThreshold: 0.1
   MaxSpeedX: 6
   MinSpeedX: 0.5
-  GroundAccelerationX: 30
-  WaterAccelerationX: 25
+  GroundAccelerationX: 25
+  WaterAccelerationX: 20
   GroundDecelerationX: 30
   WaterDecelerationX: 10
   AirDecelerationX: 30
   GroundingForce: -1.5
-  GrounderDistance: -0.144
-  GroundCheckerAddRadius: 0.04
+  GrounderDistance: -0.25
+  GroundCheckerAddRadius: 0.02
   JumpPower: 9
   JumpUpGravityScale: 1.8
   FallDownGravityScale: 3
   CoyoteTime: 0.15
   JumpBuffer: 0.1
   RopeJumpedDistance: 2
+  RopeJumpedPlayerAddForce: 2
+  PlayerAttachedObjectAddVelocity: 12
   deadPositionY: -6

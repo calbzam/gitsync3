@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Player ropeRider
+  - Player electrocutedText
+  - ZipLineStoppingBlock
+  - Battery
   layers:
   - Default
   - TransparentFX
@@ -19,7 +22,7 @@ TagManager:
   - ClimbingRope
   - Do Not Render
   - Output
-  - 
+  - Pushable Box
   - 
   - 
   - 
