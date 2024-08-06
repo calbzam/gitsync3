@@ -318,6 +318,34 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Camera"",
+            ""id"": ""67646d41-23af-4324-8ff8-ba0262445338"",
+            ""actions"": [
+                {
+                    ""name"": ""Drag"",
+                    ""type"": ""Button"",
+                    ""id"": ""a0a13ea4-d58c-4c11-b4c7-63bf62742cb7"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""c7a4eec8-c4d0-469d-865f-2943443af690"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Drag"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -341,6 +369,9 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
         // ItemMenu
         m_ItemMenu = asset.FindActionMap("ItemMenu", throwIfNotFound: true);
         m_ItemMenu_Newaction = m_ItemMenu.FindAction("New action", throwIfNotFound: true);
+        // Camera
+        m_Camera = asset.FindActionMap("Camera", throwIfNotFound: true);
+        m_Camera_Drag = m_Camera.FindAction("Drag", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -638,6 +669,52 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
         }
     }
     public ItemMenuActions @ItemMenu => new ItemMenuActions(this);
+
+    // Camera
+    private readonly InputActionMap m_Camera;
+    private List<ICameraActions> m_CameraActionsCallbackInterfaces = new List<ICameraActions>();
+    private readonly InputAction m_Camera_Drag;
+    public struct CameraActions
+    {
+        private @InputControls m_Wrapper;
+        public CameraActions(@InputControls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Drag => m_Wrapper.m_Camera_Drag;
+        public InputActionMap Get() { return m_Wrapper.m_Camera; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(CameraActions set) { return set.Get(); }
+        public void AddCallbacks(ICameraActions instance)
+        {
+            if (instance == null || m_Wrapper.m_CameraActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_CameraActionsCallbackInterfaces.Add(instance);
+            @Drag.started += instance.OnDrag;
+            @Drag.performed += instance.OnDrag;
+            @Drag.canceled += instance.OnDrag;
+        }
+
+        private void UnregisterCallbacks(ICameraActions instance)
+        {
+            @Drag.started -= instance.OnDrag;
+            @Drag.performed -= instance.OnDrag;
+            @Drag.canceled -= instance.OnDrag;
+        }
+
+        public void RemoveCallbacks(ICameraActions instance)
+        {
+            if (m_Wrapper.m_CameraActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(ICameraActions instance)
+        {
+            foreach (var item in m_Wrapper.m_CameraActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_CameraActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public CameraActions @Camera => new CameraActions(this);
     public interface IPlayerActions
     {
         void OnMovement(InputAction.CallbackContext context);
@@ -660,5 +737,9 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
     public interface IItemMenuActions
     {
         void OnNewaction(InputAction.CallbackContext context);
+    }
+    public interface ICameraActions
+    {
+        void OnDrag(InputAction.CallbackContext context);
     }
 }
