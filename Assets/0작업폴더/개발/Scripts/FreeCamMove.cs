@@ -1,14 +1,19 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class FreeCameraDrag : MonoBehaviour
+public class FreeCamMove : MonoBehaviour
 {
+    [SerializeField] private float _zoomReduction = 3000;
+    [SerializeField] private float _minThreshold = 4;
+
     private Vector3 _mouseOrigin;
     private bool _isDragging;
 
     public float CamPosZ { get; private set; }
+    public event Action<float> CamPosZUpdated;
 
     private void Start()
     {
@@ -43,11 +48,26 @@ public class FreeCameraDrag : MonoBehaviour
         return Camera.main.ScreenToWorldPoint(mousePos3D);
     }
 
+    private float getScrollAmount()
+    {
+        return CentralInputReader.Input.Camera.Zoom.ReadValue<float>();
+    }
+
     private void LateUpdate()
     {
         if (_isDragging)
         {
             transform.position += _mouseOrigin - getWorldMousePos();
+        }
+
+        float scrollAmount;
+        if ((scrollAmount = getScrollAmount()) != 0)
+        {
+            float distanceSizing = Mathf.Max(Mathf.Abs(CamPosZ), _minThreshold);
+            transform.position += (scrollAmount / _zoomReduction * distanceSizing) * Vector3.forward;
+            
+            CamPosZ = transform.position.z;
+            CamPosZUpdated?.Invoke(CamPosZ);
         }
     }
 }
