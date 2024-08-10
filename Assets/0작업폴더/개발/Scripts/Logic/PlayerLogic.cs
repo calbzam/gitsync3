@@ -16,6 +16,9 @@ public class PlayerLogic : MonoBehaviour
 
     private static PlayerAnimController _playerAnim;
     private static RigidbodyConstraints2D _origPlayerConstraints;
+    
+    private static FreePlayerDragUI _freePlayerDragUI;
+    private static bool _freePlayerDragEnabled;
 
     private void Start()
     {
@@ -31,6 +34,10 @@ public class PlayerLogic : MonoBehaviour
 
         _playerAnim = Player.GetComponentInChildren<PlayerAnimController>();
         _origPlayerConstraints = PlayerRb.constraints;
+
+        _freePlayerDragUI = GameObject.FindGameObjectWithTag("FreePlayerMoveUI").GetComponent<FreePlayerDragUI>();
+        _freePlayerDragEnabled = false;
+        _freePlayerDragUI.gameObject.SetActive(false);
     }
 
     public static void DisconnectedPlayerAddJump()
@@ -39,6 +46,16 @@ public class PlayerLogic : MonoBehaviour
             PlayerRb.AddForce(new Vector2(-1, 1) * PlayerStats.RopeJumpedPlayerAddForce, ForceMode2D.Impulse);
         else if (FrameInputReader.FrameInput.Move.x > 0)
             PlayerRb.AddForce(new Vector2(1, 1) * PlayerStats.RopeJumpedPlayerAddForce, ForceMode2D.Impulse);
+    }
+
+    public static void SetPlayerXYPos(float x, float y)
+    {
+        Player.transform.position = new Vector3(x, y, Player.transform.position.z);
+    }
+
+    public static void SetPlayerXYPos(Vector2 newPos)
+    {
+        SetPlayerXYPos(newPos.x, newPos.y);
     }
 
     public static void SetPlayerZPosition(float newZPos)
@@ -58,6 +75,13 @@ public class PlayerLogic : MonoBehaviour
         PlayerRb.constraints = _origPlayerConstraints;
         Player.DirInputSetActive(true);
         _playerAnim.DirInputSetActive(true);
+    }
+
+    public static void ToggleFreePlayerDrag()
+    {
+        _freePlayerDragEnabled = !_freePlayerDragEnabled;
+        _freePlayerDragUI.gameObject.SetActive(_freePlayerDragEnabled);
+        if (_freePlayerDragEnabled) _freePlayerDragUI.MoveToPlayerPosition();
     }
 
     public static void IgnorePlayerGroundCollision(bool bypass)

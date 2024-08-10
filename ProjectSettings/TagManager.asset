@@ -8,6 +8,7 @@ TagManager:
   - Player electrocutedText
   - ZipLineStoppingBlock
   - Battery
+  - FreePlayerMoveUI
   layers:
   - Default
   - TransparentFX
