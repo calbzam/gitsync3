@@ -9,59 +9,30 @@ public class FreeCamMove : MonoBehaviour
     [SerializeField] private float _zoomReduction = 3000;
     [SerializeField] private float _minThreshold = 4;
 
-    private Vector3 _mouseOrigin;
-    private bool _isDragging;
+    public bool DragMouseEnabled;
+
+    private ReadMouse _readMouse;
 
     public float CamPosZ { get; private set; }
     public event Action<float> CamPosZUpdated;
 
     private void Start()
     {
-        _isDragging = false;
+        DragMouseEnabled = true;
         CamPosZ = transform.position.z;
-    }
-
-    private void OnEnable()
-    {
-        CentralInputReader.Input.Camera.Drag.started += DragEvaluate;
-        CentralInputReader.Input.Camera.Drag.performed += DragEvaluate;
-        CentralInputReader.Input.Camera.Drag.canceled += DragEvaluate;
-    }
-
-    private void OnDisable()
-    {
-        CentralInputReader.Input.Camera.Drag.started -= DragEvaluate;
-        CentralInputReader.Input.Camera.Drag.performed -= DragEvaluate;
-        CentralInputReader.Input.Camera.Drag.canceled -= DragEvaluate;
-    }
-
-    public void DragEvaluate(InputAction.CallbackContext ctx)
-    {
-        if (ctx.started) _mouseOrigin = getWorldMousePos();
-        _isDragging = ctx.started || ctx.performed;
-    }
-
-    private Vector3 getWorldMousePos()
-    {
-        Vector3 mousePos3D = Mouse.current.position.ReadValue();
-        mousePos3D.z = -CamPosZ;
-        return Camera.main.ScreenToWorldPoint(mousePos3D);
-    }
-
-    private float getScrollAmount()
-    {
-        return CentralInputReader.Input.Camera.Zoom.ReadValue<float>();
+        _readMouse = gameObject.AddComponent<ReadMouse>();
+        _readMouse.RefPosZ = CamPosZ;
     }
 
     private void LateUpdate()
     {
-        if (_isDragging)
+        if (DragMouseEnabled && _readMouse.IsDragging)
         {
-            transform.position += _mouseOrigin - getWorldMousePos();
+            transform.position += _readMouse.MouseClickOrigin - _readMouse.GetWorldMousePos();
         }
 
         float scrollAmount;
-        if ((scrollAmount = getScrollAmount()) != 0)
+        if ((scrollAmount = ReadMouse.GetScrollAmount()) != 0)
         {
             float distanceSizing = Mathf.Max(Mathf.Abs(CamPosZ), _minThreshold);
             transform.position += (scrollAmount / _zoomReduction * distanceSizing) * Vector3.forward;
