@@ -194,6 +194,76 @@
             ]
         },
         {
+            "name": "Camera",
+            "id": "67646d41-23af-4324-8ff8-ba0262445338",
+            "actions": [
+                {
+                    "name": "Drag",
+                    "type": "Button",
+                    "id": "a0a13ea4-d58c-4c11-b4c7-63bf62742cb7",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Zoom",
+                    "type": "Value",
+                    "id": "dd5ab4f9-cb44-4afb-84a8-0854f1e47457",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "c7a4eec8-c4d0-469d-865f-2943443af690",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Drag",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "1D Axis",
+                    "id": "d661cbbc-2643-4ab9-b032-b6ad38de84d1",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Zoom",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "298a0bd0-ee90-4f98-9627-6c2ea7f57e89",
+                    "path": "<Mouse>/scroll/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Zoom",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "456150d5-3358-4fc4-8de7-c1d8bd16d2e2",
+                    "path": "<Mouse>/scroll/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Zoom",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                }
+            ]
+        },
+        {
             "name": "UI",
             "id": "ad1bd8b2-b81a-4bb0-8697-31631a16aa8a",
             "actions": [

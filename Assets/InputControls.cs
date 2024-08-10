@@ -216,6 +216,76 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
             ]
         },
         {
+            ""name"": ""Camera"",
+            ""id"": ""67646d41-23af-4324-8ff8-ba0262445338"",
+            ""actions"": [
+                {
+                    ""name"": ""Drag"",
+                    ""type"": ""Button"",
+                    ""id"": ""a0a13ea4-d58c-4c11-b4c7-63bf62742cb7"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Zoom"",
+                    ""type"": ""Value"",
+                    ""id"": ""dd5ab4f9-cb44-4afb-84a8-0854f1e47457"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""c7a4eec8-c4d0-469d-865f-2943443af690"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Drag"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""d661cbbc-2643-4ab9-b032-b6ad38de84d1"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Zoom"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""298a0bd0-ee90-4f98-9627-6c2ea7f57e89"",
+                    ""path"": ""<Mouse>/scroll/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Zoom"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""456150d5-3358-4fc4-8de7-c1d8bd16d2e2"",
+                    ""path"": ""<Mouse>/scroll/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Zoom"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                }
+            ]
+        },
+        {
             ""name"": ""UI"",
             ""id"": ""ad1bd8b2-b81a-4bb0-8697-31631a16aa8a"",
             ""actions"": [
@@ -331,6 +401,10 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
         m_Player_Swap = m_Player.FindAction("Swap", throwIfNotFound: true);
         m_Player_Activate = m_Player.FindAction("Activate", throwIfNotFound: true);
         m_Player_PickupActivate = m_Player.FindAction("PickupActivate", throwIfNotFound: true);
+        // Camera
+        m_Camera = asset.FindActionMap("Camera", throwIfNotFound: true);
+        m_Camera_Drag = m_Camera.FindAction("Drag", throwIfNotFound: true);
+        m_Camera_Zoom = m_Camera.FindAction("Zoom", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Pause = m_UI.FindAction("Pause", throwIfNotFound: true);
@@ -493,6 +567,60 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
     }
     public PlayerActions @Player => new PlayerActions(this);
 
+    // Camera
+    private readonly InputActionMap m_Camera;
+    private List<ICameraActions> m_CameraActionsCallbackInterfaces = new List<ICameraActions>();
+    private readonly InputAction m_Camera_Drag;
+    private readonly InputAction m_Camera_Zoom;
+    public struct CameraActions
+    {
+        private @InputControls m_Wrapper;
+        public CameraActions(@InputControls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Drag => m_Wrapper.m_Camera_Drag;
+        public InputAction @Zoom => m_Wrapper.m_Camera_Zoom;
+        public InputActionMap Get() { return m_Wrapper.m_Camera; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(CameraActions set) { return set.Get(); }
+        public void AddCallbacks(ICameraActions instance)
+        {
+            if (instance == null || m_Wrapper.m_CameraActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_CameraActionsCallbackInterfaces.Add(instance);
+            @Drag.started += instance.OnDrag;
+            @Drag.performed += instance.OnDrag;
+            @Drag.canceled += instance.OnDrag;
+            @Zoom.started += instance.OnZoom;
+            @Zoom.performed += instance.OnZoom;
+            @Zoom.canceled += instance.OnZoom;
+        }
+
+        private void UnregisterCallbacks(ICameraActions instance)
+        {
+            @Drag.started -= instance.OnDrag;
+            @Drag.performed -= instance.OnDrag;
+            @Drag.canceled -= instance.OnDrag;
+            @Zoom.started -= instance.OnZoom;
+            @Zoom.performed -= instance.OnZoom;
+            @Zoom.canceled -= instance.OnZoom;
+        }
+
+        public void RemoveCallbacks(ICameraActions instance)
+        {
+            if (m_Wrapper.m_CameraActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(ICameraActions instance)
+        {
+            foreach (var item in m_Wrapper.m_CameraActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_CameraActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public CameraActions @Camera => new CameraActions(this);
+
     // UI
     private readonly InputActionMap m_UI;
     private List<IUIActions> m_UIActionsCallbackInterfaces = new List<IUIActions>();
@@ -647,6 +775,11 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
         void OnSwap(InputAction.CallbackContext context);
         void OnActivate(InputAction.CallbackContext context);
         void OnPickupActivate(InputAction.CallbackContext context);
+    }
+    public interface ICameraActions
+    {
+        void OnDrag(InputAction.CallbackContext context);
+        void OnZoom(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

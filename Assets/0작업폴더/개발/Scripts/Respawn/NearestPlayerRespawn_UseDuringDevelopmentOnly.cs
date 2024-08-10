@@ -17,19 +17,13 @@ public class NearestPlayerRespawn_UseDuringDevelopmentOnly : MonoBehaviour
         _player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
 
         _player.SetRespawnPos(_initialSpawnPoint.position);
-        GetNearestRespawnPos();
+        _player.SetNearestRespawnPos(_checkpoints);
     }
 
-    private void GetNearestRespawnPos()
+    public void SetNearestRespawnPosAndRespawn()
     {
-        Vector3 playerPos = _player.transform.position;
-        Vector3 currentRespawnPos = _player.RespawnPos;
-
-        foreach (Checkpoint trigger in _checkpoints)
-        {
-            if (trigger.RespawnPoint.position.x < playerPos.x)
-                if (Vector2.Distance(trigger.RespawnPoint.position, playerPos) < Vector2.Distance(currentRespawnPos, playerPos))
-                    _player.SetRespawnPos(trigger.RespawnPoint.position);
-        }
+        _player.SetRespawnPos(_initialSpawnPoint.position);
+        _player.SetNearestRespawnPos(_checkpoints);
+        _player.RespawnPlayer();
     }
 }

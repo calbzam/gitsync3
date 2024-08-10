@@ -343,6 +343,19 @@ public class PlayerController : MonoBehaviour
 
     #region Respawn
 
+    public void SetNearestRespawnPos(Checkpoint[] checkpoints)
+    {
+        Vector3 playerPos = transform.position;
+        Vector3 currentRespawnPos = RespawnPos;
+
+        foreach (Checkpoint trigger in checkpoints)
+        {
+            if (trigger.RespawnPoint.position.x < playerPos.x)
+                if (Vector2.Distance(trigger.RespawnPoint.position, playerPos) < Vector2.Distance(currentRespawnPos, playerPos))
+                    SetRespawnPos(trigger.RespawnPoint.position);
+        }
+    }
+
     public void SetRespawnPos(Vector3 position)
     {
         _respawnPos = new Vector3(position.x, position.y, playerTransform.position.z);
