@@ -32,9 +32,9 @@ public class ElectricWaterTrigger : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D col)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (col.CompareTag("Player"))
         {
             PlayerLogic.LockPlayerPosition();
             PlayerLogic.PlayerElectrocutedText.gameObject.SetActive(true);

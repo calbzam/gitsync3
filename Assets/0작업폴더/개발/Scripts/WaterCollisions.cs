@@ -10,12 +10,12 @@ public class WaterCollisions : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D col)
     {
         if (col.CompareTag("Player"))
-            col.GetComponent<PlayerController>().SetPlayerIsInWater(true);
+            col.GetComponent<PlayerController>().IsInWater = true;
     }
 
     private void OnTriggerExit2D(Collider2D col)
     {
         if (col.CompareTag("Player"))
-            col.GetComponent<PlayerController>().SetPlayerIsInWater(false);
+            col.GetComponent<PlayerController>().IsInWater = false;
     }
 }

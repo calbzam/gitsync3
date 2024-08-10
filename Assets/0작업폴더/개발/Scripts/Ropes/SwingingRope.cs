@@ -15,9 +15,8 @@ public class SwingingRope : RidableObject
 
     //private bool[] particleHasCollision;
 
-    protected override void Awake()
+    private void Awake()
     {
-        base.Awake();
         _rope = gameObject.GetComponent<ObiRope>();
         //particleHasCollision = new bool[rope.particleCount];
     }
@@ -67,7 +66,7 @@ public class SwingingRope : RidableObject
     {
         if (!_playerIsAttached) return;
 
-        if (InputReader.FrameInput.Move.y > 0)
+        if (FrameInputReader.FrameInput.Move.y > 0)
         {
             int indexInActor = getIndexInActor(_currentParticle);
             if (indexInActor - 1 > 0 /* first particle in visible rope */)
@@ -78,7 +77,7 @@ public class SwingingRope : RidableObject
                 attachPlayerToParticle(prevParticle);
             }
         }
-        else if (InputReader.FrameInput.Move.y < 0)
+        else if (FrameInputReader.FrameInput.Move.y < 0)
         {
             int indexInActor = getIndexInActor(_currentParticle);
             if (indexInActor + 1 < _rope.elements.Count + 1 /* total number of particles in visible rope */)

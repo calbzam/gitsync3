@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class InputReader : MonoBehaviour
+public class FrameInputReader : MonoBehaviour
 {
     public struct FrameInput
     {
@@ -11,27 +11,26 @@ public class InputReader : MonoBehaviour
         public static Vector2 Move;
     }
 
-    private InputControls _input;
-    private bool JumpHolding, JumpTriggered, JumpTriggeredPrev;
-
+    //public InputControls Input;
     public static event Action JumpPressed;
+
+    private bool JumpHolding, JumpTriggered, JumpTriggeredPrev;
 
     private void Awake()
     {
-        _input = new InputControls();
+        //Input = new InputControls();
         JumpHolding = JumpTriggered = JumpTriggeredPrev = false;
     }
 
     private void OnEnable()
     {
-        _input.Enable();
-        _input.Player.Jump.started += JumpStartedAction;
+        //Input.Enable();
+        CentralInputReader.Input.Player.Jump.started += JumpStartedAction;
     }
 
     private void OnDisable()
     {
-        _input.Disable();
-        _input.Player.Jump.started -= JumpStartedAction;
+        CentralInputReader.Input.Player.Jump.started -= JumpStartedAction;
     }
 
     private void Update()
@@ -51,12 +50,12 @@ public class InputReader : MonoBehaviour
 
     private void GatherInput()
     {
-        JumpHolding = _input.Player.Jump.IsPressed();
+        JumpHolding = CentralInputReader.Input.Player.Jump.IsPressed();
         JumpTriggered = !JumpTriggeredPrev && JumpHolding;
         JumpTriggeredPrev = JumpHolding;
 
         FrameInput.JumpStarted = JumpTriggered;
         FrameInput.JumpHeld = JumpHolding;
-        FrameInput.Move = _input.Player.Movement.ReadValue<Vector2>();
+        FrameInput.Move = CentralInputReader.Input.Player.Movement.ReadValue<Vector2>();
     }
 }
