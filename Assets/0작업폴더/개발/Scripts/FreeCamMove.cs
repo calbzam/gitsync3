@@ -38,6 +38,7 @@ public class FreeCamMove : MonoBehaviour
             transform.position += (scrollAmount / _zoomReduction * distanceSizing) * Vector3.forward;
             
             CamPosZ = transform.position.z;
+            _readMouse.RefPosZ = CamPosZ;
             CamPosZUpdated?.Invoke(CamPosZ);
         }
     }
