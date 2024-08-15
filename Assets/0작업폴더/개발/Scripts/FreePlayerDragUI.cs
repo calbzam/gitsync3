@@ -45,11 +45,11 @@ public class FreePlayerDragUI : MonoBehaviour, IBeginDragHandler, IDragHandler, 
     {
         if (!_isDragging)
         {
-            MoveToPlayerPosition();
+            MoveUIToPlayerPosition();
         }
     }
 
-    public void MoveToPlayerPosition()
+    public void MoveUIToPlayerPosition()
     {
         transform.position = Camera.main.WorldToScreenPoint(PlayerLogic.Player.transform.position);
     }
