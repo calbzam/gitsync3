@@ -81,11 +81,16 @@ public class PlayerLogic : MonoBehaviour
     {
         _freePlayerDragEnabled = !_freePlayerDragEnabled;
         _freePlayerDragUI.gameObject.SetActive(_freePlayerDragEnabled);
-        if (_freePlayerDragEnabled) _freePlayerDragUI.MoveToPlayerPosition();
+        if (_freePlayerDragEnabled) _freePlayerDragUI.MoveUIToPlayerPosition();
     }
 
     public static void IgnorePlayerGroundCollision(bool bypass)
     {
         Physics2D.IgnoreLayerCollision(Layers.PlayerLayer.LayerValue, Layers.GroundLayer.LayerValue, bypass);
     }
+
+    //public static void IgnorePlayerLadderCollision(bool bypass)
+    //{
+    //    Physics2D.IgnoreLayerCollision(Layers.PlayerLayer.LayerValue, Layers.(no ladder layer).LayerValue, bypass);
+    //}
 }
