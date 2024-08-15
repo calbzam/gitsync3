@@ -75,8 +75,8 @@ public class PlayerStats : ScriptableObject
     public float PlayerAttachedObjectAddVelocity = 10f;
 
 
-    [Header("RESPAWN")]
-
-    [Tooltip("Respawn if player Y position is below this value")]
-    public float deadPositionY = -6;
+    //[Header("RESPAWN")]
+    //
+    //[Tooltip("Respawn if player Y position is below this value")]
+    //public float deadPositionY = -6;
 }

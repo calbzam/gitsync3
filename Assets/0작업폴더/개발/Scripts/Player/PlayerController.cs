@@ -45,6 +45,7 @@ public class PlayerController : MonoBehaviour
     public bool OnGround { get; private set; }
     public bool IsInWater { get; set; }
 
+    public bool LadderClimbAllowed { get; set; }
     public bool IsInLadderRange { get; set; }
     public bool IsOnLadder { get; set; }
     public LadderTrigger CurrentLadder { get; set; }
@@ -64,6 +65,12 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         drawGizmosEnabled = true;
+        LadderClimbAllowed = true;
+    }
+
+    private void OnEnable()
+    {
+        drawGizmosEnabled = true;
     }
 
     private void OnDisable()
@@ -76,7 +83,7 @@ public class PlayerController : MonoBehaviour
         _time += Time.deltaTime;
         RefineInput();
 
-        CheckRespawn();
+        //CheckRespawn();
     }
 
     private void FixedUpdate()
@@ -84,7 +91,7 @@ public class PlayerController : MonoBehaviour
         CheckCollisions();
 
         HandleJump();
-        HandleLadderClimb();
+        if (LadderClimbAllowed) HandleLadderClimb();
 
         HandleDirection();
         HandleGravity();
@@ -364,18 +371,18 @@ public class PlayerController : MonoBehaviour
     public void RespawnPlayer()
     {
         FrameInputReader.TriggerJump();
-        PlayerLogic.FreePlayerPosition();
+        PlayerLogic.FreePlayer();
         playerTransform.position = _respawnPos;
         _rb.velocity = Vector3.zero;
     }
 
-    private void CheckRespawn()
-    {
-        if (playerTransform.position.y < _stats.deadPositionY)
-        {
-            RespawnPlayer();
-        }
-    }
+    //private void CheckRespawn()
+    //{
+    //    if (playerTransform.position.y < _stats.deadPositionY)
+    //    {
+    //        RespawnPlayer();
+    //    }
+    //}
 
     #endregion
 

@@ -15,6 +15,11 @@ public static class MyMath
         return diff.x * diff.x + diff.z * diff.z;
     }
 
+    public static bool Vector2DiffLessThan(Vector2 v1, Vector2 v2, float delta)
+    {
+        return Mathf.Abs(v1.x - v2.x) < delta && Mathf.Abs(v1.y - v2.y) < delta;
+    }
+
     public static void limit2dVelocity(Rigidbody rb, float moveSpeed)
     {
         Vector3 flat = new Vector3(rb.velocity.x, 0f, rb.velocity.z);

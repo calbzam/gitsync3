@@ -22,7 +22,7 @@ public class FreePlayerDragUI : MonoBehaviour, IBeginDragHandler, IDragHandler, 
     {
         _isDragging = true;
         _freeCamMove.DragMouseEnabled = false;
-        PlayerLogic.LockPlayerPosition();
+        PlayerLogic.LockPlayer();
         if (!(_freeCamWasEnabled = _freeCamMove.gameObject.activeSelf)) _cameraLogic.ToggleFreeCam();
     }
 
@@ -37,7 +37,7 @@ public class FreePlayerDragUI : MonoBehaviour, IBeginDragHandler, IDragHandler, 
     {
         _isDragging = false;
         _freeCamMove.DragMouseEnabled = true;
-        PlayerLogic.FreePlayerPosition();
+        PlayerLogic.FreePlayer();
         if (!_freeCamWasEnabled) _cameraLogic.ToggleFreeCam();
     }
 

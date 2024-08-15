@@ -93,7 +93,7 @@ public class ZipLineHandle : RidableObject
         Vector2 playerVelocityNow = PlayerLogic.PlayerRb.velocity;
         PlayerLogic.PlayerRb.transform.SetParent(transform);
 
-        PlayerLogic.LockPlayerPosition();
+        PlayerLogic.LockPlayer();
         PlayerLogic.PlayerRb.transform.localPosition = Vector3.zero;
         _pulleyRb.constraints = _freeXPos_PulleyConstraints;
         MovePulley(playerVelocityNow.x);
@@ -126,7 +126,7 @@ public class ZipLineHandle : RidableObject
         if (_playerIsAttached)
         {
             PlayerLogic.PlayerRb.transform.SetParent(null);
-            PlayerLogic.FreePlayerPosition();
+            PlayerLogic.FreePlayer();
 
             _pulleyRb.constraints = _lockXPos_PulleyConstraints;
 

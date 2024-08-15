@@ -24,7 +24,7 @@ public class ElectricWaterTrigger : MonoBehaviour
         {
             if (Time.time - _respawnDelayTimer > _respawnDelay)
             {
-                PlayerLogic.FreePlayerPosition();
+                PlayerLogic.FreePlayer();
                 PlayerLogic.Player.RespawnPlayer();
                 PlayerLogic.PlayerElectrocutedText.gameObject.SetActive(false);
                 _timerIsActive = false;
@@ -36,7 +36,7 @@ public class ElectricWaterTrigger : MonoBehaviour
     {
         if (col.CompareTag("Player"))
         {
-            PlayerLogic.LockPlayerPosition();
+            PlayerLogic.LockPlayer();
             PlayerLogic.PlayerElectrocutedText.gameObject.SetActive(true);
             _respawnDelayTimer = Time.time;
             _timerIsActive = true;

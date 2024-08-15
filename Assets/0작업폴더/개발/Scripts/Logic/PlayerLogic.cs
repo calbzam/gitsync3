@@ -63,16 +63,18 @@ public class PlayerLogic : MonoBehaviour
         Player.transform.position = new Vector3(Player.transform.position.x, Player.transform.position.y, newZPos);
     }
 
-    public static void LockPlayerPosition()
+    public static void LockPlayer()
     {
         PlayerRb.constraints = _origPlayerConstraints | RigidbodyConstraints2D.FreezePosition;
+        Player.LadderClimbAllowed = false;
         Player.DirInputSetActive(false);
         _playerAnim.DirInputSetActive(false);
     }
 
-    public static void FreePlayerPosition()
+    public static void FreePlayer()
     {
         PlayerRb.constraints = _origPlayerConstraints;
+        Player.LadderClimbAllowed = true;
         Player.DirInputSetActive(true);
         _playerAnim.DirInputSetActive(true);
     }
