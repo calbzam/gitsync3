@@ -38,9 +38,9 @@ public class PlayerStats : ScriptableObject
     [Header("Ground Checker")]
 
     [Tooltip("The detection distance for grounding and roof detection"), Range(-0.3f, 0.3f)]
-    public float GrounderDistance = -0.144f;
+    public float GrounderDistance = -0.21f; // -0.144f
+    public float GroundCheckerAddRadius = -0.01f; // 0.02f
     //public Vector2 GroundCheckCapsuleSize = new Vector2(0.2f, 1.2f);
-    public float GroundCheckerAddRadius = 0.02f;
 
 
     [Header("MOVEMENT Y")]
