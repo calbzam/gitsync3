@@ -5,6 +5,8 @@ using TMPro;
 
 public class PlayerLogic : MonoBehaviour
 {
+    public static bool PlayerIsLocked { get; private set; }
+
     public static PlayerController Player { get; private set; }
     public static PlayerStats PlayerStats { get; private set; }
     public static Rigidbody2D PlayerRb { get; private set; }
@@ -22,6 +24,8 @@ public class PlayerLogic : MonoBehaviour
 
     private void Start()
     {
+        PlayerIsLocked = false;
+
         Player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         PlayerStats = Player.Stats;
         PlayerRb = Player.GetComponent<Rigidbody2D>();
@@ -65,7 +69,9 @@ public class PlayerLogic : MonoBehaviour
 
     public static void LockPlayer()
     {
+        PlayerIsLocked = true;
         PlayerRb.constraints = _origPlayerConstraints | RigidbodyConstraints2D.FreezePosition;
+        Player.GroundCheckAllowed = false;
         Player.LadderClimbAllowed = false;
         Player.DirInputSetActive(false);
         _playerAnim.DirInputSetActive(false);
@@ -73,7 +79,9 @@ public class PlayerLogic : MonoBehaviour
 
     public static void FreePlayer()
     {
+        PlayerIsLocked = false;
         PlayerRb.constraints = _origPlayerConstraints;
+        Player.GroundCheckAllowed = true;
         Player.LadderClimbAllowed = true;
         Player.DirInputSetActive(true);
         _playerAnim.DirInputSetActive(true);
