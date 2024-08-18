@@ -9,6 +9,7 @@ TagManager:
   - ZipLineStoppingBlock
   - Battery
   - FreePlayerMoveUI
+  - MainCamera Collider
   layers:
   - Default
   - TransparentFX
