@@ -1,32 +1,30 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using FromDirection = ColBounds2D.FromDirection;
 
 public class LightsToggleTrigger2D : MonoBehaviour
 {
+    [SerializeField] private BoxCollider2D _triggerCol;
     [SerializeField] private Light[] _lightsToToggle;
     [SerializeField] private FromDirection _enableWhenEntered = FromDirection.FromBelow;
     [SerializeField] private FromDirection _disableWhenEntered = FromDirection.FromAbove;
     [SerializeField] private float _switchSpeed = 5;
 
+    private ColBounds2D _triggerColBounds;
+    private Collider2D _mainCameraCol;
     private int _lightsCount;
     private bool _toggleStarted;
     private bool[] _toggleInProcess;
     private float[] _toIntensity, _onIntensity, _offIntensity;
 
-    private enum FromDirection
-    {
-        None,
-        FromAbove,
-        FromBelow,
-        FromLeft,
-        FromRight,
-    }
-
     private void Start()
     {
-        _toggleStarted = false;
+        _triggerColBounds = new ColBounds2D(_triggerCol);
+        _mainCameraCol = Camera.main.GetComponentInChildren<Collider2D>();
+
         _lightsCount = _lightsToToggle.Length;
+        _toggleStarted = false;
 
         _toggleInProcess = new bool[_lightsCount];
         _toIntensity = new float[_lightsCount];
@@ -40,17 +38,17 @@ public class LightsToggleTrigger2D : MonoBehaviour
             _offIntensity[i] = 0;
         }
 
-        evalCamPosition();
+        evalLightsIntensity();
     }
 
     private void Update()
     {
         if (_toggleStarted) toggleLights();
     }
-
-    private void evalCamPosition()
+    
+    private void evalLightsIntensity()
     {
-        FromDirection evalDir = getFromDirection(Camera.main.GetComponentInChildren<Collider2D>()); // mainCameraCol
+        FromDirection evalDir = _triggerColBounds.GetRelativePosition(_mainCameraCol);
 
         if (evalDir == _disableWhenEntered)
         {
@@ -82,26 +80,17 @@ public class LightsToggleTrigger2D : MonoBehaviour
 
         if (cnt == _lightsCount) _toggleStarted = false;
     }
-    
-    private FromDirection getFromDirection(Collider2D col)
-    {
-        if (col.transform.position.y > transform.position.y) return FromDirection.FromAbove;
-        else if (col.transform.position.y < transform.position.y) return FromDirection.FromBelow;
-        else if (col.transform.position.x < transform.position.x) return FromDirection.FromLeft;
-        else if (col.transform.position.x > transform.position.x) return FromDirection.FromRight;
-        else return FromDirection.None;
-    }
 
     private void OnTriggerEnter2D(Collider2D col)
     {
         if (col.gameObject.CompareTag("MainCamera Collider"))
         {
-            if (getFromDirection(col) == _enableWhenEntered)
+            if (_triggerColBounds.GetRelativePosition(col) == _enableWhenEntered)
             {
                 _toggleStarted = true;
                 for (int i = 0; i < _lightsCount; ++i) { _toggleInProcess[i] = true; _toIntensity[i] = _onIntensity[i]; }
             }
-            else if (getFromDirection(col) == _disableWhenEntered)
+            else if (_triggerColBounds.GetRelativePosition(col) == _disableWhenEntered)
             {
                 _toggleStarted = true;
                 for (int i = 0; i < _lightsCount; ++i) { _toggleInProcess[i] = true; _toIntensity[i] = _offIntensity[i]; }
