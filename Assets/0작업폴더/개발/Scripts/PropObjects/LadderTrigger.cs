@@ -42,7 +42,8 @@ public class LadderTrigger : MonoBehaviour
 
     private void JumpStartedAction(InputAction.CallbackContext ctx)
     {
-        JumpFromLadder();
+        if (PlayerLogic.Player.LadderClimbAllowed)
+            JumpFromLadder();
     }
 
     public void JumpFromLadder()
