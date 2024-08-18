@@ -52,7 +52,7 @@ public class PlayerController : MonoBehaviour
     public LadderTrigger CurrentLadder { get; set; }
 
     //private bool disableYVelocity = false;
-    private bool swingingGroundHit = false;
+    //private bool swingingGroundHit = false;
 
     private void Awake()
     {
@@ -224,7 +224,7 @@ public class PlayerController : MonoBehaviour
         //_frameVelocity = _rb.velocity;
         _rb.AddForce(Vector2.up * _stats.JumpPower, ForceMode2D.Impulse);
 
-        swingingGroundHit = false;
+        //swingingGroundHit = false;
         Jumped?.Invoke();
     }
 
