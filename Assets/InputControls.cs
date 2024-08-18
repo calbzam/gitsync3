@@ -89,6 +89,15 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""EnterHatchDoor"",
+                    ""type"": ""Button"",
+                    ""id"": ""4a05f393-32b4-41b0-9a03-f48e6db2dc16"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -210,6 +219,17 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""PickupActivate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cd0df274-8154-4a9d-a834-19d4d72d872b"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""EnterHatchDoor"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -401,6 +421,7 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
         m_Player_Swap = m_Player.FindAction("Swap", throwIfNotFound: true);
         m_Player_Activate = m_Player.FindAction("Activate", throwIfNotFound: true);
         m_Player_PickupActivate = m_Player.FindAction("PickupActivate", throwIfNotFound: true);
+        m_Player_EnterHatchDoor = m_Player.FindAction("EnterHatchDoor", throwIfNotFound: true);
         // Camera
         m_Camera = asset.FindActionMap("Camera", throwIfNotFound: true);
         m_Camera_Drag = m_Camera.FindAction("Drag", throwIfNotFound: true);
@@ -483,6 +504,7 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Swap;
     private readonly InputAction m_Player_Activate;
     private readonly InputAction m_Player_PickupActivate;
+    private readonly InputAction m_Player_EnterHatchDoor;
     public struct PlayerActions
     {
         private @InputControls m_Wrapper;
@@ -494,6 +516,7 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
         public InputAction @Swap => m_Wrapper.m_Player_Swap;
         public InputAction @Activate => m_Wrapper.m_Player_Activate;
         public InputAction @PickupActivate => m_Wrapper.m_Player_PickupActivate;
+        public InputAction @EnterHatchDoor => m_Wrapper.m_Player_EnterHatchDoor;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -524,6 +547,9 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
             @PickupActivate.started += instance.OnPickupActivate;
             @PickupActivate.performed += instance.OnPickupActivate;
             @PickupActivate.canceled += instance.OnPickupActivate;
+            @EnterHatchDoor.started += instance.OnEnterHatchDoor;
+            @EnterHatchDoor.performed += instance.OnEnterHatchDoor;
+            @EnterHatchDoor.canceled += instance.OnEnterHatchDoor;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -549,6 +575,9 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
             @PickupActivate.started -= instance.OnPickupActivate;
             @PickupActivate.performed -= instance.OnPickupActivate;
             @PickupActivate.canceled -= instance.OnPickupActivate;
+            @EnterHatchDoor.started -= instance.OnEnterHatchDoor;
+            @EnterHatchDoor.performed -= instance.OnEnterHatchDoor;
+            @EnterHatchDoor.canceled -= instance.OnEnterHatchDoor;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -775,6 +804,7 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
         void OnSwap(InputAction.CallbackContext context);
         void OnActivate(InputAction.CallbackContext context);
         void OnPickupActivate(InputAction.CallbackContext context);
+        void OnEnterHatchDoor(InputAction.CallbackContext context);
     }
     public interface ICameraActions
     {

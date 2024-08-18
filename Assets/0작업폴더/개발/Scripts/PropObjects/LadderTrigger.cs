@@ -42,7 +42,8 @@ public class LadderTrigger : MonoBehaviour
 
     private void JumpStartedAction(InputAction.CallbackContext ctx)
     {
-        JumpFromLadder();
+        if (PlayerLogic.Player.LadderClimbAllowed)
+            JumpFromLadder();
     }
 
     public void JumpFromLadder()
@@ -60,11 +61,11 @@ public class LadderTrigger : MonoBehaviour
         {
             PlayerLogic.Player.IsInLadderRange = true;
             PlayerLogic.Player.CurrentLadder = this;
-        }
 
-        if (AutoClimbWhenJumpedOn)
-            if (!PlayerLogic.Player.IsOnLadder && !JumpingFromLadder && !PlayerLogic.Player.OnGround)
-                PlayerLogic.Player.SetPlayerOnLadder(true);
+            if (AutoClimbWhenJumpedOn)
+                if (!PlayerLogic.Player.IsOnLadder && !JumpingFromLadder && !PlayerLogic.Player.OnGround)
+                    PlayerLogic.Player.SetPlayerOnLadder(true);
+        }
     }
 
     private void OnTriggerExit2D(Collider2D col)

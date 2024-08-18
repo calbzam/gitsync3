@@ -9,6 +9,7 @@ TagManager:
   - ZipLineStoppingBlock
   - Battery
   - FreePlayerMoveUI
+  - MainCamera Collider
   layers:
   - Default
   - TransparentFX
@@ -24,8 +25,8 @@ TagManager:
   - Do Not Render
   - Output
   - Pushable Box
-  - 
-  - 
+  - "Default - \uC9C0\uD558"
+  - "Ground - \uC9C0\uD558"
   - 
   - 
   - 
