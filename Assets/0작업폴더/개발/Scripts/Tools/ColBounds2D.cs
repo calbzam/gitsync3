@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class ColBounds2D
 {
-    public ColBounds2D(Collider2D col)
+    public ColBounds2D(Collider2D selfCol)
     {
-        SelfCollider = col;
+        SelfCollider = selfCol;
         GetColBounds();
     }
 

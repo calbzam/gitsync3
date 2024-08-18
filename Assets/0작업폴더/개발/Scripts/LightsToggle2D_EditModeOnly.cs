@@ -40,7 +40,7 @@ public class LightsToggle2D_EditModeOnly : MonoBehaviour
 #if UNITY_EDITOR
     private void Update()
     {
-        if (!Application.isPlaying)
+        if (!Application.isPlaying) // edit mode, not playing
         {
             evalLightsActiveState();
         }
