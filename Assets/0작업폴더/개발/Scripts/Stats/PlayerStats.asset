@@ -23,8 +23,8 @@ MonoBehaviour:
   WaterDecelerationX: 10
   AirDecelerationX: 30
   GroundingForce: -1.5
-  GrounderDistance: -0.25
-  GroundCheckerAddRadius: 0.02
+  GrounderDistance: -0.2
+  GroundCheckerAddRadius: 0.01
   JumpPower: 9
   JumpUpGravityScale: 1.8
   FallDownGravityScale: 3
@@ -33,4 +33,3 @@ MonoBehaviour:
   RopeJumpedDistance: 2
   RopeJumpedPlayerAddForce: 2
   PlayerAttachedObjectAddVelocity: 12
-  deadPositionY: -6

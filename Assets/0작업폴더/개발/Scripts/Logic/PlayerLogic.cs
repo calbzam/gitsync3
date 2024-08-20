@@ -5,10 +5,12 @@ using TMPro;
 
 public class PlayerLogic : MonoBehaviour
 {
+    public static bool PlayerIsLocked { get; private set; }
+
     public static PlayerController Player { get; private set; }
     public static PlayerStats PlayerStats { get; private set; }
     public static Rigidbody2D PlayerRb { get; private set; }
-    
+
     public static ObiCollider2D PlayerObiCol { get; private set; }
     public static ObiCollider2D PlayerRopeRiderCol { get; private set; }
 
@@ -22,6 +24,8 @@ public class PlayerLogic : MonoBehaviour
 
     private void Start()
     {
+        PlayerIsLocked = false;
+
         Player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         PlayerStats = Player.Stats;
         PlayerRb = Player.GetComponent<Rigidbody2D>();
@@ -63,16 +67,22 @@ public class PlayerLogic : MonoBehaviour
         Player.transform.position = new Vector3(Player.transform.position.x, Player.transform.position.y, newZPos);
     }
 
-    public static void LockPlayerPosition()
+    public static void LockPlayer()
     {
+        PlayerIsLocked = true;
         PlayerRb.constraints = _origPlayerConstraints | RigidbodyConstraints2D.FreezePosition;
+        Player.GroundCheckAllowed = false;
+        Player.LadderClimbAllowed = false;
         Player.DirInputSetActive(false);
         _playerAnim.DirInputSetActive(false);
     }
 
-    public static void FreePlayerPosition()
+    public static void FreePlayer()
     {
+        PlayerIsLocked = false;
         PlayerRb.constraints = _origPlayerConstraints;
+        Player.GroundCheckAllowed = true;
+        Player.LadderClimbAllowed = true;
         Player.DirInputSetActive(true);
         _playerAnim.DirInputSetActive(true);
     }
@@ -81,11 +91,16 @@ public class PlayerLogic : MonoBehaviour
     {
         _freePlayerDragEnabled = !_freePlayerDragEnabled;
         _freePlayerDragUI.gameObject.SetActive(_freePlayerDragEnabled);
-        if (_freePlayerDragEnabled) _freePlayerDragUI.MoveToPlayerPosition();
+        if (_freePlayerDragEnabled) _freePlayerDragUI.MoveUIToPlayerPosition();
     }
 
     public static void IgnorePlayerGroundCollision(bool bypass)
     {
         Physics2D.IgnoreLayerCollision(Layers.PlayerLayer.LayerValue, Layers.GroundLayer.LayerValue, bypass);
     }
+
+    //public static void IgnorePlayerLadderCollision(bool bypass)
+    //{
+    //    Physics2D.IgnoreLayerCollision(Layers.PlayerLayer.LayerValue, Layers.(no ladder layer).LayerValue, bypass);
+    //}
 }

@@ -28,6 +28,7 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody2D swingingGround;
 
+    public bool GroundCheckAllowed { get; set; }
     private Vector3 groundCheckerPos;
     private float groundCheckerRadius;
     private Vector3 ceilCheckerPos;
@@ -45,12 +46,13 @@ public class PlayerController : MonoBehaviour
     public bool OnGround { get; private set; }
     public bool IsInWater { get; set; }
 
+    public bool LadderClimbAllowed { get; set; }
     public bool IsInLadderRange { get; set; }
     public bool IsOnLadder { get; set; }
     public LadderTrigger CurrentLadder { get; set; }
 
     //private bool disableYVelocity = false;
-    private bool swingingGroundHit = false;
+    //private bool swingingGroundHit = false;
 
     private void Awake()
     {
@@ -62,6 +64,13 @@ public class PlayerController : MonoBehaviour
     }
 
     private void Start()
+    {
+        drawGizmosEnabled = true;
+        GroundCheckAllowed = true;
+        LadderClimbAllowed = true;
+    }
+
+    private void OnEnable()
     {
         drawGizmosEnabled = true;
     }
@@ -76,7 +85,7 @@ public class PlayerController : MonoBehaviour
         _time += Time.deltaTime;
         RefineInput();
 
-        CheckRespawn();
+        //CheckRespawn();
     }
 
     private void FixedUpdate()
@@ -84,7 +93,7 @@ public class PlayerController : MonoBehaviour
         CheckCollisions();
 
         HandleJump();
-        HandleLadderClimb();
+        if (LadderClimbAllowed) HandleLadderClimb();
 
         HandleDirection();
         HandleGravity();
@@ -114,6 +123,9 @@ public class PlayerController : MonoBehaviour
     //_col.size: (x=0.50, y=1.26)
     //_col.direction: Vertical
 
+    private Collider2D _groundCol;
+    private bool _groundHit;
+
     private void CheckCollisions()
     {
         Physics2D.queriesStartInColliders = false;
@@ -132,13 +144,21 @@ public class PlayerController : MonoBehaviour
         //if (col) { swingingGroundHit = true; /*swingingGround = col.attachedRigidbody;*/ }
         //bool groundHit = swingingGroundHit || normalGroundHit;
 
-        Collider2D groundCol = Physics2D.OverlapCircle(groundCheckerPos, groundCheckerRadius, Layers.GroundLayer.MaskValue | Layers.SwingingGroundLayer.MaskValue | Layers.PushableBoxLayer.MaskValue);
-        bool groundHit = groundCol;
-        if (!IsOnLadder && groundCol != null)
+        if (GroundCheckAllowed)
         {
-            // Set Z-pos to the Z-pos of the ground that Player hit
-            PlayerLogic.SetPlayerZPosition(groundCol.transform.position.z);
-            //transform.position = new Vector3(transform.position.x, transform.position.y, col.transform.position.z);
+            _groundCol = Physics2D.OverlapCircle(groundCheckerPos, groundCheckerRadius, Layers.GroundLayer.MaskValue);
+            _groundHit = _groundCol;
+            if (!IsOnLadder && _groundCol != null)
+            {
+                // Set Z-pos to the Z-pos of the ground that Player hit
+                PlayerLogic.SetPlayerZPosition(_groundCol.transform.position.z);
+                //transform.position = new Vector3(transform.position.x, transform.position.y, col.transform.position.z);
+            }
+        }
+        else
+        {
+            _groundCol = null;
+            _groundHit = false;
         }
 
         //bool ceilingHit = Physics2D.OverlapCircle(ceilCheckerPos, ceilCheckerRadius, Layers.GroundLayer | Layers.SwingingGroundLayer);
@@ -147,7 +167,7 @@ public class PlayerController : MonoBehaviour
 
 
         // Landed on the Ground
-        if (!OnGround && groundHit)
+        if (!OnGround && _groundHit)
         {
             OnGround = true;
             _coyoteUsable = true;
@@ -156,7 +176,7 @@ public class PlayerController : MonoBehaviour
             GroundedChanged?.Invoke(true, Mathf.Abs(/*_frameVelocity.y*/_rb.velocity.y));
         }
         // Left the Ground
-        else if (OnGround && !groundHit)
+        else if (OnGround && !_groundHit)
         {
             OnGround = false;
             _frameLeftGrounded = _time;
@@ -204,7 +224,7 @@ public class PlayerController : MonoBehaviour
         //_frameVelocity = _rb.velocity;
         _rb.AddForce(Vector2.up * _stats.JumpPower, ForceMode2D.Impulse);
 
-        swingingGroundHit = false;
+        //swingingGroundHit = false;
         Jumped?.Invoke();
     }
 
@@ -364,18 +384,18 @@ public class PlayerController : MonoBehaviour
     public void RespawnPlayer()
     {
         FrameInputReader.TriggerJump();
-        PlayerLogic.FreePlayerPosition();
+        PlayerLogic.FreePlayer();
         playerTransform.position = _respawnPos;
         _rb.velocity = Vector3.zero;
     }
 
-    private void CheckRespawn()
-    {
-        if (playerTransform.position.y < _stats.deadPositionY)
-        {
-            RespawnPlayer();
-        }
-    }
+    //private void CheckRespawn()
+    //{
+    //    if (playerTransform.position.y < _stats.deadPositionY)
+    //    {
+    //        RespawnPlayer();
+    //    }
+    //}
 
     #endregion
 
