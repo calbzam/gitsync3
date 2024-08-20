@@ -27,7 +27,6 @@ public class LightsToggle3D : MonoBehaviour
         _triggerColBounds = new ColBounds3D(_triggerColToUse);
         _mainCameraCol = Camera.main.GetComponentInChildren<Collider>();
 
-        setCamIsInTrigger();
         _toggleStarted = false;
         _lightsCount = _lightsToToggle.Length;
 
@@ -36,11 +35,29 @@ public class LightsToggle3D : MonoBehaviour
         _onIntensity = new float[_lightsCount];
         _offIntensity = new float[_lightsCount];
 
+        SetPresetIntensities();
+        EvalLightsInitialStates();
+    }
+
+    private void SetPresetIntensities()
+    {
         for (int i = 0; i < _lightsCount; ++i)
         {
             _toggleInProcess[i] = false;
             _onIntensity[i] = _lightsToToggle[i].intensity;
             _offIntensity[i] = 0;
+        }
+    }
+
+    private void EvalLightsInitialStates()
+    {
+        if (setCamIsInTrigger())
+        {
+            for (int i = 0; i < _lightsCount; ++i) _lightsToToggle[i].intensity = _onIntensity[i];
+        }
+        else
+        {
+            for (int i = 0; i < _lightsCount; ++i) _lightsToToggle[i].intensity = _offIntensity[i];
         }
     }
 

@@ -5,8 +5,12 @@ using UnityEngine.Rendering;
 
 public class ControlVolumeTrigger: MonoBehaviour
 {
+    [SerializeField] private BoxCollider _triggerColSelf;
     [SerializeField] private Volume _volumeToControl;
     [SerializeField] private float _blendSpeed = 5f;
+
+    private ColBounds3D _triggerColBounds;
+    private Collider _mainCameraCol;
 
     private bool _isInTransition;
     private float _toWeight;
@@ -14,6 +18,18 @@ public class ControlVolumeTrigger: MonoBehaviour
     private void Start()
     {
         _isInTransition = false;
+
+        _triggerColBounds = new ColBounds3D(_triggerColSelf);
+        _mainCameraCol = Camera.main.GetComponentInChildren<Collider>();
+        EvalVolumeInitialState();
+    }
+
+    private void EvalVolumeInitialState()
+    {
+        if (_triggerColBounds.OtherIsInSelf(_mainCameraCol))
+            _volumeToControl.weight = 1;
+        else
+            _volumeToControl.weight = 0;
     }
 
     private void Update()
