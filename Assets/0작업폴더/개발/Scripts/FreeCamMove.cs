@@ -24,6 +24,11 @@ public class FreeCamMove : MonoBehaviour
         _readMouse.RefPosZ = CamPosZ;
     }
 
+    private void OnEnable()
+    {
+        CamPosZ = transform.position.z;
+    }
+
     private void LateUpdate()
     {
         if (DragMouseEnabled && _readMouse.IsDragging)
@@ -35,7 +40,7 @@ public class FreeCamMove : MonoBehaviour
         if ((scrollAmount = ReadMouse.GetScrollAmount()) != 0)
         {
             float distanceSizing = Mathf.Max(Mathf.Abs(CamPosZ), _minThreshold);
-            transform.position += (scrollAmount / _zoomReduction * distanceSizing) * Vector3.forward;
+            transform.position += (scrollAmount / _zoomReduction * distanceSizing) * Vector3.forward; // 그냥 Unity Editor에서 시행착오 하다가 나온 식
             
             CamPosZ = transform.position.z;
             _readMouse.RefPosZ = CamPosZ;

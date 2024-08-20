@@ -30,7 +30,8 @@ public class FreePlayerDragUI : MonoBehaviour, IBeginDragHandler, IDragHandler, 
     {
         _isDragging = true;
         transform.position = Mouse.current.position.ReadValue();
-        PlayerLogic.SetPlayerXYPos(ReadMouse.GetWorldMousePos(_freeCamMove.CamPosZ));
+        PlayerLogic.SetPlayerXYPos(ReadMouse.GetWorldMousePos(_freeCamMove.CamPosZ - PlayerLogic.Player.transform.position.z));
+        MoveUIToPlayerPosition();
     }
 
     public void OnEndDrag(PointerEventData eventData) // IEndDragHandler override

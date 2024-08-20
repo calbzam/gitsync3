@@ -10,6 +10,7 @@ TagManager:
   - Battery
   - FreePlayerMoveUI
   - MainCamera Collider
+  - PushableBox
   layers:
   - Default
   - TransparentFX
@@ -24,9 +25,9 @@ TagManager:
   - ClimbingRope
   - Do Not Render
   - Output
-  - Pushable Box
-  - "Default - \uC9C0\uD558"
-  - "Ground - \uC9C0\uD558"
+  - 
+  - 
+  - 
   - 
   - 
   - 

@@ -10,7 +10,7 @@ public class PlayerLogic : MonoBehaviour
     public static PlayerController Player { get; private set; }
     public static PlayerStats PlayerStats { get; private set; }
     public static Rigidbody2D PlayerRb { get; private set; }
-    
+
     public static ObiCollider2D PlayerObiCol { get; private set; }
     public static ObiCollider2D PlayerRopeRiderCol { get; private set; }
 
