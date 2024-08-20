@@ -21,12 +21,23 @@ public class ColBounds3D
         FrontEnd = SelfCollider.bounds.center.z - SelfCollider.bounds.extents.z;
     }
 
-    public bool OtherIsInCollider(Collider other)
+    public bool OtherIsInSelf(Collider other)
     {
         if (other.transform.position.x > LeftEnd && other.transform.position.x < RightEnd)
         {
             if (other.transform.position.y > BottomEnd && other.transform.position.y < TopEnd)
                 if (other.transform.position.z > FrontEnd && other.transform.position.z < BackEnd)
+                    return true;
+        }
+        return false;
+    }
+
+    public bool OtherIsInSelf(Transform other)
+    {
+        if (LeftEnd < other.position.x && other.position.x < RightEnd)
+        {
+            if (BottomEnd < other.position.y && other.position.y < TopEnd)
+                if (FrontEnd < other.position.z && other.position.z < BackEnd)
                     return true;
         }
         return false;
