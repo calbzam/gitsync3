@@ -1,4 +1,3 @@
-#if UNITY_EDITOR
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -34,6 +33,7 @@ public class SwapCameraBoundsOnTrigger_EditModeOnly : MonoBehaviour
         }
     }
 
+#if UNITY_EDITOR
     private void Update()
     {
         if (_triggerColBounds.OtherIsInSelf(_playerTransform))
@@ -41,5 +41,5 @@ public class SwapCameraBoundsOnTrigger_EditModeOnly : MonoBehaviour
             _virtualCamDefaultConfiner.m_BoundingShape2D = _onTriggerEnterBounds;
         }
     }
-}
 #endif
+}
