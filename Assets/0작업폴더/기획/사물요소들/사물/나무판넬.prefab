@@ -173,7 +173,7 @@ HingeJoint2D:
   m_BreakAction: 3
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: -0.50006014, y: 0.00020774239}
-  m_ConnectedAnchor: {x: 490.99097, y: 5.897051}
+  m_ConnectedAnchor: {x: 517.7237, y: -33.054924}
   m_UseMotor: 0
   m_Motor:
     m_MotorSpeed: 0
@@ -498,7 +498,7 @@ HingeJoint2D:
   m_BreakAction: 3
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: 0.5000141, y: 0.000077724864}
-  m_ConnectedAnchor: {x: 506.2887, y: 6.7830715}
+  m_ConnectedAnchor: {x: 527.7152, y: -31.524462}
   m_UseMotor: 0
   m_Motor:
     m_MotorSpeed: 0
@@ -556,12 +556,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a4cd52eb96674149a43b829b2d43b92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DurationToBreak: 3
   _parentRb: {fileID: 5946375037720789125}
   _wholePanelTimer: {fileID: 3168084165810365014}
   _wholePanel: {fileID: 1164977784716440153}
   _leftHalf: {fileID: 263894947568513617}
   _rightHalf: {fileID: 2023337132940576558}
-  DurationToBreak: 3
 --- !u!114 &7035172402979226230
 MonoBehaviour:
   m_ObjectHideFlags: 0

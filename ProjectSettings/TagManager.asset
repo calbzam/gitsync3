@@ -10,6 +10,7 @@ TagManager:
   - Battery
   - FreePlayerMoveUI
   - MainCamera Collider
+  - PushableBox
   layers:
   - Default
   - TransparentFX
@@ -24,7 +25,7 @@ TagManager:
   - ClimbingRope
   - Do Not Render
   - Output
-  - Pushable Box
+  - 
   - 
   - 
   - 

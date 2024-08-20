@@ -146,7 +146,7 @@ public class PlayerController : MonoBehaviour
 
         if (GroundCheckAllowed)
         {
-            _groundCol = Physics2D.OverlapCircle(groundCheckerPos, groundCheckerRadius, Layers.GroundLayer.MaskValue | Layers.SwingingGroundLayer.MaskValue | Layers.PushableBoxLayer.MaskValue);
+            _groundCol = Physics2D.OverlapCircle(groundCheckerPos, groundCheckerRadius, Layers.GroundLayer.MaskValue);
             _groundHit = _groundCol;
             if (!IsOnLadder && _groundCol != null)
             {
