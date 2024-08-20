@@ -5,7 +5,7 @@ using FromDirection = ColBounds2D.FromDirection;
 
 public class LightsToggleTrigger2D : MonoBehaviour
 {
-    [SerializeField] private BoxCollider2D _triggerCol;
+    [SerializeField] private BoxCollider2D _triggerColSelf;
     [SerializeField] private Light[] _lightsToToggle;
     [SerializeField] private FromDirection _enableWhenEntered = FromDirection.FromBelow;
     [SerializeField] private FromDirection _disableWhenEntered = FromDirection.FromAbove;
@@ -20,7 +20,7 @@ public class LightsToggleTrigger2D : MonoBehaviour
 
     private void Start()
     {
-        _triggerColBounds = new ColBounds2D(_triggerCol);
+        _triggerColBounds = new ColBounds2D(_triggerColSelf);
         _mainCameraCol = Camera.main.GetComponentInChildren<Collider2D>();
 
         _lightsCount = _lightsToToggle.Length;

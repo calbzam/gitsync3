@@ -1,4 +1,4 @@
-"Trigger"가 붙어있는 스크립트들은 본인의 gameObject에 붙어 있는 collider(_triggerCol)의 "Is Trigger" 옵션을 사용해
+"Trigger"가 붙어있는 스크립트들은 본인의 gameObject에 붙어 있는 collider(_triggerColSelf)의 "Is Trigger" 옵션을 사용해
 OnTriggerEnter, OnTriggerExit에서 _mainCameraCol이 _triggerCol에 enter/exit 했을 때를 판별
 
 "Trigger"가 붙어있지 않은 스크립트들은 다른 gameObject의 collider(_triggerColToUse)의 bounds.center와 bounds.extents를 이용해

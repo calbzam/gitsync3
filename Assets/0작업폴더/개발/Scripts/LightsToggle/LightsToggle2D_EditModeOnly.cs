@@ -6,7 +6,7 @@ using FromDirection = ColBounds2D.FromDirection;
 [ExecuteInEditMode]
 public class LightsToggle2D_EditModeOnly : MonoBehaviour
 {
-    [SerializeField] private BoxCollider2D _triggerCol;
+    [SerializeField] private BoxCollider2D _triggerColSelf;
     private ColBounds2D _triggerColBounds;
     [SerializeField] private Light[] _lightsToToggle;
     [SerializeField] private FromDirection _enableWhenEntered = FromDirection.FromBelow;
@@ -23,7 +23,7 @@ public class LightsToggle2D_EditModeOnly : MonoBehaviour
         }
         else
         {
-            _triggerColBounds = new ColBounds2D(_triggerCol);
+            _triggerColBounds = new ColBounds2D(_triggerColSelf);
             _mainCameraCol = Camera.main.GetComponentInChildren<Collider2D>();
         }
     }
