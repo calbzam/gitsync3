@@ -31,4 +31,15 @@ public class ColBounds3D
         }
         return false;
     }
+
+    public bool OtherIsInSelf(Transform other)
+    {
+        if (LeftEnd < other.position.x && other.position.x < RightEnd)
+        {
+            if (BottomEnd < other.position.y && other.position.y < TopEnd)
+                if (FrontEnd < other.position.z && other.position.z < BackEnd)
+                    return true;
+        }
+        return false;
+    }
 }

@@ -36,4 +36,24 @@ public class ColBounds2D
         else if (col.transform.position.x > RightEnd) return FromDirection.FromRight;
         else return FromDirection.None;
     }
+
+    public bool OtherIsInSelf(Collider2D other)
+    {
+        if (other.transform.position.x > LeftEnd && other.transform.position.x < RightEnd)
+        {
+            if (other.transform.position.y > BottomEnd && other.transform.position.y < TopEnd)
+                return true;
+        }
+        return false;
+    }
+
+    public bool OtherIsInSelf(Transform other)
+    {
+        if (LeftEnd < other.position.x && other.position.x < RightEnd)
+        {
+            if (BottomEnd < other.position.y && other.position.y < TopEnd)
+                return true;
+        }
+        return false;
+    }
 }
