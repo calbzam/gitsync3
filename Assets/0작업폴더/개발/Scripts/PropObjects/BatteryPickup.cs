@@ -67,10 +67,10 @@ public class BatteryPickup : MonoBehaviour
 
     private void SetBatteryFacingDir()
     {
-        if (FrameInputReader.FrameInput.Move.x < 0)
+        if (PlayerLogic.PlayerAnim.FaceDirX < 0)
             SetLocalTransform(_leftOffset, _leftRotation);
 
-        else if (FrameInputReader.FrameInput.Move.x > 0)
+        else if (PlayerLogic.PlayerAnim.FaceDirX > 0)
             SetLocalTransform(_rightOffset, _rightRotation);
     }
 
