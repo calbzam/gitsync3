@@ -8,6 +8,7 @@ public class PlayerLogic : MonoBehaviour
     public static bool PlayerIsLocked { get; private set; }
 
     public static PlayerController Player { get; private set; }
+    public static PlayerAnimController PlayerAnim { get; private set; }
     public static PlayerStats PlayerStats { get; private set; }
     public static Rigidbody2D PlayerRb { get; private set; }
 
@@ -16,7 +17,6 @@ public class PlayerLogic : MonoBehaviour
 
     public static TMP_Text PlayerElectrocutedText { get; private set; }
 
-    private static PlayerAnimController _playerAnim;
     private static RigidbodyConstraints2D _origPlayerConstraints;
     
     private static FreePlayerDragUI _freePlayerDragUI;
@@ -27,6 +27,7 @@ public class PlayerLogic : MonoBehaviour
         PlayerIsLocked = false;
 
         Player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        PlayerAnim = Player.GetComponentInChildren<PlayerAnimController>();
         PlayerStats = Player.Stats;
         PlayerRb = Player.GetComponent<Rigidbody2D>();
 
@@ -36,7 +37,6 @@ public class PlayerLogic : MonoBehaviour
         PlayerElectrocutedText = GameObject.FindGameObjectWithTag("Player electrocutedText").GetComponent<TMP_Text>();
         PlayerElectrocutedText.gameObject.SetActive(false);
 
-        _playerAnim = Player.GetComponentInChildren<PlayerAnimController>();
         _origPlayerConstraints = PlayerRb.constraints;
 
         _freePlayerDragUI = GameObject.FindGameObjectWithTag("FreePlayerMoveUI").GetComponent<FreePlayerDragUI>();
@@ -74,7 +74,7 @@ public class PlayerLogic : MonoBehaviour
         Player.GroundCheckAllowed = false;
         Player.LadderClimbAllowed = false;
         Player.DirInputSetActive(false);
-        _playerAnim.DirInputSetActive(false);
+        PlayerAnim.DirInputSetActive(false);
     }
 
     public static void FreePlayer()
@@ -84,7 +84,7 @@ public class PlayerLogic : MonoBehaviour
         Player.GroundCheckAllowed = true;
         Player.LadderClimbAllowed = true;
         Player.DirInputSetActive(true);
-        _playerAnim.DirInputSetActive(true);
+        PlayerAnim.DirInputSetActive(true);
     }
 
     public static void ToggleFreePlayerDrag()

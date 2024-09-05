@@ -153,6 +153,22 @@ public class PlayerController : MonoBehaviour
                 // Set Z-pos to the Z-pos of the ground that Player hit
                 PlayerLogic.SetPlayerZPosition(_groundCol.transform.position.z);
                 //transform.position = new Vector3(transform.position.x, transform.position.y, col.transform.position.z);
+
+
+                // Move Player up if Player is passing through ground
+                PlatformEffector2D plat = _groundCol.GetComponent<PlatformEffector2D>();
+                if (plat != null)
+                {
+                    float groundCheckerLow = groundCheckerPos.y - groundCheckerRadius;
+                    float groundCheckerHigh = groundCheckerPos.y + groundCheckerRadius;
+                    float groundColHigh = _groundCol.bounds.center.y + _groundCol.bounds.extents.y;
+                    float groundColLow = _groundCol.bounds.center.y - _groundCol.bounds.extents.y;
+
+                    if (groundCheckerLow > groundColLow && groundCheckerHigh < groundColHigh)
+                    {
+                        _rb.MovePosition(new Vector2(_rb.position.x, groundColHigh));
+                    }
+                }
             }
         }
         else
