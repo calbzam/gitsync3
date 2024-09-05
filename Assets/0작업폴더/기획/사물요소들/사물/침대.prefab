@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 9165334530867343366}
   - component: {fileID: 6988626470463095568}
   - component: {fileID: 3342057429507977804}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: "\uD5E4\uB4DC"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -141,7 +141,7 @@ GameObject:
   - component: {fileID: 792002499121372518}
   - component: {fileID: 4715471557783651251}
   - component: {fileID: 769738673862731744}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: "\uD310"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -269,7 +269,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3311810216141848971}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: "\uCE68\uB300"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -306,7 +306,7 @@ GameObject:
   - component: {fileID: 5579670854875408295}
   - component: {fileID: 2305863487377689078}
   - component: {fileID: 5452777836386496896}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: "\uC774\uBD88"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -389,7 +389,7 @@ BoxCollider2D:
   m_GameObject: {fileID: 8361525917978658519}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 7d5c3928c8eb2f947b08ea87635f47ec, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -436,7 +436,7 @@ GameObject:
   - component: {fileID: 2670322699857767880}
   - component: {fileID: 2779510053480715065}
   - component: {fileID: 1812208665808534959}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: "\uB9E4\uD2B8\uB9AC\uC2A4"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -519,7 +519,7 @@ BoxCollider2D:
   m_GameObject: {fileID: 8666268096829082988}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 7d5c3928c8eb2f947b08ea87635f47ec, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
