@@ -5,6 +5,8 @@ using TMPro;
 
 public class PlayerLogic : MonoBehaviour
 {
+    public static event Action PlayerRespawned;
+
     public static bool PlayerIsLocked { get; private set; }
 
     public static PlayerController Player { get; private set; }
@@ -65,6 +67,11 @@ public class PlayerLogic : MonoBehaviour
     public static void SetPlayerZPosition(float newZPos)
     {
         Player.transform.position = new Vector3(Player.transform.position.x, Player.transform.position.y, newZPos);
+    }
+
+    public static void InvokePlayerRespawedEvent()
+    {
+        PlayerRespawned?.Invoke();
     }
 
     public static void LockPlayer()

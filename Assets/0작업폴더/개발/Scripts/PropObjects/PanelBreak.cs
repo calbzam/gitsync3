@@ -14,14 +14,53 @@ public class PanelBreak : MonoBehaviour
     [SerializeField] private GameObject _leftHalf;
     [SerializeField] private GameObject _rightHalf;
 
+    private Vector3 _leftHalfPos, _rightHalfPos;
+    private Quaternion _leftHalfRot, _rightHalfRot;
+
+    private void OnEnable()
+    {
+        PlayerLogic.PlayerRespawned += PlayerRespawnedAction;
+    }
+
+    private void OnDisable()
+    {
+        PlayerLogic.PlayerRespawned -= PlayerRespawnedAction;
+    }
+
+    private void PlayerRespawnedAction()
+    {
+        ResetPanelTransforms();
+    }
+
     private void Start()
     {
+        SetPanelTransformVariables();
         SetPanelBroken(false);
     }
 
     private void Update()
     {
         MeasureTime();
+    }
+
+    private void SetPanelTransformVariables()
+    {
+        _leftHalfPos = _leftHalf.transform.position;
+        _rightHalfPos = _rightHalf.transform.position;
+        _leftHalfRot = _leftHalf.transform.rotation;
+        _rightHalfRot = _rightHalf.transform.rotation;
+    }
+
+    private void ResetPanelTransforms()
+    {
+        _leftHalf.SetActive(true);
+        _rightHalf.SetActive(true);
+        _leftHalf.transform.position = _leftHalfPos;
+        _rightHalf.transform.position = _rightHalfPos;
+        _leftHalf.transform.rotation = _leftHalfRot;
+        _rightHalf.transform.rotation = _rightHalfRot;
+
+        SetPanelBroken(false);
     }
 
     private void SetPanelBroken(bool isBroken)

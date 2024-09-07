@@ -385,6 +385,7 @@ public class PlayerController : MonoBehaviour
     {
         FrameInputReader.TriggerJump();
         PlayerLogic.FreePlayer();
+        PlayerLogic.InvokePlayerRespawedEvent();
         playerTransform.position = _respawnPos;
         _rb.velocity = Vector3.zero;
     }
