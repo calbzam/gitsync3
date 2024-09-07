@@ -17,7 +17,9 @@ public class CameraLogic : MonoBehaviour
 
     public void ToggleFreeCam()
     {
-        SetFreeCam(_isFreeCam = !_isFreeCam);
+        _isFreeCam = !_isFreeCam;
+        if (!_isFreeCam) PlayerLogic.SetFreePlayerDrag(false); // swapped to Player Camera via button click
+        SetFreeCam(_isFreeCam);
     }
 
     private void Start()
@@ -45,8 +47,9 @@ public class CameraLogic : MonoBehaviour
         _freeCamPosZ = newPosZ;
     }
 
-    private void SetFreeCam(bool freeCam)
+    public void SetFreeCam(bool freeCam)
     {
+        _isFreeCam = freeCam;
         if (freeCam) _freeVirtualCam.transform.position = new Vector3(_defaultVirtualCam.transform.position.x, _defaultVirtualCam.transform.position.y, _freeCamPosZ);
 
         _freeVirtualCam.gameObject.SetActive(freeCam);
