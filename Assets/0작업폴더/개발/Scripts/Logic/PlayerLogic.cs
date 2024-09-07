@@ -5,6 +5,11 @@ using TMPro;
 
 public class PlayerLogic : MonoBehaviour
 {
+    [SerializeField] private NearestPlayerRespawn_UseDuringDevelopmentOnly _nearestPlayerRespawn_UseDuringDevelopmentOnly;
+    public static NearestPlayerRespawn_UseDuringDevelopmentOnly NearestPlayerRespawn { get; private set; }
+
+    public static event Action PlayerRespawned;
+
     public static bool PlayerIsLocked { get; private set; }
 
     public static PlayerController Player { get; private set; }
@@ -24,6 +29,8 @@ public class PlayerLogic : MonoBehaviour
 
     private void Start()
     {
+        NearestPlayerRespawn = _nearestPlayerRespawn_UseDuringDevelopmentOnly;
+
         PlayerIsLocked = false;
 
         Player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
@@ -67,6 +74,11 @@ public class PlayerLogic : MonoBehaviour
         Player.transform.position = new Vector3(Player.transform.position.x, Player.transform.position.y, newZPos);
     }
 
+    public static void InvokePlayerRespawedEvent()
+    {
+        PlayerRespawned?.Invoke();
+    }
+
     public static void LockPlayer()
     {
         PlayerIsLocked = true;
@@ -90,6 +102,13 @@ public class PlayerLogic : MonoBehaviour
     public static void ToggleFreePlayerDrag()
     {
         _freePlayerDragEnabled = !_freePlayerDragEnabled;
+        _freePlayerDragUI.gameObject.SetActive(_freePlayerDragEnabled);
+        if (_freePlayerDragEnabled) _freePlayerDragUI.MoveUIToPlayerPosition();
+    }
+
+    public static void SetFreePlayerDrag(bool enabled)
+    {
+        _freePlayerDragEnabled = enabled;
         _freePlayerDragUI.gameObject.SetActive(_freePlayerDragEnabled);
         if (_freePlayerDragEnabled) _freePlayerDragUI.MoveUIToPlayerPosition();
     }

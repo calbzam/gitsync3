@@ -6,12 +6,13 @@ public class LeverActivate : MonoBehaviour
 {
     [SerializeField] private LeverConnectedObject _connectedObject;
     [SerializeField] private Checkpoint _checkPointToActivate;
+    [SerializeField] private bool _updateCheckpointOnActivate = false;
 
     public bool IsAutomatic;
 
     public bool IsActivated { get; private set; }
     
-    private void Start()
+    private void Awake()
     {
         IsActivated = false;
 
@@ -32,6 +33,8 @@ public class LeverActivate : MonoBehaviour
     public void UpdateCheckpoint()
     {
         _checkPointToActivate.gameObject.SetActive(true);
-        PlayerLogic.Player.SetRespawnPos(_checkPointToActivate.RespawnPoint.position);
+
+        if (_updateCheckpointOnActivate)
+            PlayerLogic.Player.SetRespawnPos(_checkPointToActivate.RespawnPoint.position);
     }
 }

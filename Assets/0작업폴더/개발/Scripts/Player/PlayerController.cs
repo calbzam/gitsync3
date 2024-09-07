@@ -15,8 +15,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private PlayerStats _stats;
     public PlayerStats Stats => _stats; // for public access
 
-    private Vector3 _respawnPos;
-    public Vector3 RespawnPos => _respawnPos; // for public access
+    public Vector3 RespawnPos { get; private set; }
 
     private bool _DirInputEnabled = true;
     public void DirInputSetActive(bool enabled) { _DirInputEnabled = enabled; }
@@ -153,22 +152,6 @@ public class PlayerController : MonoBehaviour
                 // Set Z-pos to the Z-pos of the ground that Player hit
                 PlayerLogic.SetPlayerZPosition(_groundCol.transform.position.z);
                 //transform.position = new Vector3(transform.position.x, transform.position.y, col.transform.position.z);
-
-
-                // Move Player up if Player is passing through ground
-                PlatformEffector2D plat = _groundCol.GetComponent<PlatformEffector2D>();
-                if (plat != null)
-                {
-                    float groundCheckerLow = groundCheckerPos.y - groundCheckerRadius;
-                    float groundCheckerHigh = groundCheckerPos.y + groundCheckerRadius;
-                    float groundColHigh = _groundCol.bounds.center.y + _groundCol.bounds.extents.y;
-                    float groundColLow = _groundCol.bounds.center.y - _groundCol.bounds.extents.y;
-
-                    if (groundCheckerLow > groundColLow && groundCheckerHigh < groundColHigh)
-                    {
-                        _rb.MovePosition(new Vector2(_rb.position.x, groundColHigh));
-                    }
-                }
             }
         }
         else
@@ -394,14 +377,15 @@ public class PlayerController : MonoBehaviour
 
     public void SetRespawnPos(Vector3 position)
     {
-        _respawnPos = new Vector3(position.x, position.y, playerTransform.position.z);
+        RespawnPos = new Vector3(position.x, position.y, playerTransform.position.z);
     }
 
     public void RespawnPlayer()
     {
         FrameInputReader.TriggerJump();
         PlayerLogic.FreePlayer();
-        playerTransform.position = _respawnPos;
+        PlayerLogic.InvokePlayerRespawedEvent();
+        playerTransform.position = RespawnPos;
         _rb.velocity = Vector3.zero;
     }
 

@@ -23,7 +23,7 @@ public class FreePlayerDragUI : MonoBehaviour, IBeginDragHandler, IDragHandler, 
         _isDragging = true;
         _freeCamMove.DragMouseEnabled = false;
         PlayerLogic.LockPlayer();
-        if (!(_freeCamWasEnabled = _freeCamMove.gameObject.activeSelf)) _cameraLogic.ToggleFreeCam();
+        if (!(_freeCamWasEnabled = _freeCamMove.gameObject.activeSelf)) _cameraLogic.SetFreeCam(true);
     }
 
     public void OnDrag(PointerEventData eventData) // IDragHandler override
@@ -39,7 +39,8 @@ public class FreePlayerDragUI : MonoBehaviour, IBeginDragHandler, IDragHandler, 
         _isDragging = false;
         _freeCamMove.DragMouseEnabled = true;
         PlayerLogic.FreePlayer();
-        if (!_freeCamWasEnabled) _cameraLogic.ToggleFreeCam();
+        PlayerLogic.NearestPlayerRespawn.SetNearestRespawnPos();
+        if (!_freeCamWasEnabled) _cameraLogic.SetFreeCam(false);
     }
 
     private void LateUpdate()

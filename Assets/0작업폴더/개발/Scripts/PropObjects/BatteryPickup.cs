@@ -1,16 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class BatteryPickup : MonoBehaviour
+public partial class BatteryPickup : MonoBehaviour
 {
     [SerializeField] private Rigidbody2D _rb;
     [SerializeField] private Vector2 _rightOffset = new Vector2(0, 0.6f);
     [SerializeField] private float _zRotation = 8;
     private Vector2 _leftOffset;
     private Quaternion _leftRotation, _rightRotation;
+
+    public bool BatteryInserted { get; set; }
 
     public RigidbodyConstraints2D OrigRbConstraints { get; private set; } // unused at the moment
 
@@ -22,25 +23,37 @@ public class BatteryPickup : MonoBehaviour
     private void OnEnable()
     {
         CentralInputReader.Input.Player.PickupActivate.started += PickupActivateStarted;
+        PlayerLogic.PlayerRespawned += PlayerRespawnedAction;
     }
 
     private void OnDisable()
     {
         CentralInputReader.Input.Player.PickupActivate.started -= PickupActivateStarted;
+        PlayerLogic.PlayerRespawned -= PlayerRespawnedAction;
     }
 
     private void Start()
     {
+        _initialParent = transform.parent;
+        _initialPos = transform.position;
+        _initialRot = transform.rotation;
+
         _rb.simulated = false;
         _leftOffset = new Vector2(-_rightOffset.x, _rightOffset.y);
         _leftRotation = Quaternion.Euler(new Vector3(0, 0, -_zRotation));
         _rightRotation = Quaternion.Euler(new Vector3(0, 0, _zRotation));
 
+        ResetBools();
+        BatteryInserted = false;
+        OrigRbConstraints = _rb.constraints;
+    }
+    
+    private void ResetBools()
+    {
         IsPickable = true;
         PlayerIsInRange = false;
         IsHeldByPlayer = false;
         BatteryIsInBox = true;
-        OrigRbConstraints = _rb.constraints;
     }
 
     private void Update()

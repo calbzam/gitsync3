@@ -48,6 +48,6 @@ public class LeverBatteryReader : MonoBehaviour
         battery.IsPickable = false;
         battery.SetBatteryParent(_batteryInsertPoint);
         battery.SetLocalTransform(_offsetVec3, _insertedQuatRot);
-        BatteryInserted = true;
+        BatteryInserted = battery.BatteryInserted = true;
     }
 }
