@@ -19,7 +19,7 @@ public class ShowHideToolButtons : MonoBehaviour
 
     private void Start()
     {
-        SetToolsHidden(_toolsHidden = false);
+        SetToolsHidden(_toolsHidden = true); // hide test tools on startup
     }
 
     private void SetToolsHidden(bool hideTools)

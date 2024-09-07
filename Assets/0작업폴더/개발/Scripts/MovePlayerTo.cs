@@ -45,7 +45,7 @@ public class MovePlayerTo : MonoBehaviour
         {
             PlayerLogic.SetPlayerXYPos(Vector2.MoveTowards(PlayerLogic.Player.transform.position, _toPoint.position, Time.deltaTime * _moveSpeed));
 
-            if (MyMath.Vector2DiffLessThan(PlayerLogic.Player.transform.position, _toPoint.position, _checkMargin)) doneMovingPlayer();
+            if (MyMath.Vector2DiffLessThan(PlayerLogic.Player.transform.position, _toPoint.position, _checkMargin)) finishMovingPlayer();
         }
     }
 
@@ -69,7 +69,7 @@ public class MovePlayerTo : MonoBehaviour
         }
     }
 
-    private void doneMovingPlayer()
+    private void finishMovingPlayer()
     {
         _isMovingPlayer = false;
         PlayerLogic.IgnorePlayerGroundCollision(false);
@@ -101,7 +101,7 @@ public class MovePlayerTo : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.gameObject.CompareTag("Player"))
+        if (col.CompareTag("Player"))
         {
             _playerIsInRange = true;
             if (!_buttonPressRequired) startMovingPlayer();
@@ -110,7 +110,7 @@ public class MovePlayerTo : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D col)
     {
-        if (col.gameObject.CompareTag("Player"))
+        if (col.CompareTag("Player"))
         {
             _playerIsInRange = false;
         }
