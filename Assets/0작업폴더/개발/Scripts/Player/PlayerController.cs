@@ -15,8 +15,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private PlayerStats _stats;
     public PlayerStats Stats => _stats; // for public access
 
-    private Vector3 _respawnPos;
-    public Vector3 RespawnPos => _respawnPos; // for public access
+    public Vector3 RespawnPos { get; private set; }
 
     private bool _DirInputEnabled = true;
     public void DirInputSetActive(bool enabled) { _DirInputEnabled = enabled; }
@@ -378,7 +377,7 @@ public class PlayerController : MonoBehaviour
 
     public void SetRespawnPos(Vector3 position)
     {
-        _respawnPos = new Vector3(position.x, position.y, playerTransform.position.z);
+        RespawnPos = new Vector3(position.x, position.y, playerTransform.position.z);
     }
 
     public void RespawnPlayer()
@@ -386,7 +385,7 @@ public class PlayerController : MonoBehaviour
         FrameInputReader.TriggerJump();
         PlayerLogic.FreePlayer();
         PlayerLogic.InvokePlayerRespawedEvent();
-        playerTransform.position = _respawnPos;
+        playerTransform.position = RespawnPos;
         _rb.velocity = Vector3.zero;
     }
 

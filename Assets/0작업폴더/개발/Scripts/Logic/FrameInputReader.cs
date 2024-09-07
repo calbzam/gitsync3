@@ -26,16 +26,23 @@ public class FrameInputReader : MonoBehaviour
     {
         //Input.Enable();
         CentralInputReader.Input.Player.Jump.started += JumpStartedAction;
+        CentralInputReader.Input.Player.Respawn.started += RespawnPressedAction;
     }
 
     private void OnDisable()
     {
         CentralInputReader.Input.Player.Jump.started -= JumpStartedAction;
+        CentralInputReader.Input.Player.Respawn.started -= RespawnPressedAction;
     }
 
     private void Update()
     {
         GatherInput();
+    }
+
+    private void RespawnPressedAction(InputAction.CallbackContext ctx)
+    {
+        PlayerLogic.Player.RespawnPlayer();
     }
 
     private void JumpStartedAction(InputAction.CallbackContext ctx)

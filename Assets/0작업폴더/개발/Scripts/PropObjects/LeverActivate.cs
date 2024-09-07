@@ -12,7 +12,7 @@ public class LeverActivate : MonoBehaviour
 
     public bool IsActivated { get; private set; }
     
-    private void Start()
+    private void Awake()
     {
         IsActivated = false;
 
