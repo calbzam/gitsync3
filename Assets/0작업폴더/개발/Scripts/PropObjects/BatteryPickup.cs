@@ -80,10 +80,10 @@ public partial class BatteryPickup : MonoBehaviour
 
     private void SetBatteryFacingDir()
     {
-        if (PlayerLogic.PlayerAnim.FaceDirX < 0)
+        if (PlayerLogic.AnimController.FaceDirX < 0)
             SetLocalTransform(_leftOffset, _leftRotation);
 
-        else if (PlayerLogic.PlayerAnim.FaceDirX > 0)
+        else if (PlayerLogic.AnimController.FaceDirX > 0)
             SetLocalTransform(_rightOffset, _rightRotation);
     }
 

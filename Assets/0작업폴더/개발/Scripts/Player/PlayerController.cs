@@ -17,8 +17,7 @@ public class PlayerController : MonoBehaviour
 
     public Vector3 RespawnPos { get; private set; }
 
-    private bool _DirInputEnabled = true;
-    public void DirInputSetActive(bool enabled) { _DirInputEnabled = enabled; }
+    public bool DirInputActive { get; set; } = true;
 
     private Rigidbody2D _rb;
     private CapsuleCollider2D _col;
@@ -242,14 +241,14 @@ public class PlayerController : MonoBehaviour
             _rb.velocity = Vector2.zero;
 
             if (CurrentLadder.BypassGroundCollision) PlayerLogic.IgnorePlayerGroundCollision(true);
-            DirInputSetActive(false);
+            DirInputActive = false;
         }
         else
         {
             IsOnLadder = false;
 
             PlayerLogic.IgnorePlayerGroundCollision(false);
-            DirInputSetActive(true);
+            DirInputActive = true;
         }
 
         Physics2D.SyncTransforms();
@@ -296,7 +295,7 @@ public class PlayerController : MonoBehaviour
 
     private void HandleDirection()
     {
-        if (!_DirInputEnabled) return;
+        if (!DirInputActive) return;
 
         if (FrameInputReader.FrameInput.Move.x == 0)
         {
