@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NearestPlayerRespawn_UseDuringDevelopmentOnly : MonoBehaviour
+public class NearestPlayerRespawn_DevelopmentOnly : MonoBehaviour
 {
     private Checkpoint[] _checkpoints;
 

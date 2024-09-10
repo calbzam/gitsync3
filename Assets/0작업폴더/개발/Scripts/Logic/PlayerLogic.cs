@@ -5,8 +5,8 @@ using TMPro;
 
 public class PlayerLogic : MonoBehaviour
 {
-    [SerializeField] private NearestPlayerRespawn_UseDuringDevelopmentOnly _nearestPlayerRespawn_UseDuringDevelopmentOnly;
-    public static NearestPlayerRespawn_UseDuringDevelopmentOnly NearestPlayerRespawn { get; private set; }
+    [SerializeField] private NearestPlayerRespawn_DevelopmentOnly _nearestPlayerRespawn_UseDuringDevelopmentOnly;
+    public static NearestPlayerRespawn_DevelopmentOnly NearestPlayerRespawn { get; private set; }
 
     public static event Action PlayerRespawned;
 
