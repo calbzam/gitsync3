@@ -14,18 +14,30 @@ public class NearestPlayerRespawn_DevelopmentOnly : MonoBehaviour
     {
         _player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
 
-        SetNearestRespawnPos();
+        SetToPrevRespawnPos();
     }
 
-    public void SetNearestRespawnPos()
+    public void SetToPrevRespawnPos() // nearest respawn point from left side of player
     {
         _player.SetRespawnPos(_initialSpawnPoint.position);
-        _player.SetNearestRespawnPos(_checkpoints = gameObject.GetComponentsInChildren<Checkpoint>());
+        _player.SetToPrevRespawnPos(_checkpoints = gameObject.GetComponentsInChildren<Checkpoint>());
     }
 
-    public void SetNearestRespawnPosAndRespawn()
+    public void SetToNextRespawnPos() // nearest respawn point from right side of player
     {
-        SetNearestRespawnPos();
+        //_player.SetRespawnPos([last spawn point].position);
+        _player.SetToNextRespawnPos(_checkpoints = gameObject.GetComponentsInChildren<Checkpoint>());
+    }
+
+    public void SetToPrevRespawnPosAndRespawn()
+    {
+        SetToPrevRespawnPos();
+        _player.RespawnPlayer();
+    }
+
+    public void SetToNextRespawnPosAndRespawn()
+    {
+        SetToNextRespawnPos();
         _player.RespawnPlayer();
     }
 }

@@ -361,17 +361,49 @@ public class PlayerController : MonoBehaviour
 
     #region Respawn
 
-    public void SetNearestRespawnPos(Checkpoint[] checkpoints)
+    private bool XYDiffBothMoreThan(Vector2 v1, Vector2 v2, float moreThan)
+    {
+        return Mathf.Abs(v1.x - v2.x) > moreThan && Math.Abs(v1.y - v2.y) > moreThan;
+    }
+
+    public void SetToPrevRespawnPos(Checkpoint[] checkpoints) // nearest respawn point from left side of player
     {
         Vector3 playerPos = transform.position;
         Vector3 currentRespawnPos = RespawnPos;
 
         foreach (Checkpoint trigger in checkpoints)
         {
-            if (trigger.RespawnPoint.position.x < playerPos.x)
+            if (trigger.RespawnPoint.position.x < playerPos.x && XYDiffBothMoreThan(trigger.RespawnPoint.position, playerPos, 1)) // 내리막길 지형에서 미끄러져 여러 번 클릭해야 함을 방지)
+            {
                 if (Vector2.Distance(trigger.RespawnPoint.position, playerPos) < Vector2.Distance(currentRespawnPos, playerPos))
-                    SetRespawnPos(trigger.RespawnPoint.position);
+                    currentRespawnPos = trigger.RespawnPoint.position;
+            }
         }
+
+        SetRespawnPos(currentRespawnPos);
+    }
+
+    public void SetToNextRespawnPos(Checkpoint[] checkpoints) // nearest respawn point from right side of player
+    {
+        Vector3 playerPos = transform.position;
+        Vector3 currentRespawnPos = transform.position;
+
+        bool thisIsFirst = true;
+        foreach (Checkpoint trigger in checkpoints)
+        {
+            if (trigger.RespawnPoint.position.x > playerPos.x && XYDiffBothMoreThan(trigger.RespawnPoint.position, playerPos, 1)) // 오르막길 지형에서 미끄러져 여러 번 클릭해야 함을 방지)
+            {
+                if (thisIsFirst)
+                {
+                    currentRespawnPos = trigger.RespawnPoint.position;
+                    thisIsFirst = false;
+                }
+                else if (Vector2.Distance(trigger.RespawnPoint.position, playerPos) < Vector2.Distance(currentRespawnPos, playerPos))
+                    currentRespawnPos = trigger.RespawnPoint.position;
+            }
+        }
+
+        SetRespawnPos(currentRespawnPos);
     }
 
     public void SetRespawnPos(Vector3 position)
