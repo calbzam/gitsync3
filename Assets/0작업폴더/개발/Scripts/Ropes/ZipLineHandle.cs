@@ -7,7 +7,7 @@ public class ZipLineHandle : RidableObject
     public override event Action<int, bool> PlayerOnThisObject;
     [SerializeField] private ZipLineRopeCalculator _ropeCalculator;
 
-    private Rigidbody _pulleyRb;
+    [SerializeField] private Rigidbody _pulleyRb;
     [SerializeField] private float _moveToPlayer_minDistance = 3f;
     [SerializeField] private float _moveToPlayer_maxDistance = 28f;
     [SerializeField] private float _moveToPlayer_speed = 0.5f;
@@ -32,7 +32,6 @@ public class ZipLineHandle : RidableObject
     private void Start()
     {
         _stopMovingPulley = false;
-        _pulleyRb = GetComponentInParent<Rigidbody>();
     }
 
     private void FixedUpdate()

@@ -5,17 +5,19 @@ using TMPro;
 
 public class PlayerLogic : MonoBehaviour
 {
-    [SerializeField] private NearestPlayerRespawn_UseDuringDevelopmentOnly _nearestPlayerRespawn_UseDuringDevelopmentOnly;
-    public static NearestPlayerRespawn_UseDuringDevelopmentOnly NearestPlayerRespawn { get; private set; }
+    [SerializeField] private NearestPlayerRespawn_DevelopmentOnly _nearestPlayerRespawn_UseDuringDevelopmentOnly;
+    public static NearestPlayerRespawn_DevelopmentOnly NearestPlayerRespawn { get; private set; }
 
     public static event Action PlayerRespawned;
 
     public static bool PlayerIsLocked { get; private set; }
 
     public static PlayerController Player { get; private set; }
-    public static PlayerAnimController PlayerAnim { get; private set; }
     public static PlayerStats PlayerStats { get; private set; }
     public static Rigidbody2D PlayerRb { get; private set; }
+
+    public static PlayerAnimController AnimController { get; private set; }
+    public static PlayerAnimTools AnimTools { get; private set; }
 
     public static ObiCollider2D PlayerObiCol { get; private set; }
     public static ObiCollider2D PlayerRopeRiderCol { get; private set; }
@@ -34,9 +36,11 @@ public class PlayerLogic : MonoBehaviour
         PlayerIsLocked = false;
 
         Player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
-        PlayerAnim = Player.GetComponentInChildren<PlayerAnimController>();
         PlayerStats = Player.Stats;
         PlayerRb = Player.GetComponent<Rigidbody2D>();
+
+        AnimController = Player.GetComponentInChildren<PlayerAnimController>();
+        AnimTools = AnimController.AnimTools;
 
         PlayerObiCol = Player.GetComponent<ObiCollider2D>();
         PlayerRopeRiderCol = GameObject.FindGameObjectWithTag("Player ropeRider").GetComponent<ObiCollider2D>();
@@ -85,8 +89,7 @@ public class PlayerLogic : MonoBehaviour
         PlayerRb.constraints = _origPlayerConstraints | RigidbodyConstraints2D.FreezePosition;
         Player.GroundCheckAllowed = false;
         Player.LadderClimbAllowed = false;
-        Player.DirInputSetActive(false);
-        PlayerAnim.DirInputSetActive(false);
+        Player.DirInputActive = false;
     }
 
     public static void FreePlayer()
@@ -95,8 +98,7 @@ public class PlayerLogic : MonoBehaviour
         PlayerRb.constraints = _origPlayerConstraints;
         Player.GroundCheckAllowed = true;
         Player.LadderClimbAllowed = true;
-        Player.DirInputSetActive(true);
-        PlayerAnim.DirInputSetActive(true);
+        Player.DirInputActive = true;
     }
 
     public static void ToggleFreePlayerDrag()

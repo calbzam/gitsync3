@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8376883264829196107}
+  - component: {fileID: 5061414481688965910}
   m_Layer: 0
   m_Name: "\uCCAB \uC2A4\uD3F0 \uC704\uCE58"
   m_TagString: Untagged
@@ -33,6 +34,19 @@ Transform:
   - {fileID: 148199410143348561}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5061414481688965910
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 666795380671055910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8110aa9ca3a01734f9b8a5be1746c14a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _respawnPoint: {fileID: 2366568654260655017}
 --- !u!1 &2468681030135362420
 GameObject:
   m_ObjectHideFlags: 0
@@ -111,7 +125,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -7023742966917778281, guid: 28b5eec8025c5ec4492dc39f678a9955, type: 2}
+  - {fileID: -7951507620072312297, guid: 28b5eec8025c5ec4492dc39f678a9955, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -156,7 +170,7 @@ MonoBehaviour:
   m_text: "\uCCAB \uC2A4\uD3F0 \uC704\uCE58"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 28b5eec8025c5ec4492dc39f678a9955, type: 2}
-  m_sharedMaterial: {fileID: -7023742966917778281, guid: 28b5eec8025c5ec4492dc39f678a9955, type: 2}
+  m_sharedMaterial: {fileID: -7951507620072312297, guid: 28b5eec8025c5ec4492dc39f678a9955, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

@@ -39,7 +39,7 @@ public class FreePlayerDragUI : MonoBehaviour, IBeginDragHandler, IDragHandler, 
         _isDragging = false;
         _freeCamMove.DragMouseEnabled = true;
         PlayerLogic.FreePlayer();
-        PlayerLogic.NearestPlayerRespawn.SetNearestRespawnPos();
+        PlayerLogic.NearestPlayerRespawn.SetToPrevRespawnPos();
         if (!_freeCamWasEnabled) _cameraLogic.SetFreeCam(false);
     }
 

@@ -1,40 +1,67 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using AnimState = PlayerAnimTools.AnimState;
 
 public class PlayerAnimController : MonoBehaviour
 {
-    private SpriteRenderer spriteRenderer;
-    private Vector2 inputDir;
+    [SerializeField] private PlayerAnimTools _animTools;
+    public PlayerAnimTools AnimTools => _animTools;
+
+    public bool AnimLocked { get; set; }
+
+    [SerializeField] private SpriteRenderer _spriteRenderer;
+    private Vector2 _inputDir;
 
     public int FaceDirX { get; set; }
 
-    private bool _DirInputEnabled = true;
-    public void DirInputSetActive(bool enabled) { _DirInputEnabled = enabled; }
-
     private void Awake()
     {
-        spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+        AnimLocked = false;
         FaceDirX = 1;
     }
 
     private void Update()
     {
-        inputDir = CentralInputReader.Input.Player.Movement.ReadValue<Vector2>();
+        _inputDir = CentralInputReader.Input.Player.Movement.ReadValue<Vector2>();
 
-        if (_DirInputEnabled)
+        EvalSpriteFlipped();
+        EvalAnim();
+    }
+
+    private void EvalSpriteFlipped()
+    {
+        if (PlayerLogic.Player.DirInputActive)
         {
             // flip sprite on x direction
-            if (inputDir.x > 0)
+            if (_inputDir.x > 0)
             {
-                spriteRenderer.flipX = false;
+                _spriteRenderer.flipX = false;
                 FaceDirX = 1;
             }
-            else if (inputDir.x < 0)
+            else if (_inputDir.x < 0)
             {
-                spriteRenderer.flipX = true;
+                _spriteRenderer.flipX = true;
                 FaceDirX = -1;
             }
         }
+    }
+
+    private void EvalAnim()
+    {
+        if (AnimLocked) return;
+
+        if (_inputDir.x != 0)
+        {
+            if (_animTools.CurrState != AnimState.Walk)
+                _animTools.PlayAnimation(AnimState.Walk);
+        }
+        else
+        {
+            if (_animTools.CurrState != AnimState.Idle)
+                _animTools.PlayAnimation(AnimState.Idle);
+        }
+
+        _animTools.CurrState = _animTools.NextState;
     }
 }

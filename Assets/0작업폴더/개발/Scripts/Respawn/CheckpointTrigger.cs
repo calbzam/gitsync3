@@ -10,7 +10,7 @@ public class CheckpointTrigger : MonoBehaviour
     {
         if (col.CompareTag("Player"))
         {
-            col.GetComponent<PlayerController>().SetRespawnPos(_checkPoint.RespawnPoint.position);
+            col.GetComponent<PlayerController>().SetRespawnPoint(_checkPoint);
         }
     }
 }

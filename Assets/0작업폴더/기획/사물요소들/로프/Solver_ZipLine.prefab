@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5106869892613989778}
+  - component: {fileID: 7840061506725768844}
   - component: {fileID: 5318017239405970454}
   - component: {fileID: 4081489736378474001}
   - component: {fileID: 5928657347349642858}
@@ -42,6 +43,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 6885496709168918951}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7840061506725768844
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 643713764935211441}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45e48c09583a90448b38925bfa30a510, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &5318017239405970454
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -531,6 +544,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playerOnOtherObject: 0
   _ropeCalculator: {fileID: 4081489736378474001}
+  _pulleyRb: {fileID: 3956837994135458039}
   _moveToPlayer_minDistance: 3
   _moveToPlayer_maxDistance: 28
   _moveToPlayer_speed: 0.5
@@ -1018,6 +1032,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3161455705367265161}
+  - component: {fileID: 342984831002632035}
   - component: {fileID: 6667250113109061496}
   - component: {fileID: 4081789491335586428}
   - component: {fileID: 5803692526210172533}
@@ -1049,6 +1064,18 @@ Transform:
   - {fileID: 5661046333335051997}
   m_Father: {fileID: 6885496709168918951}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &342984831002632035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5590876485938196971}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df943ef87dc1f744aa94d2d1789b9cbf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &6667250113109061496
 MonoBehaviour:
   m_ObjectHideFlags: 0

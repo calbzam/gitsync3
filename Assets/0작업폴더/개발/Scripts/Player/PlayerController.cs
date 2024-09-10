@@ -15,10 +15,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private PlayerStats _stats;
     public PlayerStats Stats => _stats; // for public access
 
+    public Checkpoint RespawnPoint { get; private set; } // use this instead of RespawnPos
     public Vector3 RespawnPos { get; private set; }
 
-    private bool _DirInputEnabled = true;
-    public void DirInputSetActive(bool enabled) { _DirInputEnabled = enabled; }
+    public bool DirInputActive { get; set; } = true;
 
     private Rigidbody2D _rb;
     private CapsuleCollider2D _col;
@@ -242,14 +242,14 @@ public class PlayerController : MonoBehaviour
             _rb.velocity = Vector2.zero;
 
             if (CurrentLadder.BypassGroundCollision) PlayerLogic.IgnorePlayerGroundCollision(true);
-            DirInputSetActive(false);
+            DirInputActive = false;
         }
         else
         {
             IsOnLadder = false;
 
             PlayerLogic.IgnorePlayerGroundCollision(false);
-            DirInputSetActive(true);
+            DirInputActive = true;
         }
 
         Physics2D.SyncTransforms();
@@ -296,7 +296,7 @@ public class PlayerController : MonoBehaviour
 
     private void HandleDirection()
     {
-        if (!_DirInputEnabled) return;
+        if (!DirInputActive) return;
 
         if (FrameInputReader.FrameInput.Move.x == 0)
         {
@@ -362,17 +362,15 @@ public class PlayerController : MonoBehaviour
 
     #region Respawn
 
-    public void SetNearestRespawnPos(Checkpoint[] checkpoints)
-    {
-        Vector3 playerPos = transform.position;
-        Vector3 currentRespawnPos = RespawnPos;
+    //private bool XYDiffBothMoreThan(Vector2 v1, Vector2 v2, float moreThan)
+    //{
+    //    return Mathf.Abs(v1.x - v2.x) > moreThan && Math.Abs(v1.y - v2.y) > moreThan;
+    //}
 
-        foreach (Checkpoint trigger in checkpoints)
-        {
-            if (trigger.RespawnPoint.position.x < playerPos.x)
-                if (Vector2.Distance(trigger.RespawnPoint.position, playerPos) < Vector2.Distance(currentRespawnPos, playerPos))
-                    SetRespawnPos(trigger.RespawnPoint.position);
-        }
+    public void SetRespawnPoint(Checkpoint checkpoint)
+    {
+        RespawnPoint = checkpoint;
+        SetRespawnPos(checkpoint.RespawnPoint.position);
     }
 
     public void SetRespawnPos(Vector3 position)

@@ -6,4 +6,6 @@ public class Checkpoint : MonoBehaviour
 {
     [SerializeField] private Transform _respawnPoint; // yellow circle sprite
     public Transform RespawnPoint => _respawnPoint; // for public access
+
+    public int IndexNum { get; set; }
 }
