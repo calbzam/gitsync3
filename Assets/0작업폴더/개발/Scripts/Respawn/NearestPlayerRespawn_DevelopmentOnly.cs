@@ -6,7 +6,7 @@ public class NearestPlayerRespawn_DevelopmentOnly : MonoBehaviour
 {
     private Checkpoint[] _checkpoints;
 
-    [SerializeField] private Transform _initialSpawnPoint;
+    [SerializeField] private Checkpoint _initialSpawnPoint;
 
     private PlayerController _player; // do not replace with PlayerLogic.Player, for loading consistency in testing purposes
 
@@ -14,19 +14,30 @@ public class NearestPlayerRespawn_DevelopmentOnly : MonoBehaviour
     {
         _player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
 
-        SetToPrevRespawnPos();
+        RefreshCheckpoints();
+        _player.SetRespawnPoint(_initialSpawnPoint);
+    }
+
+    private void RefreshCheckpoints()
+    {
+        _checkpoints = gameObject.GetComponentsInChildren<Checkpoint>();
+        for (int i = 0; i < _checkpoints.Length; ++i)
+            _checkpoints[i].IndexNum = i;
     }
 
     public void SetToPrevRespawnPos() // nearest respawn point from left side of player
     {
-        _player.SetRespawnPos(_initialSpawnPoint.position);
-        _player.SetToPrevRespawnPos(_checkpoints = gameObject.GetComponentsInChildren<Checkpoint>());
+        RefreshCheckpoints();
+        if (_player.RespawnPoint.IndexNum > 0)
+            _player.SetRespawnPoint(_checkpoints[_player.RespawnPoint.IndexNum - 1]);
     }
 
     public void SetToNextRespawnPos() // nearest respawn point from right side of player
     {
-        //_player.SetRespawnPos([last spawn point].position);
-        _player.SetToNextRespawnPos(_checkpoints = gameObject.GetComponentsInChildren<Checkpoint>());
+        RefreshCheckpoints();
+
+        if (_player.RespawnPoint.IndexNum < _checkpoints.Length - 1)
+            _player.SetRespawnPoint(_checkpoints[_player.RespawnPoint.IndexNum + 1]);
     }
 
     public void SetToPrevRespawnPosAndRespawn()

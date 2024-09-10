@@ -35,6 +35,6 @@ public class LeverActivate : MonoBehaviour
         _checkPointToActivate.gameObject.SetActive(true);
 
         if (_updateCheckpointOnActivate)
-            PlayerLogic.Player.SetRespawnPos(_checkPointToActivate.RespawnPoint.position);
+            PlayerLogic.Player.SetRespawnPoint(_checkPointToActivate);
     }
 }
