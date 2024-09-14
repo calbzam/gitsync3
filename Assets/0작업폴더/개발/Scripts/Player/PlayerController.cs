@@ -370,12 +370,7 @@ public class PlayerController : MonoBehaviour
     public void SetRespawnPoint(Checkpoint checkpoint)
     {
         RespawnPoint = checkpoint;
-        SetRespawnPos(checkpoint.RespawnPoint.position);
-    }
-
-    public void SetRespawnPos(Vector3 position)
-    {
-        RespawnPos = new Vector3(position.x, position.y, playerTransform.position.z);
+        RespawnPos = new Vector3(checkpoint.Position.x, checkpoint.Position.y, playerTransform.position.z);
     }
 
     public void RespawnPlayer()
