@@ -11,12 +11,9 @@ public class LadderStopAutoClimb : MonoBehaviour
     {
         if (col.gameObject.CompareTag("Player"))
         {
-            if (PlayerLogic.Player.CurrentLadder == _ladder || PlayerLogic.Player.CurrentLadder == null)
-            {
-                //if (PlayerLogic.PlayerRb.velocity.y < 0 && !PlayerLogic.Player.IsOnLadder)
-                _autoClimbPrevState = _ladder.AutoClimbWhenJumpedOn;
-                _ladder.AutoClimbWhenJumpedOn = false;
-            }
+            //if (PlayerLogic.PlayerRb.velocity.y < 0 && !PlayerLogic.Player.IsOnLadder)
+            _autoClimbPrevState = _ladder.AutoClimbWhenJumpedOn;
+            _ladder.AutoClimbWhenJumpedOn = false;
         }
     }
 
@@ -24,8 +21,7 @@ public class LadderStopAutoClimb : MonoBehaviour
     {
         if (col.gameObject.CompareTag("Player"))
         {
-            if (PlayerLogic.Player.CurrentLadder == _ladder)
-                _ladder.AutoClimbWhenJumpedOn = _autoClimbPrevState;
+            _ladder.AutoClimbWhenJumpedOn = _autoClimbPrevState;
         }
     }
 }

@@ -80,7 +80,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _addForceAmount: 40
-  _playerMaxSpeedX: 14
+  _playerMaxSpeedX: 15
   _moveDir: 1
 --- !u!212 &3182727451098884536
 SpriteRenderer:
@@ -226,7 +226,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _addForceAmount: 40
-  _playerMaxSpeedX: 14
+  _playerMaxSpeedX: 15
   _moveDir: 1
 --- !u!212 &7779879539329984526
 SpriteRenderer:

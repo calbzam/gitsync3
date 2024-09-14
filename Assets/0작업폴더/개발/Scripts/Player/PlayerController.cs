@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour
 
     public bool DirInputActive { get; set; }
     public bool LimitXVelocity { get; set; } // assigned false when speed boost from other object, assigned true when player hits ground
+    public bool ZPosSetToGround { get; set; }
 
     private Rigidbody2D _rb;
     private CapsuleCollider2D _col;
@@ -67,6 +68,7 @@ public class PlayerController : MonoBehaviour
     {
         DirInputActive = true;
         LimitXVelocity = true;
+        ZPosSetToGround = false;
 
         GroundCheckAllowed = true;
         LadderClimbAllowed = true;
@@ -157,6 +159,8 @@ public class PlayerController : MonoBehaviour
                 
                 // Set Z-pos to the Z-pos of the ground that Player hit
                 PlayerLogic.SetPlayerZPosition(_groundCol.transform.position.z);
+                ZPosSetToGround = true;
+
                 //transform.position = new Vector3(transform.position.x, transform.position.y, col.transform.position.z);
             }
         }
