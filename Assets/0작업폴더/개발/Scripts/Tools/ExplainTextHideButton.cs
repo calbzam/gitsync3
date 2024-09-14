@@ -17,7 +17,7 @@ public class ExplainTextHideButton : MonoBehaviour
         ShowButtonText(_explainTextEnabled);
     }
 
-    public void ExplainTextToggle()
+    public void ExplainTextToggle_Button()
     {
         _explainTextEnabled = !_explainTextEnabled;
         ShowButtonText(_explainTextEnabled);

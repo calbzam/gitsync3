@@ -40,13 +40,13 @@ public class NearestPlayerRespawn_DevelopmentOnly : MonoBehaviour
             _player.SetRespawnPoint(_checkpoints[_player.RespawnPoint.IndexNum + 1]);
     }
 
-    public void SetToPrevRespawnPosAndRespawn()
+    public void SetToPrevRespawnPosAndRespawn_Button()
     {
         SetToPrevRespawnPos();
         _player.RespawnPlayer();
     }
 
-    public void SetToNextRespawnPosAndRespawn()
+    public void SetToNextRespawnPosAndRespawn_Button()
     {
         SetToNextRespawnPos();
         _player.RespawnPlayer();

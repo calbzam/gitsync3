@@ -101,7 +101,7 @@ public class PlayerLogic : MonoBehaviour
         Player.DirInputActive = true;
     }
 
-    public static void ToggleFreePlayerDrag()
+    public static void ToggleFreePlayerDrag_Button()
     {
         _freePlayerDragEnabled = !_freePlayerDragEnabled;
         _freePlayerDragUI.gameObject.SetActive(_freePlayerDragEnabled);
