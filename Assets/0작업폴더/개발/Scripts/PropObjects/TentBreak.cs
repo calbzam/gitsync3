@@ -15,6 +15,8 @@ public class TentBreak : MonoBehaviour
 
     private bool _timerEnabled;
 
+    private Vector2 _exitScale;
+
     private void OnEnable()
     {
         PlayerLogic.PlayerRespawned += PlayerRespawnedAction;
@@ -33,6 +35,7 @@ public class TentBreak : MonoBehaviour
     private void Start()
     {
         _timerEnabled = false;
+        _exitScale = Vector2.Scale(transform.lossyScale, new Vector2(1, 2));
 
         if (_debrisParent != null)
         {
@@ -87,7 +90,16 @@ public class TentBreak : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            if (_timerEnabled) SetPanelBroken(true);
+            if (_timerEnabled)
+            {
+                if (!Physics2D.OverlapBox(transform.position, _exitScale, transform.eulerAngles.z, Layers.PlayerLayer.MaskValue))
+                    SetPanelBroken(true);
+            }
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        MyMath.DrawWireBox(transform.position, _exitScale, transform.eulerAngles.z, Color.white, 0);
     }
 }
