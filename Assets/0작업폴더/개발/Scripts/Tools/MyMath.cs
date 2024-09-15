@@ -57,4 +57,33 @@ public static class MyMath
     {
         return (anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f);
     }
+
+    // https://www.reddit.com/r/Unity2D/comments/d9arky/comment/f1fwaog/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
+    /* I added the particular offset for each case (north,south,west,east)
+     * and then the overlapbox was in the correct position.
+     * It was a very easy thing to solve once I had the proper tools for visualisation.
+     * A user that goes by the name DMGregory on StackExchange gave the solution for the last problem
+     * with which I was easily able to see where overlapbox was.
+     * You don't have to use gizmos to rotate the overlapbox, just use this custom function made by him. 
+     */
+    public static void DrawWireBox(Vector2 point, Vector2 size, float angle, Color color, float duration)
+    {
+        var orientation = Quaternion.Euler(0, 0, angle);
+
+        // Basis vectors, half the size in each direction from the center.
+        Vector2 right = orientation * Vector2.right * size.x / 2f;
+        Vector2 up = orientation * Vector2.up * size.y / 2f;
+
+        // Four box corners.
+        var topLeft = point + up - right;
+        var topRight = point + up + right;
+        var bottomRight = point - up + right;
+        var bottomLeft = point - up - right;
+
+        // Now we've reduced the problem to drawing lines.
+        Debug.DrawLine(topLeft, topRight, color, duration);
+        Debug.DrawLine(topRight, bottomRight, color, duration);
+        Debug.DrawLine(bottomRight, bottomLeft, color, duration);
+        Debug.DrawLine(bottomLeft, topLeft, color, duration);
+    }
 }

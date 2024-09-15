@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
 public class MovePlayerToDir : MonoBehaviour
 {
@@ -17,25 +18,38 @@ public class MovePlayerToDir : MonoBehaviour
         FromRight,
     }
 
-    private bool _playerIsInRange;
     private bool _isMovingPlayer;
+    private Bounds _colBounds;
+    private Vector2 _colSize;
 
     private void Start()
     {
-        _playerIsInRange = false;
         _isMovingPlayer = false;
-        calcToDirection();
+        SetColSize();
+
+        CalcToDirection();
     }
 
     private void Update()
     {
         if (_isMovingPlayer)
         {
-            PlayerLogic.Player.transform.position += Time.deltaTime * _moveSpeed * _toDirection;
+            movePlayer();
         }
     }
 
-    private void calcToDirection()
+    private void movePlayer()
+    {
+        PlayerLogic.Player.transform.position += Time.deltaTime * _moveSpeed * _toDirection;
+    }
+
+    private void SetColSize()
+    {
+        _colBounds = gameObject.GetComponent<BoxCollider2D>().bounds;
+        _colSize = new Vector2(_colBounds.extents.x, _colBounds.extents.y);
+    }
+    
+    private void CalcToDirection()
     {
         switch (_fromDirection)
         {
@@ -55,37 +69,64 @@ public class MovePlayerToDir : MonoBehaviour
         }
     }
 
-    private bool checkValidEnter()
+    //private bool checkValidEnter()
+    //{
+    //    switch (_fromDirection)
+    //    {
+    //        default: return true;
+    //
+    //        case FromDirection.FromAbove:
+    //            return PlayerLogic.Player.transform.position.y > transform.position.y;
+    //
+    //        case FromDirection.FromBelow:
+    //            return PlayerLogic.Player.transform.position.y < transform.position.y;
+    //
+    //        case FromDirection.FromLeft:
+    //            return PlayerLogic.Player.transform.position.x < transform.position.x;
+    //
+    //        case FromDirection.FromRight:
+    //            return PlayerLogic.Player.transform.position.x > transform.position.x;
+    //    }
+    //}
+
+    private bool checkValidEnter(Collision2D collision)
     {
+        Vector2 playerPos = PlayerLogic.Player.transform.position;
+
         switch (_fromDirection)
         {
             default: return true;
 
             case FromDirection.FromAbove:
-                return PlayerLogic.Player.transform.position.y > transform.position.y;
+                foreach (ContactPoint2D contact in collision.contacts)
+                    if (contact.point.y < playerPos.y) return true;
+                return false;
 
             case FromDirection.FromBelow:
-                return PlayerLogic.Player.transform.position.y < transform.position.y;
+                foreach (ContactPoint2D contact in collision.contacts)
+                    if (contact.point.y > playerPos.y) return true;
+                return false;
 
             case FromDirection.FromLeft:
-                return PlayerLogic.Player.transform.position.x < transform.position.x;
+                foreach (ContactPoint2D contact in collision.contacts)
+                    if (contact.point.x > playerPos.x) return true;
+                return false;
 
             case FromDirection.FromRight:
-                return PlayerLogic.Player.transform.position.x > transform.position.x;
+                foreach (ContactPoint2D contact in collision.contacts)
+                    if (contact.point.x < playerPos.x) return true;
+                return false;
         }
     }
 
     private void startMovingPlayer()
     {
-        if (_playerIsInRange && !PlayerLogic.PlayerIsLocked)
-        {
-            if (checkValidEnter())
-            {
-                PlayerLogic.LockPlayer();
-                PlayerLogic.IgnorePlayerGroundCollision(true);
-                _isMovingPlayer = true;
-            }
-        }
+        PlayerLogic.LockPlayer();
+        PlayerLogic.PlayerRb.simulated = false;
+        PlayerLogic.IgnorePlayerGroundCollision(true);
+        Debug.Log("ignored");
+        _isMovingPlayer = true;
+        PlayerLogic.Player.transform.position += 0.1f * _toDirection;
     }
 
     private void finishMovingPlayer()
@@ -93,6 +134,7 @@ public class MovePlayerToDir : MonoBehaviour
         _isMovingPlayer = false;
         PlayerLogic.IgnorePlayerGroundCollision(false);
         PlayerLogic.FreePlayer();
+        PlayerLogic.PlayerRb.simulated = true;
 
         if (PlayerLogic.Player.IsOnLadder) PlayerLogic.Player.SetPlayerOnLadder(true);
     }
@@ -101,8 +143,17 @@ public class MovePlayerToDir : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            _playerIsInRange = true;
-            startMovingPlayer();
+            if (!PlayerLogic.PlayerIsLocked && checkValidEnter(collision))
+                startMovingPlayer();
+        }
+    }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            if (!_isMovingPlayer && !PlayerLogic.PlayerIsLocked && checkValidEnter(collision))
+                startMovingPlayer();
         }
     }
 
@@ -110,8 +161,19 @@ public class MovePlayerToDir : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            _playerIsInRange = false;
-            finishMovingPlayer();
+            PlayerLogic.IgnorePlayerGroundCollision(false);
+            if (!Physics2D.OverlapBox(transform.position, transform.lossyScale, transform.eulerAngles.z, Layers.PlayerLayer.MaskValue))
+            {
+                Debug.Log("exit");
+                finishMovingPlayer();
+            }
+            else
+                PlayerLogic.IgnorePlayerGroundCollision(true);
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        MyMath.DrawWireBox(transform.position, transform.lossyScale, transform.eulerAngles.z, Color.white, 0);
     }
 }
