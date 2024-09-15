@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
 
 public class MovePlayerToDir : MonoBehaviour
 {
@@ -122,9 +121,7 @@ public class MovePlayerToDir : MonoBehaviour
     private void startMovingPlayer()
     {
         PlayerLogic.LockPlayer();
-        PlayerLogic.PlayerRb.simulated = false;
-        PlayerLogic.IgnorePlayerGroundCollision(true);
-        Debug.Log("ignored");
+        //PlayerLogic.IgnorePlayerGroundCollision(true);
         _isMovingPlayer = true;
         PlayerLogic.Player.transform.position += 0.1f * _toDirection;
     }
@@ -132,9 +129,8 @@ public class MovePlayerToDir : MonoBehaviour
     private void finishMovingPlayer()
     {
         _isMovingPlayer = false;
-        PlayerLogic.IgnorePlayerGroundCollision(false);
+        //PlayerLogic.IgnorePlayerGroundCollision(false);
         PlayerLogic.FreePlayer();
-        PlayerLogic.PlayerRb.simulated = true;
 
         if (PlayerLogic.Player.IsOnLadder) PlayerLogic.Player.SetPlayerOnLadder(true);
     }
@@ -161,14 +157,11 @@ public class MovePlayerToDir : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            PlayerLogic.IgnorePlayerGroundCollision(false);
+            //PlayerLogic.IgnorePlayerGroundCollision(false);
             if (!Physics2D.OverlapBox(transform.position, transform.lossyScale, transform.eulerAngles.z, Layers.PlayerLayer.MaskValue))
-            {
-                Debug.Log("exit");
                 finishMovingPlayer();
-            }
-            else
-                PlayerLogic.IgnorePlayerGroundCollision(true);
+            //else
+            //    PlayerLogic.IgnorePlayerGroundCollision(true);
         }
     }
 

@@ -124,8 +124,8 @@ public class ZipLineHandle : RidableObject
     {
         if (_playerIsAttached)
         {
-            PlayerLogic.PlayerRb.transform.SetParent(null);
             PlayerLogic.FreePlayer();
+            PlayerLogic.PlayerRb.transform.SetParent(null);
 
             _pulleyRb.constraints = _lockXPos_PulleyConstraints;
 
