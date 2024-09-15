@@ -63,6 +63,7 @@ public class MovePlayerTo : MonoBehaviour
                 PlayerLogic.LockPlayer();
                 PlayerLogic.IgnorePlayerGroundCollision(true);
                 _isMovingPlayer = true;
+                PlayerLogic.Player.RespawnButtonAllowed = false;
 
                 PlayerLogic.SetPlayerZPosition(_toPoint.position.z);
             }
@@ -72,6 +73,7 @@ public class MovePlayerTo : MonoBehaviour
     private void finishMovingPlayer()
     {
         _isMovingPlayer = false;
+        PlayerLogic.Player.RespawnButtonAllowed = true;
         PlayerLogic.IgnorePlayerGroundCollision(false);
         PlayerLogic.FreePlayer();
 

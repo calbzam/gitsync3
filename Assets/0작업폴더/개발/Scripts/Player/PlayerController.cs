@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
 
     public Checkpoint RespawnPoint { get; private set; } // use this instead of RespawnPos
     public Vector3 RespawnPos { get; private set; }
+    public bool RespawnButtonAllowed { get; set; }
 
     public bool DirInputActive { get; set; }
     public bool LimitXVelocity { get; set; } // assigned false when speed boost from other object, assigned true when player hits ground
@@ -66,6 +67,8 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+        RespawnButtonAllowed = true;
+
         DirInputActive = true;
         LimitXVelocity = true;
         ZPosSetToGround = false;

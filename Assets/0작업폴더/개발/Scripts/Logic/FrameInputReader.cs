@@ -42,7 +42,8 @@ public class FrameInputReader : MonoBehaviour
 
     private void RespawnPressedAction(InputAction.CallbackContext ctx)
     {
-        PlayerLogic.Player.RespawnPlayer();
+        if (PlayerLogic.Player.RespawnButtonAllowed)
+            PlayerLogic.Player.RespawnPlayer();
     }
 
     private void JumpStartedAction(InputAction.CallbackContext ctx)
