@@ -15,7 +15,7 @@ public class CameraLogic : MonoBehaviour
     private bool _isFreeCam = false;
     private float _freeCamPosZ;
 
-    public void ToggleFreeCam()
+    public void ToggleFreeCam_Button()
     {
         _isFreeCam = !_isFreeCam;
         if (!_isFreeCam) PlayerLogic.SetFreePlayerDrag(false); // swapped to Player Camera via button click

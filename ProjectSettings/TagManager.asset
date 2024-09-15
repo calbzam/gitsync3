@@ -11,6 +11,7 @@ TagManager:
   - FreePlayerMoveUI
   - MainCamera Collider
   - PushableBox
+  - SpeedBoost Ground
   layers:
   - Default
   - TransparentFX
@@ -26,7 +27,7 @@ TagManager:
   - Do Not Render
   - Output
   - Cloth
-  - 
+  - No Directional Light
   - 
   - 
   - 

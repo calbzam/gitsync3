@@ -29,7 +29,7 @@ public class PlayerStats : ScriptableObject
 
     public float GroundDecelerationX = 30;
     public float WaterDecelerationX = 20;
-    public float AirDecelerationX = 30;
+    public float AirDecelerationX = 20;
 
     [Header("A constant downward force applied while grounded. Helps on slopes"), Range(0f, -10f)]
     //[Tooltip("A constant downward force applied while grounded. Helps on slopes"), Range(0f, -10f)]

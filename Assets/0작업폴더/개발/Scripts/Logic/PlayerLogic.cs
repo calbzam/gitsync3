@@ -83,6 +83,8 @@ public class PlayerLogic : MonoBehaviour
         PlayerRespawned?.Invoke();
     }
 
+    // simulated가 다시 시작될 때 적용되는 mass 값에 의해(?)
+    // ZipLineHandle에서 떨어지지 않는 버그가 생기기 때문에 PlayerRb.simulated는 사용하지 말 것
     public static void LockPlayer()
     {
         PlayerIsLocked = true;
@@ -101,7 +103,7 @@ public class PlayerLogic : MonoBehaviour
         Player.DirInputActive = true;
     }
 
-    public static void ToggleFreePlayerDrag()
+    public static void ToggleFreePlayerDrag_Button()
     {
         _freePlayerDragEnabled = !_freePlayerDragEnabled;
         _freePlayerDragUI.gameObject.SetActive(_freePlayerDragEnabled);

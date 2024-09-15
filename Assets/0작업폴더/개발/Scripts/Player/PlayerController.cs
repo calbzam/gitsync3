@@ -17,8 +17,11 @@ public class PlayerController : MonoBehaviour
 
     public Checkpoint RespawnPoint { get; private set; } // use this instead of RespawnPos
     public Vector3 RespawnPos { get; private set; }
+    public bool RespawnButtonAllowed { get; set; }
 
-    public bool DirInputActive { get; set; } = true;
+    public bool DirInputActive { get; set; }
+    public bool LimitXVelocity { get; set; } // assigned false when speed boost from other object, assigned true when player hits ground
+    public bool ZPosSetToGround { get; set; }
 
     private Rigidbody2D _rb;
     private CapsuleCollider2D _col;
@@ -64,9 +67,15 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        drawGizmosEnabled = true;
+        RespawnButtonAllowed = true;
+
+        DirInputActive = true;
+        LimitXVelocity = true;
+        ZPosSetToGround = false;
+
         GroundCheckAllowed = true;
         LadderClimbAllowed = true;
+        drawGizmosEnabled = true;
     }
 
     private void OnEnable()
@@ -149,8 +158,12 @@ public class PlayerController : MonoBehaviour
             _groundHit = _groundCol;
             if (!IsOnLadder && _groundCol != null)
             {
+                if (!_groundCol.CompareTag("SpeedBoost Ground")) LimitXVelocity = true;
+                
                 // Set Z-pos to the Z-pos of the ground that Player hit
                 PlayerLogic.SetPlayerZPosition(_groundCol.transform.position.z);
+                ZPosSetToGround = true;
+
                 //transform.position = new Vector3(transform.position.x, transform.position.y, col.transform.position.z);
             }
         }
@@ -218,6 +231,8 @@ public class PlayerController : MonoBehaviour
         _timeJumpWasPressed = 0;
         _bufferedJumpUsable = false;
         _coyoteUsable = false;
+
+        LimitXVelocity = true;
 
         //_frameVelocity.y = _stats.JumpPower;
         //_frameVelocity = _rb.velocity;
@@ -310,17 +325,24 @@ public class PlayerController : MonoBehaviour
 
                 //_frameVelocity.x = Mathf.MoveTowards(_frameVelocity.x, 0, decelerationX * Time.fixedDeltaTime);
                 float prevDir = Mathf.Sign(_rb.velocity.x);
-                _rb.AddForce(Vector2.left * prevDir * decelerationX, ForceMode2D.Force);
-                if (Mathf.Sign(_rb.velocity.x) * prevDir < 0 || MathF.Abs(_rb.velocity.x) < _stats.MinSpeedX) _rb.AddForce(Vector2.left * _rb.totalForce.x, ForceMode2D.Force);
+                _rb.AddForce(decelerationX * prevDir * Vector2.left, ForceMode2D.Force);
+                if (Mathf.Sign(_rb.velocity.x) * prevDir < 0 || MathF.Abs(_rb.velocity.x) < _stats.MinSpeedX) _rb.AddForce(_rb.totalForce.x * Vector2.left, ForceMode2D.Force);
             }
         }
         else
         {
-            //_frameVelocity.x = Mathf.MoveTowards(_frameVelocity.x, InputReader.FrameInput.Move.x * _stats.MaxSpeedX, _stats.AccelerationX * Time.fixedDeltaTime);
-            if (IsInWater) _rb.AddForce(Vector2.right * FrameInputReader.FrameInput.Move.x * _stats.WaterAccelerationX, ForceMode2D.Force);
-            else _rb.AddForce(Vector2.right * FrameInputReader.FrameInput.Move.x * _stats.GroundAccelerationX, ForceMode2D.Force);
-            if (Mathf.Abs(_rb.velocity.x) > _stats.MaxSpeedX) _rb.velocity = new Vector2(Math.Sign(_rb.velocity.x) * _stats.MaxSpeedX, _rb.velocity.y);
+            //_frameVelocity.x = Mathf.MoveTowards(_frameVelocity.x, _stats.MaxSpeedX * InputReader.FrameInput.Move.x, _stats.AccelerationX * Time.fixedDeltaTime);
+            if (IsInWater) _rb.AddForce(_stats.WaterAccelerationX * FrameInputReader.FrameInput.Move.x * Vector2.right, ForceMode2D.Force);
+            else _rb.AddForce(_stats.GroundAccelerationX * FrameInputReader.FrameInput.Move.x * Vector2.right, ForceMode2D.Force);
+
+            if (LimitXVelocity) LimitXVelocityTo(_stats.MaxSpeedX);
         }
+    }
+
+    public void LimitXVelocityTo(float maxSpeed)
+    {
+        if (Mathf.Abs(_rb.velocity.x) > maxSpeed)
+            _rb.velocity = new Vector2(Math.Sign(_rb.velocity.x) * maxSpeed, _rb.velocity.y);
     }
 
     #endregion
@@ -370,12 +392,7 @@ public class PlayerController : MonoBehaviour
     public void SetRespawnPoint(Checkpoint checkpoint)
     {
         RespawnPoint = checkpoint;
-        SetRespawnPos(checkpoint.RespawnPoint.position);
-    }
-
-    public void SetRespawnPos(Vector3 position)
-    {
-        RespawnPos = new Vector3(position.x, position.y, playerTransform.position.z);
+        RespawnPos = new Vector3(checkpoint.Position.x, checkpoint.Position.y, playerTransform.position.z);
     }
 
     public void RespawnPlayer()

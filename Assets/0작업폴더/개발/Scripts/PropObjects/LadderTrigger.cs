@@ -64,8 +64,20 @@ public class LadderTrigger : MonoBehaviour
 
             if (AutoClimbWhenJumpedOn)
                 if (!PlayerLogic.Player.IsOnLadder && !JumpingFromLadder && !PlayerLogic.Player.OnGround)
+                {
                     PlayerLogic.Player.SetPlayerOnLadder(true);
+                }
         }
+    }
+
+    private void OnTriggerStay2D(Collider2D col)
+    {
+        if (PlayerLogic.Player.ZPosSetToGround)
+            if (col.gameObject.CompareTag("Player"))
+            {
+                PlayerLogic.SetPlayerZPosition(transform.position.z - 0.1f);
+                PlayerLogic.Player.ZPosSetToGround = false;
+            }
     }
 
     private void OnTriggerExit2D(Collider2D col)

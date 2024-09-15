@@ -16,6 +16,7 @@ public class NearestPlayerRespawn_DevelopmentOnly : MonoBehaviour
 
         RefreshCheckpoints();
         _player.SetRespawnPoint(_initialSpawnPoint);
+        SetToNearestRespawnPoint();
     }
 
     private void RefreshCheckpoints()
@@ -25,14 +26,28 @@ public class NearestPlayerRespawn_DevelopmentOnly : MonoBehaviour
             _checkpoints[i].IndexNum = i;
     }
 
-    public void SetToPrevRespawnPos() // nearest respawn point from left side of player
+    private void SetToNearestRespawnPoint() // nearest respawnpoint regardless of actual respawnpoint order
+    {
+        Vector3 playerPos = _player.transform.position;
+        Checkpoint currentPoint = _player.RespawnPoint;
+
+        foreach (Checkpoint checkPoint in _checkpoints)
+        {
+            if (Vector2.Distance(checkPoint.Position, playerPos) < Vector2.Distance(currentPoint.Position, playerPos))
+                currentPoint = checkPoint;
+        }
+
+        _player.SetRespawnPoint(currentPoint);
+    }
+
+    public void SetToPrevRespawnPos() // nearest respawnpoint from left side of player
     {
         RefreshCheckpoints();
         if (_player.RespawnPoint.IndexNum > 0)
             _player.SetRespawnPoint(_checkpoints[_player.RespawnPoint.IndexNum - 1]);
     }
 
-    public void SetToNextRespawnPos() // nearest respawn point from right side of player
+    public void SetToNextRespawnPos() // nearest respawnpoint from right side of player
     {
         RefreshCheckpoints();
 
@@ -40,13 +55,13 @@ public class NearestPlayerRespawn_DevelopmentOnly : MonoBehaviour
             _player.SetRespawnPoint(_checkpoints[_player.RespawnPoint.IndexNum + 1]);
     }
 
-    public void SetToPrevRespawnPosAndRespawn()
+    public void SetToPrevRespawnPosAndRespawn_Button()
     {
         SetToPrevRespawnPos();
         _player.RespawnPlayer();
     }
 
-    public void SetToNextRespawnPosAndRespawn()
+    public void SetToNextRespawnPosAndRespawn_Button()
     {
         SetToNextRespawnPos();
         _player.RespawnPlayer();
