@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class StageBGMFade : MonoBehaviour
@@ -12,7 +10,7 @@ public class StageBGMFade : MonoBehaviour
     private float _volumeMax;
     public float VolumePercent { get; private set; }
 
-    public bool PlayerIsInside { get; private set; }
+    public bool PlayerInZone { get; private set; }
     
     private void Start()
     {
@@ -22,7 +20,7 @@ public class StageBGMFade : MonoBehaviour
         _volumeMax = _stageBgm.volume;
         EvalVolumePercentInt();
 
-        PlayerIsInside = false;
+        PlayerInZone = false;
     }
 
     public void EvalVolumePercentInt()
@@ -35,7 +33,7 @@ public class StageBGMFade : MonoBehaviour
     {
         if (col.CompareTag("Player"))
         {
-            PlayerIsInside = true;
+            PlayerInZone = true;
             EvalVolumePercentInt();
         }
     }
@@ -52,7 +50,7 @@ public class StageBGMFade : MonoBehaviour
     {
         if (col.CompareTag("Player"))
         {
-            PlayerIsInside = false;
+            PlayerInZone = false;
             EvalVolumePercentInt();
         }
     }
