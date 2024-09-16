@@ -6,11 +6,14 @@ TagManager:
   tags:
   - Player ropeRider
   - Player electrocutedText
-  - ZipLineStoppingBlock
   - Battery
   - FreePlayerMoveUI
   - MainCamera Collider
   - PushableBox
+  - SpeedBoost Ground
+  - ZipLinePulley RopeChecker
+  - ZipLineStoppingStartBlock
+  - ZipLineStoppingEndBlock
   layers:
   - Default
   - TransparentFX
@@ -26,7 +29,7 @@ TagManager:
   - Do Not Render
   - Output
   - Cloth
-  - 
+  - No Directional Light
   - 
   - 
   - 

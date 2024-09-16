@@ -21,7 +21,7 @@ MonoBehaviour:
   WaterAccelerationX: 20
   GroundDecelerationX: 30
   WaterDecelerationX: 10
-  AirDecelerationX: 30
+  AirDecelerationX: 20
   GroundingForce: -1.5
   GrounderDistance: -0.2
   GroundCheckerAddRadius: 0.01

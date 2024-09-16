@@ -42,7 +42,8 @@ public class FrameInputReader : MonoBehaviour
 
     private void RespawnPressedAction(InputAction.CallbackContext ctx)
     {
-        PlayerLogic.Player.RespawnPlayer();
+        if (PlayerLogic.Player.RespawnButtonAllowed)
+            PlayerLogic.Player.RespawnPlayer();
     }
 
     private void JumpStartedAction(InputAction.CallbackContext ctx)
@@ -52,9 +53,13 @@ public class FrameInputReader : MonoBehaviour
 
     public static void TriggerJump()
     {
+        FrameInput.JumpStarted = true;
+        FrameInput.JumpHeld = true;
+        FrameInput.Move = CentralInputReader.Input.Player.Movement.ReadValue<Vector2>();
+
         JumpPressed?.Invoke();
     }
-
+    
     private void GatherInput()
     {
         JumpHolding = CentralInputReader.Input.Player.Jump.IsPressed();

@@ -166,130 +166,125 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61104f33a3f344db9b7e0d0cda41a9fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  solverIndices: 000000000100000002000000030000000400000005000000060000000700000008000000090000000a0000000b0000000c0000000d0000000e0000000f000000100000001100000012000000130000001400000015000000160000001700000018000000190000001a0000001b0000001c0000001d0000001e0000001f000000200000002100000022000000230000002400000025000000260000002700000028000000290000002a0000002b0000002c0000002d0000002e0000002f000000300000003100000032000000330000003400000035000000360000003700000038000000390000003a0000003b0000003c0000003d0000003e0000003f000000400000004100000042000000430000004400000045000000460000004700000048000000490000004a0000004b0000004c0000004d0000004e0000004f000000500000005100000052000000530000005400000055000000560000005700000058000000590000005a0000005b0000005c0000005d0000005e0000005f000000600000006100000062000000630000006400000065000000660000006700000068000000690000006a0000006b0000006c0000006d0000006e0000006f000000700000007100000072000000730000007400000075000000760000007700000078000000790000007a0000007b0000007c000000
+  solverIndices: 000000000100000002000000030000000400000005000000060000000700000008000000090000000a0000000b0000000c0000000d0000000e0000000f000000100000001100000012000000130000001400000015000000160000001700000018000000190000001a0000001b0000001c0000001d0000001e0000001f000000200000002100000022000000230000002400000025000000260000002700000028000000290000002a0000002b0000002c0000002d0000002e0000002f000000300000003100000032000000330000003400000035000000360000003700000038000000390000003a0000003b0000003c0000003d0000003e0000003f000000400000004100000042000000430000004400000045000000460000004700000048000000490000004a0000004b0000004c0000004d0000004e0000004f000000500000005100000052000000530000005400000055000000560000005700000058000000590000005a0000005b0000005c0000005d0000005e0000005f000000600000006100000062000000630000006400000065000000660000006700000068000000690000006a0000006b0000006c0000006d0000006e0000006f000000700000007100000072000000730000007400000075000000760000007700000078000000790000007a0000007b000000
   m_CollisionMaterial: {fileID: 0}
   m_SurfaceCollisions: 1
   m_SelfCollisions: 0
-  restLength_: 17.77669
+  restLength_: 17.13357
   elements:
   - particle1: 0
     particle2: 1
-    restLength: 0.7404316
+    restLength: 0.74480486
     constraintForce: 0
     tearResistance: 1
   - particle1: 1
     particle2: 2
-    restLength: 0.7400458
+    restLength: 0.74389625
     constraintForce: 0
     tearResistance: 1
   - particle1: 2
     particle2: 3
-    restLength: 0.74019694
+    restLength: 0.74344337
     constraintForce: 0
     tearResistance: 1
   - particle1: 3
     particle2: 4
-    restLength: 0.74064225
+    restLength: 0.74416703
     constraintForce: 0
     tearResistance: 1
   - particle1: 4
     particle2: 5
-    restLength: 0.7411564
+    restLength: 0.7457785
     constraintForce: 0
     tearResistance: 1
   - particle1: 5
     particle2: 6
-    restLength: 0.74152774
+    restLength: 0.7475173
     constraintForce: 0
     tearResistance: 1
   - particle1: 6
     particle2: 7
-    restLength: 0.74033374
+    restLength: 0.7485563
     constraintForce: 0
     tearResistance: 1
   - particle1: 7
     particle2: 8
-    restLength: 0.7406591
+    restLength: 0.74410826
     constraintForce: 0
     tearResistance: 1
   - particle1: 8
     particle2: 9
-    restLength: 0.74113923
+    restLength: 0.7460601
     constraintForce: 0
     tearResistance: 1
   - particle1: 9
     particle2: 10
-    restLength: 0.7412538
+    restLength: 0.74707454
     constraintForce: 0
     tearResistance: 1
   - particle1: 10
     particle2: 11
-    restLength: 0.7408754
+    restLength: 0.74605435
     constraintForce: 0
     tearResistance: 1
   - particle1: 11
     particle2: 12
-    restLength: 0.74108136
+    restLength: 0.7467606
     constraintForce: 0
     tearResistance: 1
   - particle1: 12
     particle2: 13
-    restLength: 0.7415974
+    restLength: 0.74720854
     constraintForce: 0
     tearResistance: 1
   - particle1: 13
     particle2: 14
-    restLength: 0.741502
+    restLength: 0.7455691
     constraintForce: 0
     tearResistance: 1
   - particle1: 14
     particle2: 15
-    restLength: 0.7409898
+    restLength: 0.7444483
     constraintForce: 0
     tearResistance: 1
   - particle1: 15
     particle2: 16
-    restLength: 0.74019146
+    restLength: 0.74919957
     constraintForce: 0
     tearResistance: 1
   - particle1: 16
     particle2: 17
-    restLength: 0.73949957
+    restLength: 0.7481997
     constraintForce: 0
     tearResistance: 1
   - particle1: 17
     particle2: 18
-    restLength: 0.7422528
+    restLength: 0.74686885
     constraintForce: 0
     tearResistance: 1
   - particle1: 18
     particle2: 19
-    restLength: 0.74188
+    restLength: 0.74621695
     constraintForce: 0
     tearResistance: 1
   - particle1: 19
     particle2: 20
-    restLength: 0.7414058
+    restLength: 0.7469829
     constraintForce: 0
     tearResistance: 1
   - particle1: 20
     particle2: 21
-    restLength: 0.7408542
+    restLength: 0.74754596
     constraintForce: 0
     tearResistance: 1
   - particle1: 21
     particle2: 22
-    restLength: 0.7401289
+    restLength: 0.73575795
     constraintForce: 0
     tearResistance: 1
   - particle1: 22
     particle2: 23
-    restLength: 0.7390872
-    constraintForce: 0
-    tearResistance: 1
-  - particle1: 23
-    particle2: 24
-    restLength: 0.7379562
+    restLength: 0.72734994
     constraintForce: 0
     tearResistance: 1
   m_RopeBlueprint: {fileID: 11400000, guid: 460f6f7dc3a708445af6a4996f3fbb06, type: 2}
@@ -405,7 +400,7 @@ GameObject:
   - component: {fileID: 6662491590786526102}
   m_Layer: 11
   m_Name: Endblocker
-  m_TagString: ZipLineStoppingBlock
+  m_TagString: ZipLineStoppingEndBlock
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -418,13 +413,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1517292908273761266}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: 0.56992567, w: 0.8216963}
-  m_LocalPosition: {x: 14.809998, y: 2.2499995, z: 0}
-  m_LocalScale: {x: 0.69357806, y: 3.1701035, z: 0.77903}
+  m_LocalRotation: {x: -0, y: -0, z: 0.34023923, w: 0.94033897}
+  m_LocalPosition: {x: 14.67, y: 1.42, z: 0}
+  m_LocalScale: {x: 3.0786648, y: 1.8346083, z: 1.7199425}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6885496709168918951}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 69.49}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 39.783}
 --- !u!33 &5439249348148974848
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -524,7 +519,7 @@ Transform:
   m_GameObject: {fileID: 2884802790826844546}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.002475679, y: -4.24, z: 0.15000045}
+  m_LocalPosition: {x: 0.002475679, y: -4.49, z: 0.15000045}
   m_LocalScale: {x: 0.19999999, y: 5.6800895, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -545,12 +540,13 @@ MonoBehaviour:
   _playerOnOtherObject: 0
   _ropeCalculator: {fileID: 4081489736378474001}
   _pulleyRb: {fileID: 3956837994135458039}
+  _bottomPulley: {fileID: 1964318173753154989}
   _moveToPlayer_minDistance: 3
   _moveToPlayer_maxDistance: 28
   _moveToPlayer_speed: 0.5
   _startBlock: {fileID: 7105507610189804426}
   _endBlock: {fileID: 6501697808794217608}
-  _pulleyHitStopMargin: 1
+  _pulleyHitStopMargin: 1.5
 --- !u!212 &7212428324866021992
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -662,7 +658,7 @@ GameObject:
   - component: {fileID: 8614136305637135201}
   m_Layer: 11
   m_Name: Startblocker
-  m_TagString: ZipLineStoppingBlock
+  m_TagString: ZipLineStoppingStartBlock
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -675,13 +671,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2969069600153833752}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0.38244435, w: 0.92397857}
-  m_LocalPosition: {x: 0.14, y: 1.07, z: 0}
-  m_LocalScale: {x: 0.5334986, y: 1.1890455, z: 0.77903}
+  m_LocalRotation: {x: -0, y: -0, z: -0.35098422, w: 0.93638146}
+  m_LocalPosition: {x: 0.019989014, y: 1.43, z: 0}
+  m_LocalScale: {x: 3.0150323, y: 2.2868936, z: 1.8227541}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6885496709168918951}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -44.97}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -41.095}
 --- !u!33 &6162425739929125494
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -873,7 +869,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   thickness: 0
   material: {fileID: 0}
-  filter: 65537
+  filter: 131074
   m_SourceCollider: {fileID: 334089632429071469}
   m_DistanceField: {fileID: 0}
 --- !u!1 &3975588994150216319
@@ -1023,6 +1019,105 @@ MonoBehaviour:
     iterations: 2
     SORFactor: 1
     enabled: 0
+--- !u!1 &3996580196004534304
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8849815109474897605}
+  - component: {fileID: 2149086572043781977}
+  - component: {fileID: 1634544105411001315}
+  - component: {fileID: 8825141135992886157}
+  m_Layer: 0
+  m_Name: RopeChecker
+  m_TagString: ZipLinePulley RopeChecker
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8849815109474897605
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3996580196004534304}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.0000025828676, y: -0.7, z: 0.04666646}
+  m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3161455705367265161}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2149086572043781977
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3996580196004534304}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e74c12c38d13c046819239c24914068, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _solver: {fileID: 8813931647685156957}
+  _zipLinePulley: {fileID: 3956837994135458039}
+--- !u!58 &1634544105411001315
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3996580196004534304}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.000015258789, y: 0.0000009536743}
+  serializedVersion: 2
+  m_Radius: 0.5
+--- !u!114 &8825141135992886157
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3996580196004534304}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f6a9934a1a0f44e89ccbb25355461bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  thickness: 0
+  material: {fileID: 0}
+  filter: 131074
+  sourceCollider: {fileID: 1634544105411001315}
 --- !u!1 &5590876485938196971
 GameObject:
   m_ObjectHideFlags: 0
@@ -1056,12 +1151,13 @@ Transform:
   m_GameObject: {fileID: 5590876485938196971}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.739, y: 0.31, z: 0}
+  m_LocalPosition: {x: 3, y: -0.03, z: 0}
   m_LocalScale: {x: 0.6, y: 0.6, z: 0.6}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1964318173753154989}
   - {fileID: 5661046333335051997}
+  - {fileID: 8849815109474897605}
   m_Father: {fileID: 6885496709168918951}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &342984831002632035
@@ -1201,7 +1297,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   thickness: 0
   material: {fileID: 0}
-  filter: 65537
+  filter: 131074
   m_SourceCollider: {fileID: 7025967164443711655}
   m_DistanceField: {fileID: 0}
 --- !u!114 &7937701626560640392

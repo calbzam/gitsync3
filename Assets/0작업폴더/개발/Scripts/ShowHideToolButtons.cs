@@ -12,7 +12,7 @@ public class ShowHideToolButtons : MonoBehaviour
 
     private bool _toolsHidden = false;
 
-    public void ToggleToolsHidden()
+    public void ToggleToolsHidden_Button()
     {
         SetToolsHidden(_toolsHidden = !_toolsHidden);
     }

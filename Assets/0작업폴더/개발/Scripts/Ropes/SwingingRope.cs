@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
 using Obi;
-using UnityEngine.InputSystem;
 
 public class SwingingRope : RidableObject
 {
@@ -21,9 +20,10 @@ public class SwingingRope : RidableObject
         //particleHasCollision = new bool[rope.particleCount];
     }
 
-    private void Start()
+    protected override void Start()
     {
-        _jumpedEnoughDistance = PlayerLogic.PlayerStats.RopeJumpedDistance;
+        base.Start();
+        _jumpedEnoughDistance = PlayerLogic.Player.Stats.RopeJumpedDistance;
     }
 
     protected override void OnEnable()
@@ -64,7 +64,7 @@ public class SwingingRope : RidableObject
     // indexInActor: https://obi.virtualmethodstudio.com/forum/thread-4019-post-14919.html#pid14919
     private void HandleRopeClimb()
     {
-        if (!_playerIsAttached) return;
+        if (!PlayerIsAttached) return;
 
         if (FrameInputReader.FrameInput.Move.y > 0)
         {
@@ -95,7 +95,7 @@ public class SwingingRope : RidableObject
         CheckRopePlayerDisconnectedDistance();
         
         //Debug.Log(_ropeAttached + ", " + _ropeJumped); // start from: false, false
-        if (_playerIsAttached) return;
+        if (PlayerIsAttached) return;
         if (_playerOnOtherObject) return;
 
         var world = ObiColliderWorld.GetInstance();
@@ -112,7 +112,7 @@ public class SwingingRope : RidableObject
                     int particle = _rope.solver.simplices[contact.bodyA];
                     attachPlayerToParticle(particle);
                     PlayerOnThisObject?.Invoke(gameObject.GetInstanceID(), true);
-                    _playerIsAttached = true;
+                    PlayerIsAttached = true;
                     PlayerLogic.PlayerObiCol.enabled = false;
 
                     break;
@@ -121,9 +121,9 @@ public class SwingingRope : RidableObject
         }
     }
 
-    protected override void DisconnectPlayer()
+    public override void DisconnectPlayer()
     {
-        if (_playerIsAttached)
+        if (PlayerIsAttached)
         {
             _playerHasJumped = true;
             PlayerOnThisObject?.Invoke(gameObject.GetInstanceID(), false);
@@ -137,14 +137,14 @@ public class SwingingRope : RidableObject
 
     private void CheckRopePlayerDisconnectedDistance()
     {
-        if (_playerIsAttached && _playerHasJumped)
+        if (PlayerIsAttached && _playerHasJumped)
         {
             Vector3 particlePos = getGlobalParticlePos(_rope.solver.positions[_currentParticle]);
             bool awayFromRope = Vector2.Distance(particlePos, PlayerLogic.PlayerObiCol.transform.position) > _jumpedEnoughDistance;
 
             if (awayFromRope)
             {
-                _playerIsAttached = _playerHasJumped = false;
+                PlayerIsAttached = _playerHasJumped = false;
                 EnableRopeCollision(true);
                 _currentParticle = -1;
             }

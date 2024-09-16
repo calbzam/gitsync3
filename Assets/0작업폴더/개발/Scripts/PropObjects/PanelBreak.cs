@@ -53,14 +53,13 @@ public class PanelBreak : MonoBehaviour
 
     private void ResetPanelTransforms()
     {
-        _leftHalf.SetActive(true);
-        _rightHalf.SetActive(true);
+        SetPanelBroken(false);
+        //_leftHalf.SetActive(true);
+        //_rightHalf.SetActive(true);
         _leftHalf.transform.position = _leftHalfPos;
         _rightHalf.transform.position = _rightHalfPos;
         _leftHalf.transform.rotation = _leftHalfRot;
         _rightHalf.transform.rotation = _rightHalfRot;
-
-        SetPanelBroken(false);
     }
 
     private void SetPanelBroken(bool isBroken)
