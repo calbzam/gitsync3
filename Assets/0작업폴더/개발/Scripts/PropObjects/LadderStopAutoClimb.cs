@@ -11,7 +11,7 @@ public class LadderStopAutoClimb : MonoBehaviour
     {
         if (col.gameObject.CompareTag("Player"))
         {
-            //if (PlayerLogic.PlayerRb.velocity.y < 0 && !PlayerLogic.Player.IsOnLadder)
+            //if (PlayerLogic.Player.Rb.velocity.y < 0 && !PlayerLogic.Player.IsOnLadder)
             _autoClimbPrevState = _ladder.AutoClimbWhenJumpedOn;
             _ladder.AutoClimbWhenJumpedOn = false;
         }

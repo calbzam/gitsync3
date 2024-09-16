@@ -32,9 +32,12 @@ public class LeverActivate : MonoBehaviour
 
     public void UpdateCheckpoint()
     {
-        _checkPointToActivate.gameObject.SetActive(true);
+        if (_checkPointToActivate != null)
+        {
+            _checkPointToActivate.gameObject.SetActive(true);
 
-        if (_updateCheckpointOnActivate)
-            PlayerLogic.Player.SetRespawnPoint(_checkPointToActivate);
+            if (_updateCheckpointOnActivate)
+                PlayerLogic.Player.SetRespawnPoint(_checkPointToActivate);
+        }
     }
 }

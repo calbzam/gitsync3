@@ -15,7 +15,7 @@ public class AddForceXToPlayer : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             if (PlayerLogic.Player.LimitXVelocity) PlayerLogic.Player.LimitXVelocity = false;
-            PlayerLogic.PlayerRb.AddForce(_addForceAmount * (int)_moveDir * Vector2.right, ForceMode2D.Force);
+            PlayerLogic.Player.Rb.AddForce(_addForceAmount * (int)_moveDir * Vector2.right, ForceMode2D.Force);
             PlayerLogic.Player.LimitXVelocityTo(_playerMaxSpeedX);
         }
     }

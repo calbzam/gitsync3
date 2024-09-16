@@ -53,9 +53,13 @@ public class FrameInputReader : MonoBehaviour
 
     public static void TriggerJump()
     {
+        FrameInput.JumpStarted = true;
+        FrameInput.JumpHeld = true;
+        FrameInput.Move = CentralInputReader.Input.Player.Movement.ReadValue<Vector2>();
+
         JumpPressed?.Invoke();
     }
-
+    
     private void GatherInput()
     {
         JumpHolding = CentralInputReader.Input.Player.Jump.IsPressed();

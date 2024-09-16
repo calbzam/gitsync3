@@ -3,17 +3,20 @@ using UnityEngine;
 using UnityEditor;
 
 
-// PlayerController.cs and PlayerStats.cs EDITED from TarodevController on GitHub
+// PlayerController.cs and Player.Stats.cs EDITED from TarodevController on GitHub
 // github: https://github.com/Matthew-J-Spencer/Ultimate-2D-Controller/tree/main
 // license: https://github.com/Matthew-J-Spencer/Ultimate-2D-Controller/blob/main/LICENSE
 
 [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
 public class PlayerController : MonoBehaviour
 {
-    private Transform playerTransform;
+    [SerializeField] private Rigidbody2D _rb;
+    public Rigidbody2D Rb => _rb;
+    [SerializeField] private CapsuleCollider2D _col;
+    private bool _cachedQueryStartInColliders;
 
     [SerializeField] private PlayerStats _stats;
-    public PlayerStats Stats => _stats; // for public access
+    public PlayerStats Stats => _stats;
 
     public Checkpoint RespawnPoint { get; private set; } // use this instead of RespawnPos
     public Vector3 RespawnPos { get; private set; }
@@ -22,11 +25,6 @@ public class PlayerController : MonoBehaviour
     public bool DirInputActive { get; set; }
     public bool LimitXVelocity { get; set; } // assigned false when speed boost from other object, assigned true when player hits ground
     public bool ZPosSetToGround { get; set; }
-
-    private Rigidbody2D _rb;
-    private CapsuleCollider2D _col;
-    //private Vector2 _frameVelocity;
-    private bool _cachedQueryStartInColliders;
 
     private Rigidbody2D swingingGround;
 
@@ -58,10 +56,6 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
-        playerTransform = gameObject.GetComponent<Transform>();
-        _rb = gameObject.GetComponent<Rigidbody2D>();
-        _col = gameObject.GetComponent<CapsuleCollider2D>();
-
         _cachedQueryStartInColliders = Physics2D.queriesStartInColliders;
     }
 
@@ -221,12 +215,11 @@ public class PlayerController : MonoBehaviour
         if (!_jumpToConsume && !HasBufferedJump) return;
 
         if (!IsOnLadder && (OnGround || CanUseCoyote)) ExecuteJump();
-
-        _jumpToConsume = false;
     }
 
     private void ExecuteJump()
     {
+        _jumpToConsume = false;
         _endedJumpEarly = false;
         _timeJumpWasPressed = 0;
         _bufferedJumpUsable = false;
@@ -239,7 +232,7 @@ public class PlayerController : MonoBehaviour
         _rb.AddForce(Vector2.up * _stats.JumpPower, ForceMode2D.Impulse);
 
         //swingingGroundHit = false;
-        Jumped?.Invoke();
+        //Jumped?.Invoke();
     }
 
     #endregion
@@ -253,7 +246,7 @@ public class PlayerController : MonoBehaviour
             IsOnLadder = true; // 사다리에서 방향키를 처음 눌렀을 때
             CurrentLadder.StepProgress = CurrentLadder.StepSize;
 
-            transform.position = new Vector3(CurrentLadder.transform.position.x, transform.position.y, CurrentLadder.transform.position.z - 0.1f);
+            base.transform.position = new Vector3(CurrentLadder.transform.position.x, base.transform.position.y, CurrentLadder.transform.position.z - 0.1f);
             _rb.velocity = Vector2.zero;
 
             if (CurrentLadder.BypassGroundCollision) PlayerLogic.IgnorePlayerGroundCollision(true);
@@ -392,16 +385,17 @@ public class PlayerController : MonoBehaviour
     public void SetRespawnPoint(Checkpoint checkpoint)
     {
         RespawnPoint = checkpoint;
-        RespawnPos = new Vector3(checkpoint.Position.x, checkpoint.Position.y, playerTransform.position.z);
+        RespawnPos = new Vector3(checkpoint.Position.x, checkpoint.Position.y, transform.position.z);
     }
 
     public void RespawnPlayer()
     {
         FrameInputReader.TriggerJump();
         PlayerLogic.FreePlayer();
-        PlayerLogic.InvokePlayerRespawedEvent();
-        playerTransform.position = RespawnPos;
+        transform.position = RespawnPos;
         _rb.velocity = Vector3.zero;
+
+        PlayerLogic.InvokePlayerRespawnedEvent();
     }
 
     //private void CheckRespawn()

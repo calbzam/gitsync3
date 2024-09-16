@@ -1,17 +1,21 @@
 using System;
 using UnityEngine;
-using Obi;
-using UnityEngine.InputSystem;
 
 public abstract class RidableObject : MonoBehaviour
 {
     public abstract event Action<int, bool> PlayerOnThisObject;
     public bool _playerOnOtherObject = false;
 
-    protected bool _playerIsAttached = false;
-    protected bool _playerHasJumped = false;
+    public bool PlayerIsAttached { get; protected set; }
+    protected bool _playerHasJumped;
     
-    protected abstract void DisconnectPlayer();
+    public abstract void DisconnectPlayer();
+
+    protected virtual void Start()
+    {
+        PlayerIsAttached = false;
+        _playerHasJumped = false;
+    }
 
     protected virtual void OnEnable()
     {
