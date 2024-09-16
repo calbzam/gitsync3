@@ -85,13 +85,15 @@ public class Test_DrawParticlePositions : MonoBehaviour
         }
     }
 
-    //private void OnDrawGizmosSelected()
-    //{
-    //    GetParticlePositions();
-    //
-    //    Gizmos.DrawWireSphere(firstPos, 2);
-    //    Gizmos.DrawWireSphere(lastPos, 2);
-    //
-    //    Gizmos.DrawWireSphere(transform.position, 2);
-    //}
+//#if UNITY_EDITOR
+//    private void OnDrawGizmosSelected()
+//    {
+//        GetParticlePositions();
+
+//        Gizmos.DrawWireSphere(firstPos, 2);
+//        Gizmos.DrawWireSphere(lastPos, 2);
+
+//        Gizmos.DrawWireSphere(transform.position, 2);
+//    }
+//#endif
 }

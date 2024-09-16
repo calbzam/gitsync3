@@ -62,6 +62,6 @@ public class ZipLinePulleyRopeChecker : MonoBehaviour
     private void FellFromRopeAction()
     {
         _zipLinePulley.transform.position = _lastFinePos;
-        _zipLinePulley.velocity = Vector3.zero;
+        //_zipLinePulley.velocity = Vector3.zero;
     }
 }

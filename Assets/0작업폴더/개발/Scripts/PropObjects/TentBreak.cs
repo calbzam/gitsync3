@@ -98,8 +98,10 @@ public class TentBreak : MonoBehaviour
         }
     }
 
+#if UNITY_EDITOR
     private void OnDrawGizmos()
     {
         MyMath.DrawWireBox(transform.position, _exitScale, transform.eulerAngles.z, Color.white, 0);
     }
+#endif
 }

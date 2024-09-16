@@ -165,8 +165,10 @@ public class MovePlayerToDir : MonoBehaviour
         }
     }
 
+#if UNITY_EDITOR
     private void OnDrawGizmos()
     {
         MyMath.DrawWireBox(transform.position, transform.lossyScale, transform.eulerAngles.z, Color.white, 0);
     }
+#endif
 }

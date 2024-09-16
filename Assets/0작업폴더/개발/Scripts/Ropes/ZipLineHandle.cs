@@ -15,12 +15,11 @@ public class ZipLineHandle : RidableObject
     [SerializeField] private Transform _startBlock;
     [SerializeField] private Transform _endBlock;
 
-    private RigidbodyConstraints _lockXPos_PulleyConstraints;
-    private RigidbodyConstraints _freeXPos_PulleyConstraints;
-
+    [SerializeField] private float _pulleyHitStopMargin = 3f;
     public bool StopMovingPulley { get; set; }
 
-    [SerializeField] private float _pulleyHitStopMargin = 1f;
+    private RigidbodyConstraints _lockXPos_PulleyConstraints;
+    private RigidbodyConstraints _freeXPos_PulleyConstraints;
 
     private void Awake()
     {
@@ -102,9 +101,18 @@ public class ZipLineHandle : RidableObject
 
     private void StartMovingPulley(float moveDir)
     {
-        if (moveDir < 0 && transform.position.x - _startBlock.position.x < _pulleyHitStopMargin) return;
-        if (moveDir > 0 && _endBlock.position.x - transform.position.x < _pulleyHitStopMargin) return;
-
+        /* if within margin then don't add velocity */
+        Collider[] cols = Physics.OverlapSphere(_pulleyRb.transform.position, _pulleyHitStopMargin);
+        foreach (Collider col in cols)
+        {
+            if (col.transform.parent != _pulleyRb.transform.parent) continue;
+            if (moveDir < 0 && col.CompareTag("ZipLineStoppingStartBlock")) return;
+            if (moveDir > 0 && col.CompareTag("ZipLineStoppingEndBlock")) return;
+        }
+        //if (moveDir < 0 && transform.position.x - _startBlock.position.x < _pulleyHitStopMargin) return;
+        //if (moveDir > 0 && _endBlock.position.x - transform.position.x < _pulleyHitStopMargin) return;
+        
+        /* add initial velocity */
         if (!StopMovingPulley)
         {
             if (moveDir < 0)
@@ -135,10 +143,10 @@ public class ZipLineHandle : RidableObject
         }
     }
 
-//#if UNITY_EDITOR
-//    private void OnDrawGizmos()
-//    {
-//        UnityEditor.Handles.DrawWireDisc((_pulleyRb.position + _bottomPulley.position) / 2, Vector3.back, 0.4f);
-//    }
-//#endif
+#if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(_pulleyRb.transform.position, _pulleyHitStopMargin);
+    }
+#endif
 }
