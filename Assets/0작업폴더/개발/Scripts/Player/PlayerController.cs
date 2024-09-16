@@ -215,12 +215,11 @@ public class PlayerController : MonoBehaviour
         if (!_jumpToConsume && !HasBufferedJump) return;
 
         if (!IsOnLadder && (OnGround || CanUseCoyote)) ExecuteJump();
-
-        _jumpToConsume = false;
     }
 
     private void ExecuteJump()
     {
+        _jumpToConsume = false;
         _endedJumpEarly = false;
         _timeJumpWasPressed = 0;
         _bufferedJumpUsable = false;
@@ -233,7 +232,7 @@ public class PlayerController : MonoBehaviour
         _rb.AddForce(Vector2.up * _stats.JumpPower, ForceMode2D.Impulse);
 
         //swingingGroundHit = false;
-        Jumped?.Invoke();
+        //Jumped?.Invoke();
     }
 
     #endregion

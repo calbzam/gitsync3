@@ -27,8 +27,9 @@ public class ZipLineHandle : RidableObject
         _lockXPos_PulleyConstraints = _freeXPos_PulleyConstraints | RigidbodyConstraints.FreezePositionX;
     }
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
         StopMovingPulley = false;
     }
 
@@ -40,7 +41,7 @@ public class ZipLineHandle : RidableObject
     private void MoveTowardsPlayer()
     {
         if (PlayerLogic.Player.Rb == null) return;
-        if (_playerIsAttached) return;
+        if (PlayerIsAttached) return;
 
         float distance = PlayerLogic.Player.transform.position.x - transform.position.x;
         if (_moveToPlayer_minDistance < Mathf.Abs(distance) && Mathf.Abs(distance) < _moveToPlayer_maxDistance)
@@ -58,7 +59,7 @@ public class ZipLineHandle : RidableObject
     private void MoveTowardsPlayer_useVelocity_with_RopeCalculator()
     {
         if (PlayerLogic.Player.Rb == null) return;
-        if (_playerIsAttached) return;
+        if (PlayerIsAttached) return;
 
         float distance = PlayerLogic.Player.transform.position.x - transform.position.x;
         Vector2 pulleyDir;
@@ -96,7 +97,7 @@ public class ZipLineHandle : RidableObject
         StartMovingPulley(playerVelocityNow.x);
 
         PlayerOnThisObject?.Invoke(gameObject.GetInstanceID(), true);
-        _playerIsAttached = true;
+        PlayerIsAttached = true;
     }
 
     private void StartMovingPulley(float moveDir)
@@ -127,9 +128,9 @@ public class ZipLineHandle : RidableObject
         }
     }
 
-    protected override void DisconnectPlayer()
+    public override void DisconnectPlayer()
     {
-        if (_playerIsAttached)
+        if (PlayerIsAttached)
         {
             PlayerLogic.FreePlayer();
             PlayerLogic.Player.Rb.transform.SetParent(null);
@@ -137,7 +138,7 @@ public class ZipLineHandle : RidableObject
             _pulleyRb.constraints = _lockXPos_PulleyConstraints;
 
             PlayerOnThisObject?.Invoke(gameObject.GetInstanceID(), false);
-            _playerIsAttached = false;
+            PlayerIsAttached = false;
 
             PlayerLogic.DisconnectedPlayerAddJump();
         }

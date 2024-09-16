@@ -9,12 +9,15 @@ public class ZipLinePulleyRopeChecker : MonoBehaviour
     private Vector3 _initialPos;
     private Vector3 _lastFinePos;
 
+    private int _contactCntPrev;
+
     private void Start()
     {
         _initialPos = _zipLinePulley.transform.position;
+        _contactCntPrev = 0;
     }
 
-    private void OnEnable()
+private void OnEnable()
     {
         PlayerLogic.PlayerRespawned += PlayerRespawnedAction;
         _solver.OnCollision += Solver_OnCollision;
@@ -31,7 +34,6 @@ public class ZipLinePulleyRopeChecker : MonoBehaviour
         _lastFinePos = _initialPos;
     }
 
-    private int _contactCntPrev = 0;
     void Solver_OnCollision(object sender, ObiSolver.ObiCollisionEventArgs e)
     {
         var world = ObiColliderWorld.GetInstance();

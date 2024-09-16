@@ -155,11 +155,11 @@ GameObject:
   - component: {fileID: 8163286425711514546}
   - component: {fileID: 8022301007029869541}
   - component: {fileID: 8612660158870851936}
+  - component: {fileID: 8308634432569987140}
   - component: {fileID: 3451459896291438397}
   - component: {fileID: 7306328875240057717}
   - component: {fileID: 8909498849510046010}
   - component: {fileID: 881971457722786287}
-  - component: {fileID: 8308634432569987140}
   - component: {fileID: 3895967393270532167}
   - component: {fileID: 8496679337350745373}
   - component: {fileID: 6250444290528020628}
@@ -213,6 +213,19 @@ MonoBehaviour:
   _meshRenderer: {fileID: 8909498849510046010}
   _rope: {fileID: 881971457722786287}
   _additionalChildObjectsToDisable: []
+--- !u!114 &8308634432569987140
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2181408558619098267}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49203ec79639d7747aff9a8611c937d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playerOnOtherObject: 0
 --- !u!114 &3451459896291438397
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -404,19 +417,6 @@ MonoBehaviour:
   _maxBending: 0.025
   _plasticYield: 0
   _plasticCreep: 0
---- !u!114 &8308634432569987140
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2181408558619098267}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49203ec79639d7747aff9a8611c937d5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _playerOnOtherObject: 0
 --- !u!114 &3895967393270532167
 MonoBehaviour:
   m_ObjectHideFlags: 0
