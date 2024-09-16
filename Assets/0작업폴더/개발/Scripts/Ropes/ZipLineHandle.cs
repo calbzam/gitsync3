@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class ZipLineHandle : RidableObject
 {
@@ -8,6 +7,7 @@ public class ZipLineHandle : RidableObject
     [SerializeField] private ZipLineRopeCalculator _ropeCalculator;
 
     [SerializeField] private Rigidbody _pulleyRb;
+    [SerializeField] private Transform _bottomPulley;
     [SerializeField] private float _moveToPlayer_minDistance = 3f;
     [SerializeField] private float _moveToPlayer_maxDistance = 28f;
     [SerializeField] private float _moveToPlayer_speed = 0.5f;
@@ -18,8 +18,7 @@ public class ZipLineHandle : RidableObject
     private RigidbodyConstraints _lockXPos_PulleyConstraints;
     private RigidbodyConstraints _freeXPos_PulleyConstraints;
 
-    private bool _stopMovingPulley = false;
-    public void StopMoving() { _stopMovingPulley = true; }
+    public bool StopMovingPulley { get; set; }
 
     [SerializeField] private float _pulleyHitStopMargin = 1f;
 
@@ -31,7 +30,7 @@ public class ZipLineHandle : RidableObject
 
     private void Start()
     {
-        _stopMovingPulley = false;
+        StopMovingPulley = false;
     }
 
     private void FixedUpdate()
@@ -82,7 +81,7 @@ public class ZipLineHandle : RidableObject
 
         if (col.CompareTag("Player"))
         {
-            _stopMovingPulley = false;
+            StopMovingPulley = false;
             ConnectPlayer();
         }
     }
@@ -95,18 +94,18 @@ public class ZipLineHandle : RidableObject
         PlayerLogic.LockPlayer();
         PlayerLogic.Player.Rb.transform.localPosition = Vector3.zero;
         _pulleyRb.constraints = _freeXPos_PulleyConstraints;
-        MovePulley(playerVelocityNow.x);
+        StartMovingPulley(playerVelocityNow.x);
 
         PlayerOnThisObject?.Invoke(gameObject.GetInstanceID(), true);
         _playerIsAttached = true;
     }
 
-    private void MovePulley(float moveDir)
+    private void StartMovingPulley(float moveDir)
     {
         if (moveDir < 0 && transform.position.x - _startBlock.position.x < _pulleyHitStopMargin) return;
         if (moveDir > 0 && _endBlock.position.x - transform.position.x < _pulleyHitStopMargin) return;
 
-        if (!_stopMovingPulley)
+        if (!StopMovingPulley)
         {
             if (moveDir < 0)
             { _pulleyRb.velocity = PlayerLogic.Player.Stats.PlayerAttachedObjectAddVelocity * Vector2.left; }
@@ -135,4 +134,11 @@ public class ZipLineHandle : RidableObject
             PlayerLogic.DisconnectedPlayerAddJump();
         }
     }
+
+//#if UNITY_EDITOR
+//    private void OnDrawGizmos()
+//    {
+//        UnityEditor.Handles.DrawWireDisc((_pulleyRb.position + _bottomPulley.position) / 2, Vector3.back, 0.4f);
+//    }
+//#endif
 }

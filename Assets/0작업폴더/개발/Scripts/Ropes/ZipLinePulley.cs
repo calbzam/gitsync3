@@ -10,7 +10,7 @@ public class ZipLinePulley : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("ZipLineStoppingBlock"))
         {
-            _zipLineHandle.StopMoving();
+            _zipLineHandle.StopMovingPulley = true;
         }
     }
 }

@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
 using Obi;
-using UnityEngine.InputSystem;
 
 public class SwingingRope : RidableObject
 {

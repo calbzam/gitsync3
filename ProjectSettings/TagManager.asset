@@ -12,6 +12,7 @@ TagManager:
   - MainCamera Collider
   - PushableBox
   - SpeedBoost Ground
+  - ZipLinePulley RopeChecker
   layers:
   - Default
   - TransparentFX
