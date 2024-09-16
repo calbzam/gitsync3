@@ -59,7 +59,7 @@ public class BGMManager : MonoBehaviour
 
     private bool AudioLoopEnded(AudioSource audioSource)
     {
-        return (audioSource.clip.length - audioSource.time < 0.05f);
+        return (!audioSource.isPlaying || audioSource.clip.length - audioSource.time < 0.05f);
     }
 
     private void Update()

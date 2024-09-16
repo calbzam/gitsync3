@@ -91,8 +91,8 @@ public class LightsToggle3D : MonoBehaviour
             if (_toggleInProcess[i])
             {
                 _lightsToToggle[i].intensity = Mathf.MoveTowards(_lightsToToggle[i].intensity, _toIntensity[i], _switchSpeed * Time.deltaTime);
-
-                if (Mathf.Abs(_lightsToToggle[i].intensity - _toIntensity[i]) < 0.01f)
+                Debug.Log(Mathf.Abs(_lightsToToggle[i].intensity - _toIntensity[i]);
+                if (Mathf.Abs(_lightsToToggle[i].intensity - _toIntensity[i]) < 0.001f)
                 {
                     _lightsToToggle[i].intensity = _toIntensity[i];
                     _toggleInProcess[i] = false;

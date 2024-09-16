@@ -27,7 +27,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 520.23, y: -22.5, z: 0.6}
-  m_LocalScale: {x: 5.690803, y: 0.4, z: 1}
+  m_LocalScale: {x: 5.690803, y: 0.3, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4649937013732650406}
@@ -131,7 +131,7 @@ Light:
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 18
-  m_Range: 16
+  m_Range: 20
   m_SpotAngle: 140
   m_InnerSpotAngle: 121.4427
   m_CookieSize: 10
