@@ -41,7 +41,7 @@ public class ZipLineHandle : RidableObject
 
     private void MoveTowardsPlayer()
     {
-        if (PlayerLogic.PlayerRb == null) return;
+        if (PlayerLogic.Player.Rb == null) return;
         if (_playerIsAttached) return;
 
         float distance = PlayerLogic.Player.transform.position.x - transform.position.x;
@@ -59,7 +59,7 @@ public class ZipLineHandle : RidableObject
     // _useVelocity: unused
     private void MoveTowardsPlayer_useVelocity_with_RopeCalculator()
     {
-        if (PlayerLogic.PlayerRb == null) return;
+        if (PlayerLogic.Player.Rb == null) return;
         if (_playerIsAttached) return;
 
         float distance = PlayerLogic.Player.transform.position.x - transform.position.x;
@@ -89,11 +89,11 @@ public class ZipLineHandle : RidableObject
 
     private void ConnectPlayer()
     {
-        Vector2 playerVelocityNow = PlayerLogic.PlayerRb.velocity;
-        PlayerLogic.PlayerRb.transform.SetParent(transform);
+        Vector2 playerVelocityNow = PlayerLogic.Player.Rb.velocity;
+        PlayerLogic.Player.Rb.transform.SetParent(transform);
 
         PlayerLogic.LockPlayer();
-        PlayerLogic.PlayerRb.transform.localPosition = Vector3.zero;
+        PlayerLogic.Player.Rb.transform.localPosition = Vector3.zero;
         _pulleyRb.constraints = _freeXPos_PulleyConstraints;
         MovePulley(playerVelocityNow.x);
 
@@ -109,13 +109,13 @@ public class ZipLineHandle : RidableObject
         if (!_stopMovingPulley)
         {
             if (moveDir < 0)
-            { _pulleyRb.velocity = PlayerLogic.PlayerStats.PlayerAttachedObjectAddVelocity * Vector2.left; }
+            { _pulleyRb.velocity = PlayerLogic.Player.Stats.PlayerAttachedObjectAddVelocity * Vector2.left; }
             else if (moveDir > 0)
-            { _pulleyRb.velocity = PlayerLogic.PlayerStats.PlayerAttachedObjectAddVelocity * Vector2.right; }
+            { _pulleyRb.velocity = PlayerLogic.Player.Stats.PlayerAttachedObjectAddVelocity * Vector2.right; }
             else
             {
                 Vector2 pulleyDir = (_endBlock.position.x - transform.position.x > transform.position.x - _startBlock.position.x) ? Vector2.right : Vector2.left;
-                _pulleyRb.velocity = PlayerLogic.PlayerStats.PlayerAttachedObjectAddVelocity * pulleyDir;
+                _pulleyRb.velocity = PlayerLogic.Player.Stats.PlayerAttachedObjectAddVelocity * pulleyDir;
             }
         }
     }
@@ -125,7 +125,7 @@ public class ZipLineHandle : RidableObject
         if (_playerIsAttached)
         {
             PlayerLogic.FreePlayer();
-            PlayerLogic.PlayerRb.transform.SetParent(null);
+            PlayerLogic.Player.Rb.transform.SetParent(null);
 
             _pulleyRb.constraints = _lockXPos_PulleyConstraints;
 

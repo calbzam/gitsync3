@@ -23,7 +23,7 @@ public class SwingingRope : RidableObject
 
     private void Start()
     {
-        _jumpedEnoughDistance = PlayerLogic.PlayerStats.RopeJumpedDistance;
+        _jumpedEnoughDistance = PlayerLogic.Player.Stats.RopeJumpedDistance;
     }
 
     protected override void OnEnable()
