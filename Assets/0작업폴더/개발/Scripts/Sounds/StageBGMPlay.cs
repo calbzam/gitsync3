@@ -3,21 +3,15 @@ using UnityEngine;
 
 public class StageBGMPlay : MonoBehaviour
 {
+    [SerializeField] private AudioSource _stageBgm;
     [SerializeField] private BoxCollider2D _selfCol;
 
-    public bool StageBGMStarted { get; set; }
     public event Action PlayerEntered;
-
-    private void Start()
-    {
-        StageBGMStarted = false;
-    }
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        if (!StageBGMStarted && col.CompareTag("Player"))
+        if (!_stageBgm.isPlaying && col.CompareTag("Player"))
         {
-            StageBGMStarted = true;
             PlayerEntered?.Invoke();
         }
     }

@@ -5,13 +5,16 @@ public class StageBGMFade : MonoBehaviour
     [SerializeField] private AudioSource _stageBgm;
     [SerializeField] private BoxCollider2D _selfCol;
     private float _colTopY, _colBottomY;
-    
+
+    [SerializeField] VolumeDir _volumeDir = VolumeDir.TopIsMaxVolume;
     [SerializeField] private float _volumeMin = 0.1f;
     private float _volumeMax;
     public float VolumePercent { get; private set; }
 
     public bool PlayerInZone { get; private set; }
-    
+
+    private enum VolumeDir { TopIsMaxVolume, BottomIsMaxVolume, }
+
     private void Start()
     {
         _colTopY = _selfCol.bounds.max.y;
@@ -42,7 +45,10 @@ public class StageBGMFade : MonoBehaviour
     {
         if (col.CompareTag("Player"))
         {
-            VolumePercent = Mathf.Max(PlayerLogic.Player.transform.position.y - _colBottomY, 0) / (_colTopY - _colBottomY) * (_volumeMax - _volumeMin) + _volumeMin;
+            if (_volumeDir == VolumeDir.TopIsMaxVolume)
+                VolumePercent = Mathf.Max(PlayerLogic.Player.transform.position.y - _colBottomY, 0) / (_colTopY - _colBottomY) * (_volumeMax - _volumeMin) + _volumeMin;
+            else // BottomIsMaxVolume
+                VolumePercent = Mathf.Max(_colTopY - PlayerLogic.Player.transform.position.y, 0) / (_colTopY - _colBottomY) * (_volumeMax - _volumeMin) + _volumeMin;
         }
     }
 
