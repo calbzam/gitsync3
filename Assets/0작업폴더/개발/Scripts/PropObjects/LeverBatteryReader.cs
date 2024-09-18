@@ -5,7 +5,7 @@ using UnityEngine;
 public class LeverBatteryReader : MonoBehaviour
 {
     [SerializeField] private LeverActivate _leverActivate;
-    [SerializeField] private LeverHandle_useQuatRot _leverHandle;
+    [SerializeField] private /*LeverHandle_useQuatRot*/LeverHandle_useHingeJointMotor _leverHandle;
 
     [Header("")]
     [SerializeField] private Transform _batteryInsertPoint;

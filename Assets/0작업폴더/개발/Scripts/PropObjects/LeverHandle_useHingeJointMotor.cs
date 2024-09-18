@@ -10,7 +10,6 @@ public class LeverHandle_useHingeJointMotor : MonoBehaviour
     private JointMotor2D _motor;
 
     [Header("")]
-    [SerializeField] private Transform _leverHandleTransform;
     [SerializeField] private LeverHandleReader _leverHandleReader;
     [SerializeField] private LeverBatteryReader _batteryReader;
 
@@ -32,13 +31,13 @@ public class LeverHandle_useHingeJointMotor : MonoBehaviour
 
     private void PickupActivateStarted(InputAction.CallbackContext ctx)
     {
-        if (!_leverActivate.IsAutomatic && _batteryReader.BatteryInserted && _leverHandleReader.PlayerIsInRange)
+        if (!_leverActivate.IsAutomatic && (!_leverActivate.NeedBattery || _batteryReader.BatteryInserted) && _leverHandleReader.PlayerIsInRange)
         {
             ToggleActivateLeverHandle();
         }
     }
 
-    private void ToggleActivateLeverHandle()
+    public void ToggleActivateLeverHandle()
     {
         _leverActivate.ToggleActivate();
         ToggleRotateLeverHandle();
@@ -48,7 +47,7 @@ public class LeverHandle_useHingeJointMotor : MonoBehaviour
     private void ToggleRotateLeverHandle()
     {
         _hingeJoint.attachedRigidbody.velocity = Vector2.zero;
-        _hingeJoint.attachedRigidbody.totalForce = Vector2.zero;
+        //_hingeJoint.attachedRigidbody.totalForce = Vector2.zero;
         _motor.motorSpeed = -_motor.motorSpeed;
         _hingeJoint.motor = _motor;
     }

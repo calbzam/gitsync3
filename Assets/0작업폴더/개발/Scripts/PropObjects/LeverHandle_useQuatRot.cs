@@ -8,8 +8,8 @@ public class LeverHandle_useQuatRot : MonoBehaviour
     [SerializeField] private LeverActivate _leverActivate;
 
     [Header("")]
-    [SerializeField] private Transform _leverHandleTransform;
     [SerializeField] private LeverHandleReader _leverHandleReader;
+    private Transform _leverHandleTransform;
     [SerializeField] private LeverBatteryReader _batteryReader;
 
     [Header("")] // useQuatRot variables
@@ -33,6 +33,7 @@ public class LeverHandle_useQuatRot : MonoBehaviour
     private void Start()
     {
         _rotating = false;
+        _leverHandleTransform = _leverHandleReader.GetComponent<Transform>();
     }
 
     private void Update()
@@ -42,7 +43,7 @@ public class LeverHandle_useQuatRot : MonoBehaviour
 
     private void PickupActivateStarted(InputAction.CallbackContext ctx)
     {
-        if (!_leverActivate.IsAutomatic && _batteryReader.BatteryInserted && _leverHandleReader.PlayerIsInRange)
+        if (!_leverActivate.IsAutomatic && (!_leverActivate.NeedBattery || _batteryReader.BatteryInserted) && _leverHandleReader.PlayerIsInRange)
         {
             ToggleActivateLeverHandle();
         }

@@ -8,7 +8,8 @@ public class LeverActivate : MonoBehaviour
     [SerializeField] private Checkpoint _checkPointToActivate;
     [SerializeField] private bool _updateCheckpointOnActivate = false;
 
-    public bool IsAutomatic;
+    public bool IsAutomatic = true;
+    public bool NeedBattery = true;
 
     public bool IsActivated { get; private set; }
     

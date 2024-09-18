@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8869093379455646044}
   - component: {fileID: 9205665760017977375}
   m_Layer: 0
-  m_Name: "\uBC30\uD130\uB9AC \uC778\uC2DD"
+  m_Name: "\uBC30\uD130\uB9AC \uC778\uC2DD \uBC94\uC704"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -201,9 +201,9 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5369158633189701915}
+  - {fileID: 624787514860622337}
   - {fileID: 5932876964294647258}
   - {fileID: 7629881457614338468}
-  - {fileID: 624787514860622337}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7007069745677971743
@@ -220,7 +220,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _connectedObject: {fileID: 0}
   _checkPointToActivate: {fileID: 0}
+  _updateCheckpointOnActivate: 0
   IsAutomatic: 1
+  NeedBattery: 1
 --- !u!1 &5116138111894926902
 GameObject:
   m_ObjectHideFlags: 0
@@ -601,7 +603,7 @@ GameObject:
   - component: {fileID: 396108350270058034}
   - component: {fileID: 9123232042022072280}
   m_Layer: 0
-  m_Name: "Player \uC778\uC2DD"
+  m_Name: "Player \uC778\uC2DD \uBC94\uC704"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
