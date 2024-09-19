@@ -11,7 +11,7 @@ public class LeverHandle_useHingeJointMotor : MonoBehaviour
 
     [Header("")]
     [SerializeField] private LeverHandleReader _leverHandleReader;
-    [SerializeField] private LeverBatteryReader _batteryReader;
+    [SerializeField] private LeverBatteryReader_useHingeJointMotor _batteryReader;
 
     private void Start()
     {

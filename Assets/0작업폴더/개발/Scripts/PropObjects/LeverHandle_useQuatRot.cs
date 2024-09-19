@@ -9,8 +9,7 @@ public class LeverHandle_useQuatRot : MonoBehaviour
 
     [Header("")]
     [SerializeField] private LeverHandleReader _leverHandleReader;
-    private Transform _leverHandleTransform;
-    [SerializeField] private LeverBatteryReader _batteryReader;
+    [SerializeField] private LeverBatteryReader_useQuatRot _batteryReader;
 
     [Header("")] // useQuatRot variables
     [SerializeField] private float _activatedRot = 0f;
@@ -33,7 +32,6 @@ public class LeverHandle_useQuatRot : MonoBehaviour
     private void Start()
     {
         _rotating = false;
-        _leverHandleTransform = _leverHandleReader.GetComponent<Transform>();
     }
 
     private void Update()
@@ -68,7 +66,7 @@ public class LeverHandle_useQuatRot : MonoBehaviour
         if (_rotating)
         {
             _currentAngle = Mathf.MoveTowardsAngle(_currentAngle, _targetAngle, Time.deltaTime * _rotationSpeed);
-            _leverHandleTransform.rotation = Quaternion.Euler(0, 0, _currentAngle);
+            transform.rotation = Quaternion.Euler(0, 0, _currentAngle);
 
             if (_leverActivate.IsActivated) { if (_currentAngle <= _targetAngle) _rotating = false; }
             else { if (_currentAngle >= _targetAngle) _rotating = false; }
