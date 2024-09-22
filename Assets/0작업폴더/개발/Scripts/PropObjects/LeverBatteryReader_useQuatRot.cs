@@ -31,7 +31,7 @@ public class LeverBatteryReader_useQuatRot : MonoBehaviour
             {
                 BatteryPickup battery = col.GetComponent<BatteryPickup>();
                 if (!battery.IsHeldByPlayer) InsertBatteryToLever(battery);
-                if (_leverActivate.IsAutomatic) _leverHandle.ToggleActivateLeverHandle();
+                if (_leverActivate.IsAutomatic) _leverHandle.ToggleActivateLeverHandle_RotateOnly();
                 _leverActivate.UpdateCheckpoint();
             }
         }

@@ -11,13 +11,15 @@ public class LeverHandle_useQuatRot : MonoBehaviour
     [SerializeField] private LeverHandleReader _leverHandleReader;
     [SerializeField] private LeverBatteryReader_useQuatRot _batteryReader;
 
+    private bool _toggleStarted;
+    private bool _onState;
+
     [Header("")] // useQuatRot variables
     [SerializeField] private float _activatedRot = 0f;
     [SerializeField] private float _deactivatedRot = 45f;
     [SerializeField] private float _rotationSpeed = 100f;
     private float _currentAngle;
     private float _targetAngle;
-    private bool _rotating;
 
     private void OnEnable()
     {
@@ -31,7 +33,8 @@ public class LeverHandle_useQuatRot : MonoBehaviour
 
     private void Start()
     {
-        _rotating = false;
+        _toggleStarted = false;
+        _onState = false;
     }
 
     private void Update()
@@ -43,33 +46,54 @@ public class LeverHandle_useQuatRot : MonoBehaviour
     {
         if (!_leverActivate.IsAutomatic && (!_leverActivate.NeedBattery || _batteryReader.BatteryInserted) && _leverHandleReader.PlayerIsInRange)
         {
-            ToggleActivateLeverHandle();
+            ToggleActivateLeverHandle_RotateOnly();
         }
+    }
+
+    private void OnStateEvalActivate() // run after lever rotation end
+    {
+        bool _prevOnState = _onState;
+        if ((_onState = (_targetAngle == _activatedRot)) != _prevOnState)
+        {
+            _leverActivate.ActivatedAction();
+        }
+    }
+
+    public void ToggleActivateLeverHandle_RotateOnly()
+    {
+        _leverActivate.ToggleActivateBool();
+        ToggleRotateLeverHandle();
+        _toggleStarted = true;
     }
 
     public void ToggleActivateLeverHandle()
     {
-        _leverActivate.ToggleActivate();
+        _leverActivate.ToggleActivateBool();
         ToggleRotateLeverHandle();
-        _leverActivate.ActivatedAction();
+        _toggleStarted = true;
+        OnStateEvalActivate();
     }
 
-    private void ToggleRotateLeverHandle()
+    public void ToggleRotateLeverHandle()
     {
         _currentAngle = transform.rotation.eulerAngles.z;
         _targetAngle = _leverActivate.IsActivated ? _activatedRot : _deactivatedRot;
-        _rotating = true;
     }
 
     private void RotateLeverHandle()
     {
-        if (_rotating)
+        if (_toggleStarted)
         {
             _currentAngle = Mathf.MoveTowardsAngle(_currentAngle, _targetAngle, Time.deltaTime * _rotationSpeed);
             transform.rotation = Quaternion.Euler(0, 0, _currentAngle);
 
-            if (_leverActivate.IsActivated) { if (_currentAngle <= _targetAngle) _rotating = false; }
-            else { if (_currentAngle >= _targetAngle) _rotating = false; }
+            if (_leverActivate.IsActivated) { if (_currentAngle <= _targetAngle) _toggleStarted = false; }
+            else { if (_currentAngle >= _targetAngle) _toggleStarted = false; }
+
+            if (!_toggleStarted) // 직전에 if (_toggleStarted) 안에서 수정된 _toggleStarted
+            {
+                OnStateEvalActivate();
+            }
         }
     }
 }
