@@ -8,6 +8,10 @@ public class LightsToggle3D : MonoBehaviour
     private ColBounds3D _triggerColBounds;
     [SerializeField] private Light[] _lightsToToggle;
     [SerializeField] private float _switchSpeed = 5;
+
+    [Header("Turn on/off when entering/exiting trigger")]
+    [SerializeField] private bool _turnOnEnabled = true;
+    [SerializeField] private bool _turnOffEnabled = true;
     
     private Collider _mainCameraCol;
     private bool _camIsInTrigger;
@@ -17,7 +21,7 @@ public class LightsToggle3D : MonoBehaviour
     private bool[] _toggleInProcess;
     private float[] _toIntensity, _onIntensity, _offIntensity;
 
-    private bool setCamIsInTrigger()
+    private bool checkCamIsInTrigger()
     {
         return _camIsInTrigger = _triggerColBounds.OtherIsInSelf(_mainCameraCol);
     }
@@ -51,7 +55,7 @@ public class LightsToggle3D : MonoBehaviour
 
     private void EvalLightsInitialStates()
     {
-        if (setCamIsInTrigger())
+        if (checkCamIsInTrigger())
         {
             for (int i = 0; i < _lightsCount; ++i) _lightsToToggle[i].intensity = _onIntensity[i];
         }
@@ -65,7 +69,7 @@ public class LightsToggle3D : MonoBehaviour
     {
         if (!_camIsInTrigger)
         {
-            if (setCamIsInTrigger())
+            if (_turnOnEnabled && checkCamIsInTrigger())
             {
                 _toggleStarted = true;
                 for (int i = 0; i < _lightsCount; ++i) { _toggleInProcess[i] = true; _toIntensity[i] = _onIntensity[i]; }
@@ -73,7 +77,7 @@ public class LightsToggle3D : MonoBehaviour
         }
         else // _camIsInTrigger
         {
-            if (!setCamIsInTrigger())
+            if (_turnOffEnabled && !checkCamIsInTrigger())
             {
                 _toggleStarted = true;
                 for (int i = 0; i < _lightsCount; ++i) { _toggleInProcess[i] = true; _toIntensity[i] = _offIntensity[i]; }
