@@ -82,10 +82,10 @@ public class LightsToggle3D_Emmision : MonoBehaviour
             }
         }
 
-        if (_toggleStarted) toggleLights();
+        if (_toggleStarted) toggleEmmisions();
     }
 
-    private void toggleLights()
+    private void toggleEmmisions()
     {
         int cnt = 0;
         for (int i = 0; i < _emmsCount; ++i)
