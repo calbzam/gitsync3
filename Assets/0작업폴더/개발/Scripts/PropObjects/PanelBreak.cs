@@ -14,8 +14,8 @@ public class PanelBreak : MonoBehaviour
     [SerializeField] private GameObject _leftHalf;
     [SerializeField] private GameObject _rightHalf;
 
-    private Vector3 _leftHalfPos, _rightHalfPos;
-    private Quaternion _leftHalfRot, _rightHalfRot;
+    private Vector3 _wholePanelPos, _leftHalfPos, _rightHalfPos;
+    private Quaternion _wholePanelRot, _leftHalfRot, _rightHalfRot;
 
     private void OnEnable()
     {
@@ -45,8 +45,11 @@ public class PanelBreak : MonoBehaviour
 
     private void SetPanelTransformVariables()
     {
+        _wholePanelPos = _wholePanel.transform.position;
         _leftHalfPos = _leftHalf.transform.position;
         _rightHalfPos = _rightHalf.transform.position;
+
+        _wholePanelRot = _wholePanel.transform.rotation;
         _leftHalfRot = _leftHalf.transform.rotation;
         _rightHalfRot = _rightHalf.transform.rotation;
     }
@@ -56,8 +59,11 @@ public class PanelBreak : MonoBehaviour
         SetPanelBroken(false);
         //_leftHalf.SetActive(true);
         //_rightHalf.SetActive(true);
+        _wholePanel.transform.position = _wholePanelPos;
         _leftHalf.transform.position = _leftHalfPos;
         _rightHalf.transform.position = _rightHalfPos;
+
+        _wholePanel.transform.rotation = _wholePanelRot;
         _leftHalf.transform.rotation = _leftHalfRot;
         _rightHalf.transform.rotation = _rightHalfRot;
     }

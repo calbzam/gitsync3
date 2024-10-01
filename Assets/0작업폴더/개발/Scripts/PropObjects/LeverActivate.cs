@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class LeverActivate : MonoBehaviour
 {
-    [SerializeField] private LeverConnectedObject _connectedObject;
+    [SerializeField] private LeverConnectedObject[] _connectedObjects;
     [SerializeField] private Checkpoint _checkPointToActivate;
     [SerializeField] private bool _updateCheckpointOnActivate = false;
 
-    public bool IsAutomatic;
+    public bool IsAutomatic = true;
+    public bool NeedBattery = true;
 
     public bool IsActivated { get; private set; }
     
@@ -20,14 +21,14 @@ public class LeverActivate : MonoBehaviour
             _checkPointToActivate.gameObject.SetActive(false);
     }
 
-    public void ToggleActivate()
+    public void ToggleActivateBool()
     {
         IsActivated = !IsActivated;
     }
 
     public void ActivatedAction()
     {
-        _connectedObject.ActivatedAction(IsActivated);
+        foreach (var obj in _connectedObjects) obj.ActivatedAction(IsActivated);
     }
 
     public void UpdateCheckpoint()

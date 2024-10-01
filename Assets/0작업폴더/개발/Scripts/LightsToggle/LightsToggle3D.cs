@@ -8,7 +8,13 @@ public class LightsToggle3D : MonoBehaviour
     private ColBounds3D _triggerColBounds;
     [SerializeField] private Light[] _lightsToToggle;
     [SerializeField] private float _switchSpeed = 5;
-    
+
+    [Header("Turn on/off when entering/exiting trigger")]
+    [SerializeField] private bool _turnOnEnabled = true;
+    [SerializeField] private bool _turnOffEnabled = true;
+
+    private bool _presetAllSet;
+
     private Collider _mainCameraCol;
     private bool _camIsInTrigger;
 
@@ -17,13 +23,20 @@ public class LightsToggle3D : MonoBehaviour
     private bool[] _toggleInProcess;
     private float[] _toIntensity, _onIntensity, _offIntensity;
 
-    private bool setCamIsInTrigger()
+    private bool checkCamIsInTrigger()
     {
         return _camIsInTrigger = _triggerColBounds.OtherIsInSelf(_mainCameraCol);
     }
 
+    private bool checkPlayerIsInTrigger()
+    {
+        return _camIsInTrigger = _triggerColBounds.OtherIsInSelf(PlayerLogic.Player.transform);
+    }
+
     private void Start()
     {
+        _presetAllSet = false;
+
         _triggerColBounds = new ColBounds3D(_triggerColToUse);
         _mainCameraCol = Camera.main.GetComponentInChildren<Collider>();
 
@@ -41,17 +54,23 @@ public class LightsToggle3D : MonoBehaviour
 
     private void SetPresetIntensities()
     {
+        bool noMoreInitialUpdates = true;
         for (int i = 0; i < _lightsCount; ++i)
         {
-            _toggleInProcess[i] = false;
-            _onIntensity[i] = _lightsToToggle[i].intensity;
-            _offIntensity[i] = 0;
+            if (_onIntensity[i] < _lightsToToggle[i].intensity) // not previously initialzed on first startup
+            {
+                _onIntensity[i] = _lightsToToggle[i].intensity;
+                _offIntensity[i] = 0;
+                _toggleInProcess[i] = false;
+                noMoreInitialUpdates = false;
+            }
         }
+        if (noMoreInitialUpdates) _presetAllSet = true;
     }
 
     private void EvalLightsInitialStates()
     {
-        if (setCamIsInTrigger())
+        if (checkCamIsInTrigger())
         {
             for (int i = 0; i < _lightsCount; ++i) _lightsToToggle[i].intensity = _onIntensity[i];
         }
@@ -63,9 +82,11 @@ public class LightsToggle3D : MonoBehaviour
 
     private void Update()
     {
+        if (!_presetAllSet) SetPresetIntensities(); // update _onIntensity[i] until "max" intensities are reached
+
         if (!_camIsInTrigger)
         {
-            if (setCamIsInTrigger())
+            if (_turnOnEnabled && checkCamIsInTrigger())
             {
                 _toggleStarted = true;
                 for (int i = 0; i < _lightsCount; ++i) { _toggleInProcess[i] = true; _toIntensity[i] = _onIntensity[i]; }
@@ -73,7 +94,7 @@ public class LightsToggle3D : MonoBehaviour
         }
         else // _camIsInTrigger
         {
-            if (!setCamIsInTrigger())
+            if (_turnOffEnabled && !checkCamIsInTrigger())
             {
                 _toggleStarted = true;
                 for (int i = 0; i < _lightsCount; ++i) { _toggleInProcess[i] = true; _toIntensity[i] = _offIntensity[i]; }

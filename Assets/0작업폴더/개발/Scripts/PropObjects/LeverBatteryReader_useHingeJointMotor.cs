@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LeverBatteryReader : MonoBehaviour
+public class LeverBatteryReader_useHingeJointMotor : MonoBehaviour
 {
     [SerializeField] private LeverActivate _leverActivate;
-    [SerializeField] private LeverHandle_useQuatRot _leverHandle;
+    [SerializeField] private /*LeverHandle_useQuatRot*/LeverHandle_useHingeJointMotor _leverHandle;
 
     [Header("")]
     [SerializeField] private Transform _batteryInsertPoint;
@@ -31,7 +31,7 @@ public class LeverBatteryReader : MonoBehaviour
             {
                 BatteryPickup battery = col.GetComponent<BatteryPickup>();
                 if (!battery.IsHeldByPlayer) InsertBatteryToLever(battery);
-                if (_leverActivate.IsAutomatic) _leverHandle.ToggleActivateLeverHandle();
+                if (_leverActivate.IsAutomatic) _leverHandle.ToggleActivateLeverHandle_RotateOnly();
                 _leverActivate.UpdateCheckpoint();
             }
         }
