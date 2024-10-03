@@ -239,6 +239,47 @@ public class PlayerController : MonoBehaviour
 
     #region Ladder Climb
 
+    private Vector2 GetLadderPosClosestToPlayer()
+    {
+        // no 2x2 matrix in unity
+        // use 2 linear eqns (x, y) instead
+
+        // ladder line: p1(x1,y1), p2(x2,y2)
+        // player line: p3(x3,y3), p4(x4,y4)
+        // y = (y2-y1)/(x2-x1)*(x-x1)+y1 , x = (y-y1)/((y2-y1)/(x2-x1))+x1
+        // y = (y4-y3)/(x4-x3)*(x-x3)+y3 , x = (y-y3)/((y4-y3)/(x4-x3))+x3
+
+        // solve for x:  (y2-y1)/(x2-x1)*(x-x1)+y1 = (y4-y3)/(x4-x3)*(x-x3)+y3
+        // x = ( y3-y1 + (y2-y1)/(x2-x1)*x1 -(y4-y3)/(x4-x3)*x3 ) / ( (y2-y1)/(x2-x1) - (y4-y3)/(x4-x3) )
+        // y3==y4:  x = ( y3-y1 + (y2-y1)/(x2-x1)*x1 -(y3-y3)/(x4-x3)*x3 ) / ( (y2-y1)/(x2-x1) - (y3-y3)/(x4-x3) )
+        //            = ( y3-y1 + (y2-y1)/(x2-x1)*x1 -(0)/(x4-x3)*x3 ) / ( (y2-y1)/(x2-x1) - (0)/(x4-x3) )
+        //            = ( y3-y1 + (y2-y1)/(x2-x1)*x1 ) / ( (y2-y1)/(x2-x1) )
+        //            = ( y3-y1 + (y2-y1)/(x2-x1)*x1 ) / (y2-y1) * (x2-x1)
+
+        // solve for y:  (y-y1)/((y2-y1)/(x2-x1))+x1 = (y-y3)/((y4-y3)/(x4-x3))+x3
+        // y = ( x3-x1 + y1/((y2-y1)/(x2-x1)) - y3/((y4-y3)/(x4-x3)) ) / ( 1/((y2-y1)/(x2-x1)) - 1/((y4-y3)/(x4-x3)) )
+        //   = ( x3-x1 + y1/(y2-y1)*(x2-x1) - y3/(y4-y3)*(x4-x3) ) / ( 1/(y2-y1)*(x2-x1) - 1/(y4-y3)*(x4-x3) )
+        // x3==x4:  y = ( x3-x1 + y1/(y2-y1)*(x2-x1) - y3/(y4-y3)*(x3-x3) ) / ( 1/(y2-y1)*(x2-x1) - 1/(y4-y3)*(x3-x3) )
+        //            = ( x3-x1 + y1/(y2-y1)*(x2-x1) - y3/(y4-y3)*(0) ) / ( 1/(y2-y1)*(x2-x1) - 1/(y4-y3)*(0) )
+        //            = ( x3-x1 + y1/(y2-y1)*(x2-x1) ) / ( 1/(y2-y1)*(x2-x1) )
+
+        float x1 = CurrentLadder.TopPoint.position.x, y1 = CurrentLadder.TopPoint.position.y;
+        float x2 = CurrentLadder.BottomPoint.position.x, y2 = CurrentLadder.BottomPoint.position.y;
+        float x3 = transform.position.x - 2, y3 = transform.position.y;
+        float x4 = transform.position.x + 2, y4 = 0;
+        float ladderIntersectX = (y3 - y1 + (y2 - y1) / (x2 - x1) * x1) / (y2 - y1) * (x2 - x1);
+
+        x3 = x4 = transform.position.x;
+        y3 = transform.position.y - 2; y4 = transform.position.y + 2;
+        float ladderIntersectY = (x3 - x1 + y1 / (y2 - y1) * (x2 - x1)) / (1 / (y2 - y1) * (x2 - x1));
+
+        Vector2 usePlayerX = new Vector2(transform.position.x, ladderIntersectY);
+        Vector2 usePlayerY = new Vector2(ladderIntersectX, transform.position.y);
+        Vector2 ladderIntersect = Vector2.Distance(usePlayerX, transform.position) < Vector2.Distance(usePlayerY, transform.position) ? usePlayerX : usePlayerY;
+
+        return ladderIntersect;
+    }
+
     public void SetPlayerOnLadder(bool onLadder)
     {
         if (onLadder)
@@ -246,7 +287,12 @@ public class PlayerController : MonoBehaviour
             IsOnLadder = true; // 사다리에서 방향키를 처음 눌렀을 때
             CurrentLadder.StepProgress = CurrentLadder.StepSize;
 
-            base.transform.position = new Vector3(CurrentLadder.transform.position.x, base.transform.position.y, CurrentLadder.transform.position.z - 0.1f);
+            Vector2 ladderIntersect;
+            if (Math.Abs(CurrentLadder.Direction.x) < 0.001/*slope = inf*/) ladderIntersect = new Vector2(CurrentLadder.transform.position.x, transform.position.y);
+            else if (Math.Abs(CurrentLadder.Direction.y) < 0.001/*slope = 0*/) ladderIntersect = new Vector2(transform.position.x, CurrentLadder.transform.position.y);
+            else ladderIntersect = GetLadderPosClosestToPlayer();
+
+            transform.position = new Vector3(ladderIntersect.x, ladderIntersect.y, CurrentLadder.transform.position.z - 0.1f);
             _rb.velocity = Vector2.zero;
 
             if (CurrentLadder.BypassGroundCollision) PlayerLogic.IgnorePlayerGroundCollision(true);
@@ -285,7 +331,7 @@ public class PlayerController : MonoBehaviour
                 CurrentLadder.StepProgress += CurrentLadder.ClimbSpeed;
                 if (CurrentLadder.StepProgress > CurrentLadder.StepSize)
                 {
-                    _rb.MovePosition(_rb.position + CurrentLadder.StepSize * Mathf.Sign(FrameInputReader.FrameInput.Move.y) * Vector2.up);
+                    _rb.MovePosition(_rb.position + CurrentLadder.StepSize * Mathf.Sign(FrameInputReader.FrameInput.Move.y) * CurrentLadder.Direction);
                     if (PlayerAtLadderEnd()) CurrentLadder.JumpFromLadder();
                     CurrentLadder.StepProgress = 0;
                 }

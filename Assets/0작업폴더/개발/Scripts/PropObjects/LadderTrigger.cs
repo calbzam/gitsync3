@@ -11,6 +11,8 @@ public class LadderTrigger : MonoBehaviour
 
     public Transform TopPoint => _topPoint; // for public access
     public Transform BottomPoint => _bottomPoint;
+    public Vector2 Direction { get; private set; }
+    public void UpdateLadderDirection() => Direction = (TopPoint.position - BottomPoint.position).normalized;
 
     public bool AutoClimbWhenJumpedOn { get; set; }
     public bool BypassGroundCollision { get; set; }
@@ -28,6 +30,7 @@ public class LadderTrigger : MonoBehaviour
         BypassGroundCollision = _ladderSettings.BypassGroundCollision;
         ClimbSpeed = _ladderSettings.ClimbSpeed;
         StepSize = _ladderSettings.StepSize;
+        UpdateLadderDirection();
     }
 
     private void OnEnable()

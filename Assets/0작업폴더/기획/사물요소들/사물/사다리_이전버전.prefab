@@ -27,8 +27,8 @@ Transform:
   m_GameObject: {fileID: 1660534219011948658}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.8, z: 0}
-  m_LocalScale: {x: 1, y: 10, z: 1}
+  m_LocalPosition: {x: 0, y: 0.505, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5612492997530170693}
@@ -100,10 +100,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2376401404211397432}
-  - component: {fileID: 6535438504049319372}
-  - component: {fileID: 240933339746103177}
-  - component: {fileID: 6869461362071622381}
   - component: {fileID: 5629720449987066991}
+  - component: {fileID: 240933339746103177}
+  - component: {fileID: 6535438504049319372}
   - component: {fileID: 5265499388088324167}
   m_Layer: 0
   m_Name: LadderObject
@@ -127,6 +126,41 @@ Transform:
   m_Children: []
   m_Father: {fileID: 5612492997530170693}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5629720449987066991
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2485207000428297870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59e221e134a1d9248baed9468c7e2237, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _ladderSettings: {fileID: 5863293926981164781}
+  _topPoint: {fileID: 8999957487172610773}
+  _bottomPoint: {fileID: 4456763468414878574}
+--- !u!114 &240933339746103177
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2485207000428297870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a0c3ae34d4ec1746a5014773ebe5fde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  changeSelectionTo: {fileID: 5593561829747996892}
+  lockScale: 1
+  baseScale: {x: 1, y: 1, z: 1}
+  lockRotation: 1
+  baseRot: {x: 0, y: 0, z: 0}
+  lockTranslation: 1
+  basePos: {x: 0, y: 0, z: 0}
+  lockNonUniformScale: 0
 --- !u!212 &6535438504049319372
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -147,7 +181,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9fcd01e588583474da33ad9e83fa7897, type: 2}
+  - {fileID: 2100000, guid: 755e8f2bda4513b42b3e2299e9c55199, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -179,59 +213,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &240933339746103177
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2485207000428297870}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a0c3ae34d4ec1746a5014773ebe5fde, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  changeSelectionTo: {fileID: 5593561829747996892}
-  lockScale: 1
-  baseScale: {x: 1, y: 1, z: 1}
-  lockRotation: 1
-  baseRot: {x: 0, y: 0, z: 0}
-  lockTranslation: 1
-  basePos: {x: 0, y: 0, z: 0}
-  lockNonUniformScale: 0
---- !u!114 &6869461362071622381
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2485207000428297870}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fc5b75a9eb71834690609887bb70ae3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _spriteRendererToRead: {fileID: 6535438504049319372}
-  _boxcol2DToChange: {fileID: 5265499388088324167}
-  _topPoint: {fileID: 8999957487172610773}
-  _bottomPoint: {fileID: 4456763468414878574}
-  _noAutoClimbArea: {fileID: 8387960389635095960}
-  _ladderTrigger: {fileID: 5629720449987066991}
---- !u!114 &5629720449987066991
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2485207000428297870}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59e221e134a1d9248baed9468c7e2237, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _ladderSettings: {fileID: 5863293926981164781}
-  _topPoint: {fileID: 8999957487172610773}
-  _bottomPoint: {fileID: 4456763468414878574}
 --- !u!61 &5265499388088324167
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -288,7 +269,7 @@ GameObject:
   - component: {fileID: 5612492997530170693}
   - component: {fileID: 5863293926981164781}
   m_Layer: 0
-  m_Name: "\uC0AC\uB2E4\uB9AC"
+  m_Name: "\uC0AC\uB2E4\uB9AC_\uC774\uC804\uBC84\uC804"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -304,7 +285,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 485.79, y: 8.08, z: 0.5}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.175, y: 6.325, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2376401404211397432}
