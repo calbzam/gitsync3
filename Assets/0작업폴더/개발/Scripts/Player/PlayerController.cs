@@ -26,13 +26,13 @@ public class PlayerController : MonoBehaviour
     public bool LimitXVelocity { get; set; } // assigned false when speed boost from other object, assigned true when player hits ground
     public bool ZPosSetToGround { get; set; }
 
-    private Rigidbody2D swingingGround;
+    private Rigidbody2D _swingingGround;
 
     public bool GroundCheckAllowed { get; set; }
-    private Vector3 groundCheckerPos;
-    private float groundCheckerRadius;
-    private Vector3 ceilCheckerPos;
-    private float ceilCheckerRadius;
+    private Vector3 _groundCheckerPos;
+    private float _groundCheckerRadius;
+    private Vector3 _ceilCheckerPos;
+    private float _ceilCheckerRadius;
 
     /* Time */
     private float _time = 1f; // 1f > 0 + 0.1:  prevent character from jumping without input at scene start
@@ -47,12 +47,16 @@ public class PlayerController : MonoBehaviour
     public bool IsInWater { get; set; }
 
     public bool LadderClimbAllowed { get; set; }
-    public bool IsInLadderRange { get; set; }
-    public bool IsOnLadder { get; set; }
+    private bool _isInLadderRange => (CurrentLadder != null ? CurrentLadder.PlayerIsInRange : false);
+    public bool IsOnLadder => (CurrentLadder != null ? CurrentLadder.PlayerIsOnLadder : false);
+    public bool JumpingFromLadder { get; set; }
     public LadderTrigger CurrentLadder { get; set; }
+    private float _ladderStepProgress;
 
-    //private bool disableYVelocity = false;
-    //private bool swingingGroundHit = false;
+    private bool _drawGizmosEnabled = false;
+
+    //private bool _disableYVelocity = false;
+    //private bool _swingingGroundHit = false;
 
     private void Awake()
     {
@@ -69,17 +73,18 @@ public class PlayerController : MonoBehaviour
 
         GroundCheckAllowed = true;
         LadderClimbAllowed = true;
-        drawGizmosEnabled = true;
+        JumpingFromLadder = false;
+        _drawGizmosEnabled = true;
     }
 
     private void OnEnable()
     {
-        drawGizmosEnabled = true;
+        _drawGizmosEnabled = true;
     }
 
     private void OnDisable()
     {
-        drawGizmosEnabled = false;
+        _drawGizmosEnabled = false;
     }
 
     private void Update()
@@ -137,10 +142,10 @@ public class PlayerController : MonoBehaviour
 
         // add later: Enum groundHitType - static ground, moving ground
 
-        groundCheckerPos = _col.bounds.center + Vector3.down * (_col.size.y / 2 + _stats.GrounderDistance);
-        groundCheckerRadius = _col.size.x / 2 + _stats.GroundCheckerAddRadius;
-        ceilCheckerPos = _col.bounds.center + Vector3.up * (_col.size.y / 2 + _stats.GrounderDistance);
-        ceilCheckerRadius = groundCheckerRadius;
+        _groundCheckerPos = _col.bounds.center + Vector3.down * (_col.size.y / 2 + _stats.GrounderDistance);
+        _groundCheckerRadius = _col.size.x / 2 + _stats.GroundCheckerAddRadius;
+        _ceilCheckerPos = _col.bounds.center + Vector3.up * (_col.size.y / 2 + _stats.GrounderDistance);
+        _ceilCheckerRadius = _groundCheckerRadius;
 
         //Collider2D col = Physics2D.OverlapCircle(groundCheckerPos, groundCheckerRadius, Layers.SwingingGroundLayer);
         //if (col) { swingingGroundHit = true; /*swingingGround = col.attachedRigidbody;*/ }
@@ -148,7 +153,7 @@ public class PlayerController : MonoBehaviour
 
         if (GroundCheckAllowed)
         {
-            _groundCol = Physics2D.OverlapCircle(groundCheckerPos, groundCheckerRadius, Layers.GroundLayer.MaskValue);
+            _groundCol = Physics2D.OverlapCircle(_groundCheckerPos, _groundCheckerRadius, Layers.GroundLayer.MaskValue);
             _groundHit = _groundCol;
             if (!IsOnLadder && _groundCol != null)
             {
@@ -280,30 +285,44 @@ public class PlayerController : MonoBehaviour
         return ladderIntersect;
     }
 
-    public void SetPlayerOnLadder(bool onLadder)
+    public void SetPlayerInLadderRange(LadderTrigger ladder)
     {
-        if (onLadder)
+        CurrentLadder = ladder;
+        CurrentLadder.PlayerIsInRange = true;
+    }
+
+    public void SetPlayerOnLadder(bool onThisLadder, LadderTrigger ladder)
+    {
+        if (onThisLadder)
         {
-            IsOnLadder = true; // 사다리에서 방향키를 처음 눌렀을 때
-            CurrentLadder.StepProgress = CurrentLadder.StepSize;
+            ladder.PlayerIsOnLadder = true; // 사다리에서 방향키를 처음 눌렀을 때
 
             Vector2 ladderIntersect;
-            if (Math.Abs(CurrentLadder.Direction.x) < 0.001/*slope = inf*/) ladderIntersect = new Vector2(CurrentLadder.transform.position.x, transform.position.y);
-            else if (Math.Abs(CurrentLadder.Direction.y) < 0.001/*slope = 0*/) ladderIntersect = new Vector2(transform.position.x, CurrentLadder.transform.position.y);
+            if (Math.Abs(ladder.Direction.x) < 0.001/*slope = inf*/) ladderIntersect = new Vector2(ladder.transform.position.x, transform.position.y);
+            else if (Math.Abs(ladder.Direction.y) < 0.001/*slope = 0*/) ladderIntersect = new Vector2(transform.position.x, ladder.transform.position.y);
             else ladderIntersect = GetLadderPosClosestToPlayer();
 
-            transform.position = new Vector3(ladderIntersect.x, ladderIntersect.y, CurrentLadder.transform.position.z - 0.1f);
+            transform.position = new Vector3(ladderIntersect.x, ladderIntersect.y, ladder.transform.position.z - 0.1f);
             _rb.velocity = Vector2.zero;
 
-            if (CurrentLadder.BypassGroundCollision) PlayerLogic.IgnorePlayerGroundCollision(true);
+            if (ladder.BypassGroundCollision) PlayerLogic.IgnorePlayerGroundCollision(true);
             DirInputActive = false;
+
+            CurrentLadder = ladder;
+            JumpingFromLadder = false;
         }
         else
         {
-            IsOnLadder = false;
+            ladder.PlayerIsOnLadder = false;
+            ladder.PlayerIsInRange = false;
 
-            PlayerLogic.IgnorePlayerGroundCollision(false);
-            DirInputActive = true;
+            // disable "ladder movement" only if the trigger-exited ladder is the ladder the Player is currently on
+            if (ladder == CurrentLadder)
+            {
+                PlayerLogic.IgnorePlayerGroundCollision(false);
+                DirInputActive = true;
+                CurrentLadder = null;
+            }
         }
 
         Physics2D.SyncTransforms();
@@ -317,29 +336,51 @@ public class PlayerController : MonoBehaviour
 
     private void HandleLadderClimb()
     {
-        if (IsInLadderRange)
+        if (_isInLadderRange)
         {
             if (FrameInputReader.FrameInput.Move.y != 0)
             {
                 if (!IsOnLadder)
                 {
-                    if (PlayerAtLadderEnd()) return;
-                    if (CurrentLadder.JumpingFromLadder) CurrentLadder.JumpingFromLadder = false;
-                    SetPlayerOnLadder(true);
+                    if (CurrentLadder.StopClimbingUpwards && FrameInputReader.FrameInput.Move.y > 0) return;
+                    else if (CurrentLadder.StopClimbingDownwards && FrameInputReader.FrameInput.Move.y < 0) return;
+
+                    SetPlayerOnLadder(true, CurrentLadder);
                 }
 
-                CurrentLadder.StepProgress += CurrentLadder.ClimbSpeed;
-                if (CurrentLadder.StepProgress > CurrentLadder.StepSize)
+                _ladderStepProgress += CurrentLadder.ClimbSpeed * Time.fixedDeltaTime;
+                if (_ladderStepProgress > CurrentLadder.StepSize)
                 {
                     _rb.MovePosition(_rb.position + CurrentLadder.StepSize * Mathf.Sign(FrameInputReader.FrameInput.Move.y) * CurrentLadder.Direction);
-                    if (PlayerAtLadderEnd()) CurrentLadder.JumpFromLadder();
-                    CurrentLadder.StepProgress = 0;
+                    if (PlayerAtLadderEnd()) // 2 ladders connection evaluation
+                    {
+                        Collider2D[] cols = Physics2D.OverlapCapsuleAll(_rb.position, _col.size, _col.direction, 0, Layers.LadderLayer.MaskValue);
+                        LadderTrigger upperLadder, lowerLadder;
+
+                        if (cols.Length < 2) CurrentLadder.JumpFromLadder();
+                        else
+                        {
+                            if (FrameInputReader.FrameInput.Move.y > 0)
+                            {
+                                upperLadder = (cols[0].transform.position.y > cols[1].transform.position.y) ? cols[0].GetComponent<LadderTrigger>() : cols[1].GetComponent<LadderTrigger>();
+                                if (ReferenceEquals(CurrentLadder.gameObject, upperLadder.gameObject)) CurrentLadder.JumpFromLadder();
+                                else SetPlayerOnLadder(true, upperLadder);
+                            }
+                            else // FrameInputReader.FrameInput.Move.y < 0
+                            {
+                                lowerLadder = (cols[0].transform.position.y < cols[1].transform.position.y) ? cols[0].GetComponent<LadderTrigger>() : cols[1].GetComponent<LadderTrigger>();
+                                if (ReferenceEquals(CurrentLadder.gameObject, lowerLadder.gameObject)) CurrentLadder.JumpFromLadder();
+                                else SetPlayerOnLadder(true, lowerLadder);
+                            }
+                        }
+                    }
+                    _ladderStepProgress = 0;
                 }
             }
 
             else // no climbing input
             {
-                CurrentLadder.StepProgress = CurrentLadder.StepSize;
+                _ladderStepProgress = CurrentLadder.StepSize;
             }
         }
     }
@@ -469,13 +510,12 @@ public class PlayerController : MonoBehaviour
     //}
 
 
-    private bool drawGizmosEnabled = false;
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
-        if (drawGizmosEnabled)
+        if (_drawGizmosEnabled)
         {
-            Handles.DrawWireDisc(groundCheckerPos, Vector3.back, groundCheckerRadius);
+            Handles.DrawWireDisc(_groundCheckerPos, Vector3.back, _groundCheckerRadius);
             //Handles.DrawWireDisc(ceilCheckerPos, Vector3.back, ceilCheckerRadius);
 
             //Gizmos.DrawWireCube(_col.bounds.center, _col.size);

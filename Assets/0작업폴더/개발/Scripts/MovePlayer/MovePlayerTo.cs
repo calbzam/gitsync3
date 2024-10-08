@@ -77,7 +77,7 @@ public class MovePlayerTo : MonoBehaviour
         PlayerLogic.IgnorePlayerGroundCollision(false);
         PlayerLogic.FreePlayer();
 
-        if (PlayerLogic.Player.IsOnLadder) PlayerLogic.Player.SetPlayerOnLadder(true);
+        if (PlayerLogic.Player.IsOnLadder) PlayerLogic.Player.SetPlayerOnLadder(true, PlayerLogic.Player.CurrentLadder);
     }
 
     private bool checkValidEnter()

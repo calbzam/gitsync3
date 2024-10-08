@@ -14,22 +14,28 @@ public class LadderTrigger : MonoBehaviour
     public Vector2 Direction { get; private set; }
     public void UpdateLadderDirection() => Direction = (TopPoint.position - BottomPoint.position).normalized;
 
+    public bool PlayerIsOnLadder { get; set; }
+    public bool PlayerIsInRange { get; set; }
+
     public bool AutoClimbWhenJumpedOn { get; set; }
     public bool BypassGroundCollision { get; set; }
 
     public float ClimbSpeed { get; set; }
     public float StepSize { get; set; }
-    public float StepProgress { get; set; }
 
-    public bool JumpingFromLadder { get; set; }
+    public bool StopClimbingUpwards { get; set; }
+    public bool StopClimbingDownwards { get; set; }
 
     private void Start()
     {
-        JumpingFromLadder = false;
+        PlayerIsOnLadder = false;
+        PlayerIsInRange = false;
         AutoClimbWhenJumpedOn = _ladderSettings.AutoClimbWhenJumpedOn;
         BypassGroundCollision = _ladderSettings.BypassGroundCollision;
         ClimbSpeed = _ladderSettings.ClimbSpeed;
         StepSize = _ladderSettings.StepSize;
+        StopClimbingUpwards = false;
+        StopClimbingDownwards = false;
         UpdateLadderDirection();
     }
 
@@ -51,10 +57,11 @@ public class LadderTrigger : MonoBehaviour
 
     public void JumpFromLadder()
     {
-        if (PlayerLogic.Player.IsOnLadder && PlayerLogic.Player.CurrentLadder == this)
+        if (PlayerIsOnLadder)
         {
-            PlayerLogic.Player.SetPlayerOnLadder(false);
-            JumpingFromLadder = true;
+            PlayerLogic.Player.SetPlayerOnLadder(false, this);
+            PlayerLogic.Player.SetPlayerInLadderRange(this);
+            PlayerLogic.Player.JumpingFromLadder = true;
         }
     }
 
@@ -62,20 +69,19 @@ public class LadderTrigger : MonoBehaviour
     {
         if (col.gameObject.CompareTag("Player"))
         {
-            PlayerLogic.Player.IsInLadderRange = true;
-            PlayerLogic.Player.CurrentLadder = this;
+            PlayerLogic.Player.SetPlayerInLadderRange(this);
 
             if (AutoClimbWhenJumpedOn)
-                if (!PlayerLogic.Player.IsOnLadder && !JumpingFromLadder && !PlayerLogic.Player.OnGround)
+                if (!PlayerLogic.Player.JumpingFromLadder && !PlayerLogic.Player.OnGround)
                 {
-                    PlayerLogic.Player.SetPlayerOnLadder(true);
+                    PlayerLogic.Player.SetPlayerOnLadder(true, this);
                 }
         }
     }
 
     private void OnTriggerStay2D(Collider2D col)
     {
-        if (PlayerLogic.Player.ZPosSetToGround)
+        if (PlayerLogic.Player.ZPosSetToGround) // runs only once
             if (col.gameObject.CompareTag("Player"))
             {
                 PlayerLogic.SetPlayerZPosition(transform.position.z - 0.1f);
@@ -87,9 +93,10 @@ public class LadderTrigger : MonoBehaviour
     {
         if (col.gameObject.CompareTag("Player"))
         {
-            PlayerLogic.Player.IsInLadderRange = false;
-            PlayerLogic.Player.SetPlayerOnLadder(false);
-            JumpingFromLadder = false; // player sufficiently away from ladder
+            if (PlayerLogic.Player.CurrentLadder == this)
+                PlayerLogic.Player.JumpingFromLadder = false; // player sufficiently away from ladder
+
+            PlayerLogic.Player.SetPlayerOnLadder(false, this);
         }
     }
 }
