@@ -26,13 +26,13 @@ public class PlayerController : MonoBehaviour
     public bool LimitXVelocity { get; set; } // assigned false when speed boost from other object, assigned true when player hits ground
     public bool ZPosSetToGround { get; set; }
 
-    private Rigidbody2D swingingGround;
+    private Rigidbody2D _swingingGround;
 
     public bool GroundCheckAllowed { get; set; }
-    private Vector3 groundCheckerPos;
-    private float groundCheckerRadius;
-    private Vector3 ceilCheckerPos;
-    private float ceilCheckerRadius;
+    private Vector3 _groundCheckerPos;
+    private float _groundCheckerRadius;
+    private Vector3 _ceilCheckerPos;
+    private float _ceilCheckerRadius;
 
     /* Time */
     private float _time = 1f; // 1f > 0 + 0.1:  prevent character from jumping without input at scene start
@@ -53,10 +53,10 @@ public class PlayerController : MonoBehaviour
     public LadderTrigger CurrentLadder { get; set; }
     private float _ladderStepProgress;
 
-    private bool drawGizmosEnabled = false;
+    private bool _drawGizmosEnabled = false;
 
-    //private bool disableYVelocity = false;
-    //private bool swingingGroundHit = false;
+    //private bool _disableYVelocity = false;
+    //private bool _swingingGroundHit = false;
 
     private void Awake()
     {
@@ -74,17 +74,17 @@ public class PlayerController : MonoBehaviour
         GroundCheckAllowed = true;
         LadderClimbAllowed = true;
         JumpingFromLadder = false;
-        drawGizmosEnabled = true;
+        _drawGizmosEnabled = true;
     }
 
     private void OnEnable()
     {
-        drawGizmosEnabled = true;
+        _drawGizmosEnabled = true;
     }
 
     private void OnDisable()
     {
-        drawGizmosEnabled = false;
+        _drawGizmosEnabled = false;
     }
 
     private void Update()
@@ -142,10 +142,10 @@ public class PlayerController : MonoBehaviour
 
         // add later: Enum groundHitType - static ground, moving ground
 
-        groundCheckerPos = _col.bounds.center + Vector3.down * (_col.size.y / 2 + _stats.GrounderDistance);
-        groundCheckerRadius = _col.size.x / 2 + _stats.GroundCheckerAddRadius;
-        ceilCheckerPos = _col.bounds.center + Vector3.up * (_col.size.y / 2 + _stats.GrounderDistance);
-        ceilCheckerRadius = groundCheckerRadius;
+        _groundCheckerPos = _col.bounds.center + Vector3.down * (_col.size.y / 2 + _stats.GrounderDistance);
+        _groundCheckerRadius = _col.size.x / 2 + _stats.GroundCheckerAddRadius;
+        _ceilCheckerPos = _col.bounds.center + Vector3.up * (_col.size.y / 2 + _stats.GrounderDistance);
+        _ceilCheckerRadius = _groundCheckerRadius;
 
         //Collider2D col = Physics2D.OverlapCircle(groundCheckerPos, groundCheckerRadius, Layers.SwingingGroundLayer);
         //if (col) { swingingGroundHit = true; /*swingingGround = col.attachedRigidbody;*/ }
@@ -153,7 +153,7 @@ public class PlayerController : MonoBehaviour
 
         if (GroundCheckAllowed)
         {
-            _groundCol = Physics2D.OverlapCircle(groundCheckerPos, groundCheckerRadius, Layers.GroundLayer.MaskValue);
+            _groundCol = Physics2D.OverlapCircle(_groundCheckerPos, _groundCheckerRadius, Layers.GroundLayer.MaskValue);
             _groundHit = _groundCol;
             if (!IsOnLadder && _groundCol != null)
             {
@@ -513,9 +513,9 @@ public class PlayerController : MonoBehaviour
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
-        if (drawGizmosEnabled)
+        if (_drawGizmosEnabled)
         {
-            Handles.DrawWireDisc(groundCheckerPos, Vector3.back, groundCheckerRadius);
+            Handles.DrawWireDisc(_groundCheckerPos, Vector3.back, _groundCheckerRadius);
             //Handles.DrawWireDisc(ceilCheckerPos, Vector3.back, ceilCheckerRadius);
 
             //Gizmos.DrawWireCube(_col.bounds.center, _col.size);
