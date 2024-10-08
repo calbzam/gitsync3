@@ -28,7 +28,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.8, z: 0}
-  m_LocalScale: {x: 1, y: 10, z: 1}
+  m_LocalScale: {x: 1, y: 12, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5612492997530170693}
@@ -105,7 +105,7 @@ GameObject:
   - component: {fileID: 6869461362071622381}
   - component: {fileID: 5629720449987066991}
   - component: {fileID: 5265499388088324167}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: LadderObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -325,7 +325,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c1aec51e990fee43957c34eb71a9832, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _climbSpeed: 0.05
+  _climbSpeed: 2
   _stepSize: 0.5
   _autoClimbWhenJumpedOn: 1
   _bypassGroundCollision: 1

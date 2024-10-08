@@ -25,6 +25,8 @@ public static class Layers
     public static LayerStruct ClimbingRopeLayer = new LayerStruct(LayerMask.GetMask("ClimbingRope"));
     public static LayerStruct DoNotRenderLayer = new LayerStruct(LayerMask.GetMask("Do Not Render"));
 
+    public static LayerStruct LadderLayer = new LayerStruct(LayerMask.GetMask("Ladder"));
+
     public static int GetLayerMask(int layerValue)
     {
         return 1 << layerValue;

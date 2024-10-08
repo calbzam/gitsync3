@@ -104,7 +104,7 @@ GameObject:
   - component: {fileID: 240933339746103177}
   - component: {fileID: 6535438504049319372}
   - component: {fileID: 5265499388088324167}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: LadderObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -306,7 +306,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c1aec51e990fee43957c34eb71a9832, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _climbSpeed: 0.05
+  _climbSpeed: 2
   _stepSize: 0.5
   _autoClimbWhenJumpedOn: 1
   _bypassGroundCollision: 1
