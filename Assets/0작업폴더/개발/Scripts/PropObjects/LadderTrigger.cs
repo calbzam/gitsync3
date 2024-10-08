@@ -14,14 +14,17 @@ public class LadderTrigger : MonoBehaviour
     public Vector2 Direction { get; private set; }
     public void UpdateLadderDirection() => Direction = (TopPoint.position - BottomPoint.position).normalized;
 
+    public bool PlayerIsOnLadder { get; set; }
+    public bool PlayerIsInRange { get; set; }
+
     public bool AutoClimbWhenJumpedOn { get; set; }
     public bool BypassGroundCollision { get; set; }
 
     public float ClimbSpeed { get; set; }
     public float StepSize { get; set; }
 
-    public bool PlayerIsOnLadder { get; set; }
-    public bool PlayerIsInRange { get; set; }
+    public bool StopClimbingUpwards { get; set; }
+    public bool StopClimbingDownwards { get; set; }
 
     private void Start()
     {
@@ -31,6 +34,8 @@ public class LadderTrigger : MonoBehaviour
         BypassGroundCollision = _ladderSettings.BypassGroundCollision;
         ClimbSpeed = _ladderSettings.ClimbSpeed;
         StepSize = _ladderSettings.StepSize;
+        StopClimbingUpwards = false;
+        StopClimbingDownwards = false;
         UpdateLadderDirection();
     }
 

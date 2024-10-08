@@ -342,6 +342,9 @@ public class PlayerController : MonoBehaviour
             {
                 if (!IsOnLadder)
                 {
+                    if (CurrentLadder.StopClimbingUpwards && FrameInputReader.FrameInput.Move.y > 0) return;
+                    else if (CurrentLadder.StopClimbingDownwards && FrameInputReader.FrameInput.Move.y < 0) return;
+
                     SetPlayerOnLadder(true, CurrentLadder);
                 }
 
