@@ -44,6 +44,7 @@ public class PlayerController : MonoBehaviour
     /* Collisions */
     private float _frameLeftGrounded = float.MinValue;
     public bool OnGround { get; private set; }
+    public bool IsOnWater { get; set; }
     public bool IsInWater { get; set; }
 
     public bool LadderClimbAllowed { get; set; }
@@ -70,6 +71,9 @@ public class PlayerController : MonoBehaviour
         DirInputActive = true;
         LimitXVelocity = true;
         ZPosSetToGround = false;
+
+        IsOnWater = false;
+        IsInWater = false;
 
         GroundCheckAllowed = true;
         LadderClimbAllowed = true;
@@ -102,6 +106,8 @@ public class PlayerController : MonoBehaviour
         HandleJump();
         if (LadderClimbAllowed) HandleLadderClimb();
         HandleSwimmingVertical();
+
+        HandleSwimmingRotation();
 
         HandleMovementHorizontal();
         HandleGravity();
@@ -173,7 +179,7 @@ public class PlayerController : MonoBehaviour
             if (!IsOnLadder && _groundCol != null)
             {
                 if (!_groundCol.CompareTag("SpeedBoost Ground")) LimitXVelocity = true;
-                
+
                 // Set Z-pos to the Z-pos of the ground that Player hit
                 PlayerLogic.SetPlayerZPosition(_groundCol.transform.position.z);
                 ZPosSetToGround = true;
@@ -402,16 +408,58 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 
-    #region Swimming Vertical Movement
+    #region Swimming
+
+    private void UpdateSinkFloatDensity(float targetDensity)
+    {
+        if (Mathf.Abs(_col.density - targetDensity) < 0.001f) return;
+        _col.density = Mathf.MoveTowards(_col.density, targetDensity, _stats.UnderwaterSinkFloatSpeed * Time.fixedDeltaTime);
+    }
+
+    private void MovePlayerRotationTo(float targetEulerAngles)
+    {
+        if (Mathf.Abs(transform.localEulerAngles.z - targetEulerAngles) < 0.001f) return;
+        float angle = Mathf.MoveTowardsAngle(transform.localEulerAngles.z, targetEulerAngles, _stats.UnderwaterRotationSpeed * Time.deltaTime);
+        transform.localEulerAngles = new Vector3(0, 0, angle);
+    }
 
     private void HandleSwimmingVertical()
     {
         if (IsInWater)
         {
-
+            if (FrameInputReader.FrameInput.InputDir.y > 0)
+            {
+                UpdateSinkFloatDensity(_stats.DensitySwimmingUp);
+            }
+            else if (FrameInputReader.FrameInput.InputDir.y < 0)
+            {
+                UpdateSinkFloatDensity(_stats.DensitySwimmingDown);
+            }
+            else
+            {
+                UpdateSinkFloatDensity(_stats.DensitySwimmingIdle);
+            }
+        }
+        else
+        {
+            //if (IsOnWater && FrameInputReader.FrameInput.InputDir.y < 0) IsInWater = true;
+            //else
+            //{
+                _col.density = _stats.DensityOnGround;
+                if (Mathf.Abs(transform.localEulerAngles.z) > 0.001f) MovePlayerRotationTo(0);
+            //}
         }
     }
-    
+
+    private void HandleSwimmingRotation()
+    {
+        if (IsInWater)
+        {
+            if (FrameInputReader.FrameInput.InputDir == Vector2.zero) MovePlayerRotationTo(0);
+            else MovePlayerRotationTo(Mathf.Atan2(FrameInputReader.FrameInput.InputDir.y, FrameInputReader.FrameInput.InputDir.x) * Mathf.Rad2Deg - 90);
+        }
+    }
+
     #endregion
 
     #region Horizontal Movement
@@ -477,13 +525,16 @@ public class PlayerController : MonoBehaviour
         {
             _rb.gravityScale = 0;
         }
-        else if (_rb.velocity.y > 0)
+        else if (!IsInWater)
         {
-            _rb.gravityScale = _stats.JumpUpGravityScale;
-        }
-        else
-        {
-            _rb.gravityScale = _stats.FallDownGravityScale;
+            if (_rb.velocity.y > 0)
+            {
+                _rb.gravityScale = _stats.JumpUpGravityScale;
+            }
+            else
+            {
+                _rb.gravityScale = _stats.FallDownGravityScale;
+            }
         }
     }
 

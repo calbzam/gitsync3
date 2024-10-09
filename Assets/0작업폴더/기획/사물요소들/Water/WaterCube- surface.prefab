@@ -118,8 +118,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f81305e50966bcc4d93c545b5a479d83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _waterCol: {fileID: 0}
-  _effector: {fileID: 0}
 --- !u!61 &2911471903328036738
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -176,7 +174,7 @@ BuoyancyEffector2D:
   m_UseColliderMask: 1
   m_ColliderMask:
     serializedVersion: 2
-    m_Bits: 1791
+    m_Bits: 9951
   m_SurfaceLevel: 0
   m_Density: 4
   m_LinearDrag: 10
