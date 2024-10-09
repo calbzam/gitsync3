@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WaterCollisions : MonoBehaviour
+public class WaterCollision : MonoBehaviour
 {
     [SerializeField] private BoxCollider2D _waterCol;
     [SerializeField] private BuoyancyEffector2D _effector;
