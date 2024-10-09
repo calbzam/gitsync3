@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UpdateLadderBoundsOnStart : MonoBehaviour
+public class LadderBoundsUpdateOnStart : MonoBehaviour
 {
     [SerializeField] private SpriteRenderer _spriteRendererToRead;
     [SerializeField] private BoxCollider2D _boxcol2DToChange;
