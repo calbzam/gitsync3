@@ -15,24 +15,31 @@ public class PlayerStats : ScriptableObject
     public float HorizontalDeadZoneThreshold = 0.1f;
 
 
-    [Header("MOVEMENT X")]
+    [Header("Movement")]
 
     public float MaxSpeedX = 6;
     public float MinSpeedX = 0.5f;
+    public float UnderwaterSinkFloatSpeed = 20;
+    public float UnderwaterRotationSpeed = 280;
+
+    [Header("Gravity")]
+
+    public float JumpUpGravityScale = 1.8f;
+    public float FallDownGravityScale = 3f;
+
 
     [Header("Acceleration")]
 
-    public float GroundAccelerationX = 30;
-    public float WaterAccelerationX = 30;
+    public float GroundAccelerationX = 25;
+    public float WaterAccelerationX = 35;
 
     [Header("Deceleration")]
 
     public float GroundDecelerationX = 30;
-    public float WaterDecelerationX = 20;
+    public float WaterDecelerationX = 25;
     public float AirDecelerationX = 20;
 
     [Header("A constant downward force applied while grounded. Helps on slopes"), Range(0f, -10f)]
-    //[Tooltip("A constant downward force applied while grounded. Helps on slopes"), Range(0f, -10f)]
     public float GroundingForce = -1.5f;
 
     [Header("Ground Checker")]
@@ -43,7 +50,7 @@ public class PlayerStats : ScriptableObject
     //public Vector2 GroundCheckCapsuleSize = new Vector2(0.2f, 1.2f);
 
 
-    [Header("MOVEMENT Y")]
+    [Header("JUMPING")]
 
     [Tooltip("The immediate velocity applied when jumping")]
     public float JumpPower = 9;
@@ -52,9 +59,6 @@ public class PlayerStats : ScriptableObject
     //public float MaxFallSpeed = 40;
     //[Tooltip("The player's capacity to gain fall speed. a.k.a. In Air Gravity")]
     //public float FallAcceleration = 30;
-
-    public float JumpUpGravityScale = 1.8f;
-    public float FallDownGravityScale = 3f;
 
     [Tooltip("The time before coyote jump becomes unusable. Coyote jump allows jump to execute even after leaving a ledge")]
     public float CoyoteTime = 0.15f;
@@ -69,10 +73,19 @@ public class PlayerStats : ScriptableObject
     public float RopeJumpedDistance = 2f;
 
     [Tooltip("로프에서 뛰었을 때, 사용자가 좌우 방향키를 누르고 있는 방향으로 Player에 이만큼 힘을 추가로 가해 줌")]
-    public float RopeJumpedPlayerAddForce = 2.5f;
+    public float RopeJumpedPlayerAddForce = 2f;
 
     [Tooltip("오브젝트에 연결되었을 때, 사용자가 좌우 방향키를 누르고 있는 방향으로 오프젝트에 이만큼 힘을 추가로 가해 줌")]
-    public float PlayerAttachedObjectAddVelocity = 10f;
+    public float PlayerAttachedObjectAddVelocity = 12f;
+
+
+    [Header("SWIMMING")]
+
+    public float DensityOnGround = 1.5f;
+    public float DensitySwimmingUp = 1.8f;
+    public float DensitySwimmingDown = 6;
+    public float DensitySwimmingIdle = 4.5f;
+
 
 
     //[Header("RESPAWN")]

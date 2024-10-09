@@ -31,8 +31,8 @@ TagManager:
   - Cloth
   - No Directional Light
   - Ladder
-  - 
-  - 
+  - LitMask
+  - LitMaskTarget
   - 
   - 
   - 

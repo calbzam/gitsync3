@@ -44,6 +44,7 @@ public class PlayerController : MonoBehaviour
     /* Collisions */
     private float _frameLeftGrounded = float.MinValue;
     public bool OnGround { get; private set; }
+    public bool IsOnWater { get; set; }
     public bool IsInWater { get; set; }
 
     public bool LadderClimbAllowed { get; set; }
@@ -70,6 +71,9 @@ public class PlayerController : MonoBehaviour
         DirInputActive = true;
         LimitXVelocity = true;
         ZPosSetToGround = false;
+
+        IsOnWater = false;
+        IsInWater = false;
 
         GroundCheckAllowed = true;
         LadderClimbAllowed = true;
@@ -101,20 +105,35 @@ public class PlayerController : MonoBehaviour
 
         HandleJump();
         if (LadderClimbAllowed) HandleLadderClimb();
+        HandleSwimmingVertical();
 
-        HandleDirection();
+        HandleSwimmingRotation();
+
+        HandleMovementHorizontal();
         HandleGravity();
 
         //ApplyMovement();
     }
+
+    private Collider2D OverlapPlayerCapsule(LayerStruct layerToCheck)
+    {
+        return Physics2D.OverlapCapsule(_rb.position, _col.size, _col.direction, 0, layerToCheck.MaskValue);
+    }
+
+    private Collider2D[] OverlapPlayerCapsuleAll(LayerStruct layerToCheck)
+    {
+        return Physics2D.OverlapCapsuleAll(_rb.position, _col.size, _col.direction, 0, layerToCheck.MaskValue);
+    }
+
+    #region Input
 
     private void RefineInput()
     {
         //// unneeded as arrow keys are automatically snapped
         //if (_stats.SnapInput)
         //{
-        //    InputReader.FrameInput.Move.x = Mathf.Abs(InputReader.FrameInput.Move.x) < _stats.HorizontalDeadZoneThreshold ? 0 : Mathf.Sign(InputReader.FrameInput.Move.x);
-        //    InputReader.FrameInput.Move.y = Mathf.Abs(InputReader.FrameInput.Move.y) < _stats.VerticalDeadZoneThreshold ? 0 : Mathf.Sign(InputReader.FrameInput.Move.y);
+        //    InputReader.FrameInput.InputDir.x = Mathf.Abs(InputReader.FrameInput.InputDir.x) < _stats.HorizontalDeadZoneThreshold ? 0 : Mathf.Sign(InputReader.FrameInput.InputDir.x);
+        //    InputReader.FrameInput.InputDir.y = Mathf.Abs(InputReader.FrameInput.InputDir.y) < _stats.VerticalDeadZoneThreshold ? 0 : Mathf.Sign(InputReader.FrameInput.InputDir.y);
         //}
 
         if (FrameInputReader.FrameInput.JumpStarted)
@@ -123,6 +142,8 @@ public class PlayerController : MonoBehaviour
             _timeJumpWasPressed = _time;
         }
     }
+
+    #endregion
 
     #region Collisions
 
@@ -158,7 +179,7 @@ public class PlayerController : MonoBehaviour
             if (!IsOnLadder && _groundCol != null)
             {
                 if (!_groundCol.CompareTag("SpeedBoost Ground")) LimitXVelocity = true;
-                
+
                 // Set Z-pos to the Z-pos of the ground that Player hit
                 PlayerLogic.SetPlayerZPosition(_groundCol.transform.position.z);
                 ZPosSetToGround = true;
@@ -330,20 +351,20 @@ public class PlayerController : MonoBehaviour
 
     private bool PlayerAtLadderEnd()
     {
-        return (FrameInputReader.FrameInput.Move.y > 0 && _rb.position.y > CurrentLadder.TopPoint.position.y)
-            || (FrameInputReader.FrameInput.Move.y < 0 && _rb.position.y < CurrentLadder.BottomPoint.position.y);
+        return (FrameInputReader.FrameInput.InputDir.y > 0 && _rb.position.y > CurrentLadder.TopPoint.position.y)
+            || (FrameInputReader.FrameInput.InputDir.y < 0 && _rb.position.y < CurrentLadder.BottomPoint.position.y);
     }
 
     private void HandleLadderClimb()
     {
         if (_isInLadderRange)
         {
-            if (FrameInputReader.FrameInput.Move.y != 0)
+            if (FrameInputReader.FrameInput.InputDir.y != 0)
             {
                 if (!IsOnLadder)
                 {
-                    if (CurrentLadder.StopClimbingUpwards && FrameInputReader.FrameInput.Move.y > 0) return;
-                    else if (CurrentLadder.StopClimbingDownwards && FrameInputReader.FrameInput.Move.y < 0) return;
+                    if (CurrentLadder.StopClimbingUpwards && FrameInputReader.FrameInput.InputDir.y > 0) return;
+                    else if (CurrentLadder.StopClimbingDownwards && FrameInputReader.FrameInput.InputDir.y < 0) return;
 
                     SetPlayerOnLadder(true, CurrentLadder);
                 }
@@ -351,22 +372,22 @@ public class PlayerController : MonoBehaviour
                 _ladderStepProgress += CurrentLadder.ClimbSpeed * Time.fixedDeltaTime;
                 if (_ladderStepProgress > CurrentLadder.StepSize)
                 {
-                    _rb.MovePosition(_rb.position + CurrentLadder.StepSize * Mathf.Sign(FrameInputReader.FrameInput.Move.y) * CurrentLadder.Direction);
+                    _rb.MovePosition(_rb.position + CurrentLadder.StepSize * Mathf.Sign(FrameInputReader.FrameInput.InputDir.y) * CurrentLadder.Direction);
                     if (PlayerAtLadderEnd()) // 2 ladders connection evaluation
                     {
-                        Collider2D[] cols = Physics2D.OverlapCapsuleAll(_rb.position, _col.size, _col.direction, 0, Layers.LadderLayer.MaskValue);
+                        Collider2D[] cols = OverlapPlayerCapsuleAll(Layers.LadderLayer);
                         LadderTrigger upperLadder, lowerLadder;
 
                         if (cols.Length < 2) CurrentLadder.JumpFromLadder();
                         else
                         {
-                            if (FrameInputReader.FrameInput.Move.y > 0)
+                            if (FrameInputReader.FrameInput.InputDir.y > 0)
                             {
                                 upperLadder = (cols[0].transform.position.y > cols[1].transform.position.y) ? cols[0].GetComponent<LadderTrigger>() : cols[1].GetComponent<LadderTrigger>();
                                 if (ReferenceEquals(CurrentLadder.gameObject, upperLadder.gameObject)) CurrentLadder.JumpFromLadder();
                                 else SetPlayerOnLadder(true, upperLadder);
                             }
-                            else // FrameInputReader.FrameInput.Move.y < 0
+                            else // FrameInputReader.FrameInput.InputDir.y < 0
                             {
                                 lowerLadder = (cols[0].transform.position.y < cols[1].transform.position.y) ? cols[0].GetComponent<LadderTrigger>() : cols[1].GetComponent<LadderTrigger>();
                                 if (ReferenceEquals(CurrentLadder.gameObject, lowerLadder.gameObject)) CurrentLadder.JumpFromLadder();
@@ -387,13 +408,67 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 
+    #region Swimming
+
+    private void UpdateSinkFloatDensity(float targetDensity)
+    {
+        if (Mathf.Abs(_col.density - targetDensity) < 0.001f) return;
+        _col.density = Mathf.MoveTowards(_col.density, targetDensity, _stats.UnderwaterSinkFloatSpeed * Time.fixedDeltaTime);
+    }
+
+    private void MovePlayerRotationTo(float targetEulerAngles)
+    {
+        if (Mathf.Abs(transform.localEulerAngles.z - targetEulerAngles) < 0.001f) return;
+        float angle = Mathf.MoveTowardsAngle(transform.localEulerAngles.z, targetEulerAngles, _stats.UnderwaterRotationSpeed * Time.deltaTime);
+        transform.localEulerAngles = new Vector3(0, 0, angle);
+    }
+
+    private void HandleSwimmingVertical()
+    {
+        if (IsInWater)
+        {
+            if (FrameInputReader.FrameInput.InputDir.y > 0)
+            {
+                UpdateSinkFloatDensity(_stats.DensitySwimmingUp);
+            }
+            else if (FrameInputReader.FrameInput.InputDir.y < 0)
+            {
+                UpdateSinkFloatDensity(_stats.DensitySwimmingDown);
+            }
+            else
+            {
+                UpdateSinkFloatDensity(_stats.DensitySwimmingIdle);
+            }
+        }
+        else
+        {
+            //if (IsOnWater && FrameInputReader.FrameInput.InputDir.y < 0) IsInWater = true;
+            //else
+            //{
+                _col.density = _stats.DensityOnGround;
+                if (Mathf.Abs(transform.localEulerAngles.z) > 0.001f) MovePlayerRotationTo(0);
+            //}
+        }
+    }
+
+    private void HandleSwimmingRotation()
+    {
+        if (IsInWater)
+        {
+            if (FrameInputReader.FrameInput.InputDir == Vector2.zero) MovePlayerRotationTo(0);
+            else MovePlayerRotationTo(Mathf.Atan2(FrameInputReader.FrameInput.InputDir.y, FrameInputReader.FrameInput.InputDir.x) * Mathf.Rad2Deg - 90);
+        }
+    }
+
+    #endregion
+
     #region Horizontal Movement
 
-    private void HandleDirection()
+    private void HandleMovementHorizontal()
     {
         if (!DirInputActive) return;
 
-        if (FrameInputReader.FrameInput.Move.x == 0)
+        if (FrameInputReader.FrameInput.InputDir.x == 0)
         {
             if (_rb.velocity.x != 0)
             {
@@ -411,9 +486,9 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            //_frameVelocity.x = Mathf.MoveTowards(_frameVelocity.x, _stats.MaxSpeedX * InputReader.FrameInput.Move.x, _stats.AccelerationX * Time.fixedDeltaTime);
-            if (IsInWater) _rb.AddForce(_stats.WaterAccelerationX * FrameInputReader.FrameInput.Move.x * Vector2.right, ForceMode2D.Force);
-            else _rb.AddForce(_stats.GroundAccelerationX * FrameInputReader.FrameInput.Move.x * Vector2.right, ForceMode2D.Force);
+            //_frameVelocity.x = Mathf.MoveTowards(_frameVelocity.x, _stats.MaxSpeedX * InputReader.FrameInput.InputDir.x, _stats.AccelerationX * Time.fixedDeltaTime);
+            if (IsInWater) _rb.AddForce(_stats.WaterAccelerationX * FrameInputReader.FrameInput.InputDir.x * Vector2.right, ForceMode2D.Force);
+            else _rb.AddForce(_stats.GroundAccelerationX * FrameInputReader.FrameInput.InputDir.x * Vector2.right, ForceMode2D.Force);
 
             if (LimitXVelocity) LimitXVelocityTo(_stats.MaxSpeedX);
         }
@@ -450,13 +525,16 @@ public class PlayerController : MonoBehaviour
         {
             _rb.gravityScale = 0;
         }
-        else if (_rb.velocity.y > 0)
+        else if (!IsInWater)
         {
-            _rb.gravityScale = _stats.JumpUpGravityScale;
-        }
-        else
-        {
-            _rb.gravityScale = _stats.FallDownGravityScale;
+            if (_rb.velocity.y > 0)
+            {
+                _rb.gravityScale = _stats.JumpUpGravityScale;
+            }
+            else
+            {
+                _rb.gravityScale = _stats.FallDownGravityScale;
+            }
         }
     }
 
