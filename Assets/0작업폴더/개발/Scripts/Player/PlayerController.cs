@@ -108,6 +108,18 @@ public class PlayerController : MonoBehaviour
         //ApplyMovement();
     }
 
+    private Collider2D OverlapPlayerCapsule(LayerStruct layerToCheck)
+    {
+        return Physics2D.OverlapCapsule(_rb.position, _col.size, _col.direction, 0, layerToCheck.MaskValue);
+    }
+
+    private Collider2D[] OverlapPlayerCapsuleAll(LayerStruct layerToCheck)
+    {
+        return Physics2D.OverlapCapsuleAll(_rb.position, _col.size, _col.direction, 0, layerToCheck.MaskValue);
+    }
+
+    #region Input
+
     private void RefineInput()
     {
         //// unneeded as arrow keys are automatically snapped
@@ -123,6 +135,8 @@ public class PlayerController : MonoBehaviour
             _timeJumpWasPressed = _time;
         }
     }
+
+    #endregion
 
     #region Collisions
 
@@ -354,7 +368,7 @@ public class PlayerController : MonoBehaviour
                     _rb.MovePosition(_rb.position + CurrentLadder.StepSize * Mathf.Sign(FrameInputReader.FrameInput.Move.y) * CurrentLadder.Direction);
                     if (PlayerAtLadderEnd()) // 2 ladders connection evaluation
                     {
-                        Collider2D[] cols = Physics2D.OverlapCapsuleAll(_rb.position, _col.size, _col.direction, 0, Layers.LadderLayer.MaskValue);
+                        Collider2D[] cols = OverlapPlayerCapsuleAll(Layers.LadderLayer);
                         LadderTrigger upperLadder, lowerLadder;
 
                         if (cols.Length < 2) CurrentLadder.JumpFromLadder();
