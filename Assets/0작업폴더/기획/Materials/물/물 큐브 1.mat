@@ -113,8 +113,8 @@ Material:
     - _QueueOffset: 0
     - _ReceiveShadows: 1
     - _RefractionSpeed: 0.05
-    - _RefractionSpread: 0.0225
-    - _RefractionStrength: 4
+    - _RefractionSpread: 0.03
+    - _RefractionStrength: 1.4
     - _Shininess: 0.521
     - _Smoothness: 0.804
     - _SmoothnessTextureChannel: 0

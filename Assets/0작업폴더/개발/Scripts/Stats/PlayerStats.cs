@@ -19,7 +19,7 @@ public class PlayerStats : ScriptableObject
 
     public float MaxSpeedX = 6;
     public float MinSpeedX = 0.5f;
-    public float UnderwaterSinkFloatSpeed = 10;
+    public float UnderwaterSinkFloatSpeed = 20;
     public float UnderwaterRotationSpeed = 280;
 
     [Header("Gravity")]

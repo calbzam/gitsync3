@@ -17,7 +17,7 @@ MonoBehaviour:
   HorizontalDeadZoneThreshold: 0.1
   MaxSpeedX: 6
   MinSpeedX: 0.5
-  UnderwaterSinkFloatSpeed: 16
+  UnderwaterSinkFloatSpeed: 20
   UnderwaterRotationSpeed: 240
   JumpUpGravityScale: 1.8
   FallDownGravityScale: 3
