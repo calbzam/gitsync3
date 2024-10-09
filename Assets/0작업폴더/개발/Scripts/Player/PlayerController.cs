@@ -101,8 +101,9 @@ public class PlayerController : MonoBehaviour
 
         HandleJump();
         if (LadderClimbAllowed) HandleLadderClimb();
+        HandleSwimmingVertical();
 
-        HandleDirection();
+        HandleMovementHorizontal();
         HandleGravity();
 
         //ApplyMovement();
@@ -401,9 +402,21 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 
+    #region Swimming Vertical Movement
+
+    private void HandleSwimmingVertical()
+    {
+        if (IsInWater)
+        {
+
+        }
+    }
+    
+    #endregion
+
     #region Horizontal Movement
 
-    private void HandleDirection()
+    private void HandleMovementHorizontal()
     {
         if (!DirInputActive) return;
 
