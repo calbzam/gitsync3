@@ -66,7 +66,7 @@ public class SwingingRope : RidableObject
     {
         if (!PlayerIsAttached) return;
 
-        if (FrameInputReader.FrameInput.Move.y > 0)
+        if (FrameInputReader.FrameInput.InputDir.y > 0)
         {
             int indexInActor = getIndexInActor(_currentParticle);
             if (indexInActor - 1 > 0 /* first particle in visible rope */)
@@ -77,7 +77,7 @@ public class SwingingRope : RidableObject
                 attachPlayerToParticle(prevParticle);
             }
         }
-        else if (FrameInputReader.FrameInput.Move.y < 0)
+        else if (FrameInputReader.FrameInput.InputDir.y < 0)
         {
             int indexInActor = getIndexInActor(_currentParticle);
             if (indexInActor + 1 < _rope.elements.Count + 1 /* total number of particles in visible rope */)

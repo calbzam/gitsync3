@@ -126,8 +126,8 @@ public class PlayerController : MonoBehaviour
         //// unneeded as arrow keys are automatically snapped
         //if (_stats.SnapInput)
         //{
-        //    InputReader.FrameInput.Move.x = Mathf.Abs(InputReader.FrameInput.Move.x) < _stats.HorizontalDeadZoneThreshold ? 0 : Mathf.Sign(InputReader.FrameInput.Move.x);
-        //    InputReader.FrameInput.Move.y = Mathf.Abs(InputReader.FrameInput.Move.y) < _stats.VerticalDeadZoneThreshold ? 0 : Mathf.Sign(InputReader.FrameInput.Move.y);
+        //    InputReader.FrameInput.InputDir.x = Mathf.Abs(InputReader.FrameInput.InputDir.x) < _stats.HorizontalDeadZoneThreshold ? 0 : Mathf.Sign(InputReader.FrameInput.InputDir.x);
+        //    InputReader.FrameInput.InputDir.y = Mathf.Abs(InputReader.FrameInput.InputDir.y) < _stats.VerticalDeadZoneThreshold ? 0 : Mathf.Sign(InputReader.FrameInput.InputDir.y);
         //}
 
         if (FrameInputReader.FrameInput.JumpStarted)
@@ -345,20 +345,20 @@ public class PlayerController : MonoBehaviour
 
     private bool PlayerAtLadderEnd()
     {
-        return (FrameInputReader.FrameInput.Move.y > 0 && _rb.position.y > CurrentLadder.TopPoint.position.y)
-            || (FrameInputReader.FrameInput.Move.y < 0 && _rb.position.y < CurrentLadder.BottomPoint.position.y);
+        return (FrameInputReader.FrameInput.InputDir.y > 0 && _rb.position.y > CurrentLadder.TopPoint.position.y)
+            || (FrameInputReader.FrameInput.InputDir.y < 0 && _rb.position.y < CurrentLadder.BottomPoint.position.y);
     }
 
     private void HandleLadderClimb()
     {
         if (_isInLadderRange)
         {
-            if (FrameInputReader.FrameInput.Move.y != 0)
+            if (FrameInputReader.FrameInput.InputDir.y != 0)
             {
                 if (!IsOnLadder)
                 {
-                    if (CurrentLadder.StopClimbingUpwards && FrameInputReader.FrameInput.Move.y > 0) return;
-                    else if (CurrentLadder.StopClimbingDownwards && FrameInputReader.FrameInput.Move.y < 0) return;
+                    if (CurrentLadder.StopClimbingUpwards && FrameInputReader.FrameInput.InputDir.y > 0) return;
+                    else if (CurrentLadder.StopClimbingDownwards && FrameInputReader.FrameInput.InputDir.y < 0) return;
 
                     SetPlayerOnLadder(true, CurrentLadder);
                 }
@@ -366,7 +366,7 @@ public class PlayerController : MonoBehaviour
                 _ladderStepProgress += CurrentLadder.ClimbSpeed * Time.fixedDeltaTime;
                 if (_ladderStepProgress > CurrentLadder.StepSize)
                 {
-                    _rb.MovePosition(_rb.position + CurrentLadder.StepSize * Mathf.Sign(FrameInputReader.FrameInput.Move.y) * CurrentLadder.Direction);
+                    _rb.MovePosition(_rb.position + CurrentLadder.StepSize * Mathf.Sign(FrameInputReader.FrameInput.InputDir.y) * CurrentLadder.Direction);
                     if (PlayerAtLadderEnd()) // 2 ladders connection evaluation
                     {
                         Collider2D[] cols = OverlapPlayerCapsuleAll(Layers.LadderLayer);
@@ -375,13 +375,13 @@ public class PlayerController : MonoBehaviour
                         if (cols.Length < 2) CurrentLadder.JumpFromLadder();
                         else
                         {
-                            if (FrameInputReader.FrameInput.Move.y > 0)
+                            if (FrameInputReader.FrameInput.InputDir.y > 0)
                             {
                                 upperLadder = (cols[0].transform.position.y > cols[1].transform.position.y) ? cols[0].GetComponent<LadderTrigger>() : cols[1].GetComponent<LadderTrigger>();
                                 if (ReferenceEquals(CurrentLadder.gameObject, upperLadder.gameObject)) CurrentLadder.JumpFromLadder();
                                 else SetPlayerOnLadder(true, upperLadder);
                             }
-                            else // FrameInputReader.FrameInput.Move.y < 0
+                            else // FrameInputReader.FrameInput.InputDir.y < 0
                             {
                                 lowerLadder = (cols[0].transform.position.y < cols[1].transform.position.y) ? cols[0].GetComponent<LadderTrigger>() : cols[1].GetComponent<LadderTrigger>();
                                 if (ReferenceEquals(CurrentLadder.gameObject, lowerLadder.gameObject)) CurrentLadder.JumpFromLadder();
@@ -420,7 +420,7 @@ public class PlayerController : MonoBehaviour
     {
         if (!DirInputActive) return;
 
-        if (FrameInputReader.FrameInput.Move.x == 0)
+        if (FrameInputReader.FrameInput.InputDir.x == 0)
         {
             if (_rb.velocity.x != 0)
             {
@@ -438,9 +438,9 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            //_frameVelocity.x = Mathf.MoveTowards(_frameVelocity.x, _stats.MaxSpeedX * InputReader.FrameInput.Move.x, _stats.AccelerationX * Time.fixedDeltaTime);
-            if (IsInWater) _rb.AddForce(_stats.WaterAccelerationX * FrameInputReader.FrameInput.Move.x * Vector2.right, ForceMode2D.Force);
-            else _rb.AddForce(_stats.GroundAccelerationX * FrameInputReader.FrameInput.Move.x * Vector2.right, ForceMode2D.Force);
+            //_frameVelocity.x = Mathf.MoveTowards(_frameVelocity.x, _stats.MaxSpeedX * InputReader.FrameInput.InputDir.x, _stats.AccelerationX * Time.fixedDeltaTime);
+            if (IsInWater) _rb.AddForce(_stats.WaterAccelerationX * FrameInputReader.FrameInput.InputDir.x * Vector2.right, ForceMode2D.Force);
+            else _rb.AddForce(_stats.GroundAccelerationX * FrameInputReader.FrameInput.InputDir.x * Vector2.right, ForceMode2D.Force);
 
             if (LimitXVelocity) LimitXVelocityTo(_stats.MaxSpeedX);
         }

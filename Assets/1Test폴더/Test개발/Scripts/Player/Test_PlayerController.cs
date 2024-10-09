@@ -32,7 +32,7 @@ namespace TarodevController
 
         #region Interface
 
-        public Vector2 Test_FrameInput => _frameInput.Move;
+        public Vector2 Test_FrameInput => _frameInput.InputDir;
         public event Action<bool, float> GroundedChanged;
         public event Action Jumped;
 
@@ -85,14 +85,14 @@ namespace TarodevController
             {
                 JumpDown = JumpTriggered,
                 JumpHeld = JumpHolding,
-                Move = input.Player.Movement.ReadValue<Vector2>()
+                InputDir = input.Player.Movement.ReadValue<Vector2>()
             };
 
             // unneeded as arrow keys are automatically snapped
             //if (_stats.SnapInput)
             //{
-            //    _frameInput.Move.x = Mathf.Abs(_frameInput.Move.x) < _stats.HorizontalDeadZoneThreshold ? 0 : Mathf.Sign(_frameInput.Move.x);
-            //    _frameInput.Move.y = Mathf.Abs(_frameInput.Move.y) < _stats.VerticalDeadZoneThreshold ? 0 : Mathf.Sign(_frameInput.Move.y);
+            //    _frameInput.InputDir.x = Mathf.Abs(_frameInput.InputDir.x) < _stats.HorizontalDeadZoneThreshold ? 0 : Mathf.Sign(_frameInput.InputDir.x);
+            //    _frameInput.InputDir.y = Mathf.Abs(_frameInput.InputDir.y) < _stats.VerticalDeadZoneThreshold ? 0 : Mathf.Sign(_frameInput.InputDir.y);
             //}
 
             if (_frameInput.JumpDown)
@@ -202,14 +202,14 @@ namespace TarodevController
 
         private void HandleDirection()
         {
-            if (_frameInput.Move.x == 0)
+            if (_frameInput.InputDir.x == 0)
             {
                 var deceleration = _grounded ? _stats.GroundDeceleration : _stats.AirDeceleration;
                 _frameVelocity.x = Mathf.MoveTowards(_frameVelocity.x, 0, deceleration * Time.fixedDeltaTime);
             }
             else
             {
-                _frameVelocity.x = Mathf.MoveTowards(_frameVelocity.x, _frameInput.Move.x * _stats.MaxSpeed, _stats.Acceleration * Time.fixedDeltaTime);
+                _frameVelocity.x = Mathf.MoveTowards(_frameVelocity.x, _frameInput.InputDir.x * _stats.MaxSpeed, _stats.Acceleration * Time.fixedDeltaTime);
             }
         }
 
@@ -271,7 +271,7 @@ namespace TarodevController
     {
         public bool JumpDown;
         public bool JumpHeld;
-        public Vector2 Move;
+        public Vector2 InputDir;
     }
 
     public interface Test_IPlayerController
