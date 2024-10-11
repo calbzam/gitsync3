@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 481948620801546427}
   - component: {fileID: 9205665760017977375}
   m_Layer: 0
-  m_Name: "\uBC30\uD130\uB9AC \uC778\uC2DD \uBC94\uC704"
+  m_Name: "\uBC30\uD130\uB9AC \uC778\uC2DD"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -94,7 +94,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7629881457614338468}
   m_Layer: 0
-  m_Name: "\uBAB8\uD1B5"
+  m_Name: "\uBAB8\uD1B5\uBAA8\uC591"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -217,7 +217,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d721f65813cef164ba6f8403a6a2c233, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _connectedObject: {fileID: 0}
+  _connectedObjects: []
   _checkPointToActivate: {fileID: 0}
   _updateCheckpointOnActivate: 0
   IsAutomatic: 1
@@ -233,7 +233,7 @@ GameObject:
   - component: {fileID: 4903950984786739248}
   - component: {fileID: 8828822261240871537}
   m_Layer: 0
-  m_Name: "\uC190\uC7A1\uC774 \uBAB8\uCCB4"
+  m_Name: stick
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -317,7 +317,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5369158633189701915}
   m_Layer: 0
-  m_Name: "\uBC30\uD130\uB9AC \uC0BD\uC785 \uC704\uCE58"
+  m_Name: "\uBC30\uD130\uB9AC \uBD80\uCC29 \uC704\uCE58"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -349,7 +349,7 @@ GameObject:
   - component: {fileID: 3749178930676704322}
   - component: {fileID: 5711393583311052493}
   m_Layer: 0
-  m_Name: Square
+  m_Name: square
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -433,7 +433,7 @@ GameObject:
   - component: {fileID: 510513352497683237}
   - component: {fileID: 7322086525094922507}
   m_Layer: 0
-  m_Name: "\uC190\uC7A1\uC774 \uB05D\uBD80\uBD84"
+  m_Name: end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -517,7 +517,7 @@ GameObject:
   - component: {fileID: 6206778982861395936}
   - component: {fileID: 5260557257200917641}
   m_Layer: 0
-  m_Name: Circle (pivot)
+  m_Name: pivot circle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -602,7 +602,7 @@ GameObject:
   - component: {fileID: 396108350270058034}
   - component: {fileID: 9123232042022072280}
   m_Layer: 0
-  m_Name: "Player \uC778\uC2DD \uBC94\uC704"
+  m_Name: "Player \uC778\uC2DD"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

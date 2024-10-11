@@ -416,11 +416,9 @@ public class PlayerController : MonoBehaviour
         _col.density = Mathf.MoveTowards(_col.density, targetDensity, _stats.UnderwaterSinkFloatSpeed * Time.fixedDeltaTime);
     }
 
-    private void MovePlayerRotationTo(float targetEulerAngles)
+    private void MovePlayerRotationTo(float targetEulerAngle)
     {
-        if (Mathf.Abs(transform.localEulerAngles.z - targetEulerAngles) < 0.001f) return;
-        float angle = Mathf.MoveTowardsAngle(transform.localEulerAngles.z, targetEulerAngles, _stats.UnderwaterRotationSpeed * Time.deltaTime);
-        transform.localEulerAngles = new Vector3(0, 0, angle);
+        MyMath.RotateAndEvalDone(transform, targetEulerAngle, _stats.UnderwaterRotationSpeed);
     }
 
     private void HandleSwimmingVertical()

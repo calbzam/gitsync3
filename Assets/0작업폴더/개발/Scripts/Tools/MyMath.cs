@@ -47,6 +47,15 @@ public static class MyMath
         return current + Math.Sign(target - current) * maxDelta;
     }
 
+    public static bool RotateAndEvalDone(Transform transformToRotate, float targetEulerAngle, float rotationSpeed)
+    {
+        if (Mathf.Abs(transformToRotate.localEulerAngles.z - targetEulerAngle) < 0.001f) return true;
+
+        float angle = Mathf.MoveTowardsAngle(transformToRotate.localEulerAngles.z, targetEulerAngle, rotationSpeed * Time.deltaTime);
+        transformToRotate.localEulerAngles = new Vector3(0, 0, angle);
+        return false;
+    }
+
     public static float updatePercentDT(float current, float moveSpeed)
     {
         return moveTowards(current, 1f, moveSpeed * Time.deltaTime);
