@@ -26,12 +26,15 @@ public class PlayerController : MonoBehaviour
     public bool LimitXVelocity { get; set; } // assigned false when speed boost from other object, assigned true when player hits ground
     public bool ZPosSetToGround { get; set; }
 
-    private Rigidbody2D _swingingGround;
+    private Collider2D _groundCol;
+    private bool _groundHit;
 
     public bool GroundCheckAllowed { get; set; }
-    private Vector3 _groundCheckerPos;
-    private float _groundCheckerRadius;
+    private Vector3 _groundCheckerPos, _groundCheckerPosOnWater;
+    private Vector3 _groundCheckerOffset, _groundCheckerOffsetOnWater;
+    private float _groundCheckerRadius, _groundCheckerRadiusOnWater;
     private Vector3 _ceilCheckerPos;
+    private Vector3 _ceilCheckerOffset;
     private float _ceilCheckerRadius;
 
     /* Time */
@@ -76,6 +79,8 @@ public class PlayerController : MonoBehaviour
         IsInWater = false;
 
         GroundCheckAllowed = true;
+        setGroundCheckerParams();
+
         LadderClimbAllowed = true;
         JumpingFromLadder = false;
         _drawGizmosEnabled = true;
@@ -151,30 +156,42 @@ public class PlayerController : MonoBehaviour
     //_col.size: (x=0.50, y=1.26)
     //_col.direction: Vertical
 
-    private Collider2D _groundCol;
-    private bool _groundHit;
+    private void setGroundCheckerParams()
+    {
+        _groundCheckerOffset = (_col.size.y / 2 + _stats.GrounderDistance) * Vector3.down;
+        _groundCheckerOffsetOnWater = (_col.size.y / 2 + _stats.GrounderDistanceOnWater) * Vector3.down;
+        _groundCheckerRadius = _col.size.x / 2 + _stats.GroundCheckerAddRadius;
+        _groundCheckerRadiusOnWater = _col.size.x / 2 + _stats.GroundCheckerAddRadiusOnWater;
+
+        _ceilCheckerOffset = (_col.size.y / 2 + _stats.GrounderDistance) * Vector3.up;
+        _ceilCheckerRadius = _groundCheckerRadius;
+    }
 
     private void CheckCollisions()
     {
         Physics2D.queriesStartInColliders = false;
 
-
         // Ground and Ceiling
 
         // add later: Enum groundHitType - static ground, moving ground
 
-        _groundCheckerPos = _col.bounds.center + Vector3.down * (_col.size.y / 2 + _stats.GrounderDistance);
-        _groundCheckerRadius = _col.size.x / 2 + _stats.GroundCheckerAddRadius;
-        _ceilCheckerPos = _col.bounds.center + Vector3.up * (_col.size.y / 2 + _stats.GrounderDistance);
-        _ceilCheckerRadius = _groundCheckerRadius;
+        _groundCheckerPos = _col.bounds.center + _groundCheckerOffset;
+        _groundCheckerPosOnWater = _col.bounds.center + _groundCheckerOffsetOnWater;
+        _ceilCheckerPos = _col.bounds.center + _ceilCheckerOffset;
+
+        Vector3 groundCheckerPos;
+        float groundCheckerRadius;
+        if (IsOnWater) { groundCheckerPos = _groundCheckerPosOnWater; groundCheckerRadius = _groundCheckerRadiusOnWater; }
+        else { groundCheckerPos = _groundCheckerPos; groundCheckerRadius = _groundCheckerRadius; }
 
         //Collider2D col = Physics2D.OverlapCircle(groundCheckerPos, groundCheckerRadius, Layers.SwingingGroundLayer);
         //if (col) { swingingGroundHit = true; /*swingingGround = col.attachedRigidbody;*/ }
         //bool groundHit = swingingGroundHit || normalGroundHit;
 
+        //if (!GroundCheckAllowed) Debug.Log("not allowed");
         if (GroundCheckAllowed)
         {
-            _groundCol = Physics2D.OverlapCircle(_groundCheckerPos, _groundCheckerRadius, Layers.GroundLayer.MaskValue);
+            _groundCol = Physics2D.OverlapCircle(groundCheckerPos, groundCheckerRadius, Layers.GroundLayer.MaskValue);
             _groundHit = _groundCol;
             if (!IsOnLadder && _groundCol != null)
             {
@@ -592,6 +609,7 @@ public class PlayerController : MonoBehaviour
         if (_drawGizmosEnabled)
         {
             Handles.DrawWireDisc(_groundCheckerPos, Vector3.back, _groundCheckerRadius);
+            Handles.DrawWireDisc(_groundCheckerPosOnWater, Vector3.back, _groundCheckerRadiusOnWater);
             //Handles.DrawWireDisc(ceilCheckerPos, Vector3.back, ceilCheckerRadius);
 
             //Gizmos.DrawWireCube(_col.bounds.center, _col.size);
