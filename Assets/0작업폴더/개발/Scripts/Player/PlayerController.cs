@@ -43,7 +43,7 @@ public class PlayerController : MonoBehaviour
 
     /* Collisions */
     private float _frameLeftGrounded = float.MinValue;
-    public bool OnGround { get; private set; }
+    public bool OnGround { get; set; }
     public bool IsOnWater { get; set; }
     public bool IsInWater { get; set; }
 
@@ -243,7 +243,7 @@ public class PlayerController : MonoBehaviour
         if (!IsOnLadder && (OnGround || CanUseCoyote)) ExecuteJump();
     }
 
-    private void ExecuteJump()
+    public void ExecuteJump()
     {
         _jumpToConsume = false;
         _endedJumpEarly = false;

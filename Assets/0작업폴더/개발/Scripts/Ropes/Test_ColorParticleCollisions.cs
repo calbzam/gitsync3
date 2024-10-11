@@ -2,41 +2,44 @@ using System;
 using UnityEngine;
 using Obi;
 
-[RequireComponent(typeof(ObiParticleRenderer))]
+//[RequireComponent(typeof(ObiParticleRenderer))]
 public class Test_ColorParticleCollisions : MonoBehaviour
 {
-    private ObiRope rope;
-
+    private ObiRope _rope;
+    private ObiInstancedParticleRenderer _renderer;
     //[SerializeField] private ObiContactEventDispatcher contactEventDispatcher;
 
     private bool[] particleHasCollision;
 
     private void Awake()
     {
-        rope = gameObject.GetComponent<ObiRope>();
+        _rope = gameObject.GetComponent<ObiRope>();
+        _renderer = gameObject.GetComponent<ObiInstancedParticleRenderer>();
 
-        particleHasCollision = new bool[rope.particleCount];
+        particleHasCollision = new bool[_rope.particleCount];
 
         //contactEventDispatcher = gameObject.GetComponent<ObiContactEventDispatcher>();
     }
 
     private void OnEnable()
     {
-        rope.solver.OnCollision += Solver_OnCollision;
+        _rope.solver.OnCollision += Solver_OnCollision;
         //contactEventDispatcher.onContactEnter.AddListener(OnContactEnter);
         //contactEventDispatcher.onContactExit.AddListener(OnContactExit);
     }
 
     private void OnDisable()
     {
-        rope.solver.OnCollision -= Solver_OnCollision;
+        _rope.solver.OnCollision -= Solver_OnCollision;
         //contactEventDispatcher.onContactEnter.RemoveListener(OnContactEnter);
         //contactEventDispatcher.onContactExit.RemoveListener(OnContactExit);
     }
 
     private void Start()
     {
-
+        //foreach (var keyword in _renderer.material.shaderKeywords) Debug.Log(keyword);
+        //_renderer.material.EnableKeyword("_BASE");
+        //Debug.Log(_renderer.material.GetColor("_BaseColor"));
     }
 
     private void Update()
@@ -46,12 +49,27 @@ public class Test_ColorParticleCollisions : MonoBehaviour
 
     private void SetParticleColorsAll()
     {
-        for (int i = 0; i < particleHasCollision.Length && i < rope.solver.colors.count; ++i)
+        for (int i = 0; i < particleHasCollision.Length && i < _rope.solver.colors.count; ++i)
         {
+            //if (particleHasCollision[i])
+            //{
+            //    _rope.solver.colors[i] = Color.red; // not working with ObiParticleRenderer
+            //}
+            //else
+            //{
+            //    _rope.solver.colors[i] = Color.white;
+            //}
+
             if (particleHasCollision[i])
-                rope.solver.colors[i] = Color.red;
+            {
+                _renderer.material.SetColor("_BaseColor", Color.red);
+                return;
+            }
             else
-                rope.solver.colors[i] = Color.white;
+            {
+                _renderer.material.SetColor("_BaseColor", Color.white);
+                return;
+            }
         }
     }
 
@@ -70,10 +88,10 @@ public class Test_ColorParticleCollisions : MonoBehaviour
                 if (col != null)
                 {
                     /* do collsion of bodyA particles */
-                    int simplexStart = rope.solver.simplexCounts.GetSimplexStartAndSize(contact.bodyA, out int simplexSize);
+                    int simplexStart = _rope.solver.simplexCounts.GetSimplexStartAndSize(contact.bodyA, out int simplexSize);
                     for (int i = 0; i < simplexSize; ++i)
                     {
-                        int particleIndex = rope.solver.simplices[simplexStart + i];
+                        int particleIndex = _rope.solver.simplices[simplexStart + i];
                         particleHasCollision[particleIndex] = true;
                     }
                 }
@@ -82,9 +100,9 @@ public class Test_ColorParticleCollisions : MonoBehaviour
     }
 
 
-    // ObiContactEventDispatcher oncontactexit not working correctly?
     // http://obi.virtualmethodstudio.com/forum/thread-2485-post-7857.html#pid7857
-    private void OnContactEnter(ObiSolver solver, Oni.Contact contact)
+    // but ObiContactEventDispatcher oncontactexit is not working correctly?
+    private void OnContactEnter(ObiSolver solver, Oni.Contact contact) // used with contactEventDispatcher (not Solver_OnCollision)
     {
         //rope.solver.colors[contact.bodyA] = Color.red;
 
@@ -93,18 +111,19 @@ public class Test_ColorParticleCollisions : MonoBehaviour
         if (col != null)
         {
             // retrieve the offset and size of the simplex in the solver.simplices array:
-            int simplexStart = rope.solver.simplexCounts.GetSimplexStartAndSize(contact.bodyA, out int simplexSize);
+            int simplexStart = _rope.solver.simplexCounts.GetSimplexStartAndSize(contact.bodyA, out int simplexSize);
 
             // starting at simplexStart, iterate over all particles in the simplex:
             for (int i = 0; i < simplexSize; ++i)
             {
-                int particleIndex = rope.solver.simplices[simplexStart + i];
-                rope.solver.colors[particleIndex] = Color.red;
+                int particleIndex = _rope.solver.simplices[simplexStart + i];
+                particleHasCollision[particleIndex] = true;
+                _rope.solver.colors[particleIndex] = Color.red;
             }
         }
     }
 
-    private void OnContactExit(ObiSolver solver, Oni.Contact contact)
+    private void OnContactExit(ObiSolver solver, Oni.Contact contact) // used with contactEventDispatcher (not Solver_OnCollision)
     {
         //rope.solver.colors[contact.bodyA] = Color.white;
 
@@ -113,13 +132,14 @@ public class Test_ColorParticleCollisions : MonoBehaviour
         if (col != null)
         {
             // retrieve the offset and size of the simplex in the solver.simplices array:
-            int simplexStart = rope.solver.simplexCounts.GetSimplexStartAndSize(contact.bodyA, out int simplexSize);
+            int simplexStart = _rope.solver.simplexCounts.GetSimplexStartAndSize(contact.bodyA, out int simplexSize);
 
             // starting at simplexStart, iterate over all particles in the simplex:
             for (int i = 0; i < simplexSize; ++i)
             {
-                int particleIndex = rope.solver.simplices[simplexStart + i];
-                rope.solver.colors[particleIndex] = Color.white;
+                int particleIndex = _rope.solver.simplices[simplexStart + i];
+                particleHasCollision[particleIndex] = false;
+                _rope.solver.colors[particleIndex] = Color.white;
             }
         }
     }

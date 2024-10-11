@@ -49,13 +49,6 @@ public class SwingingRope : RidableObject
         _rope.solver.collisionConstraintParameters.enabled = enabled;
     }
 
-    private Vector3 getGlobalParticlePos(Vector3 particlePosition)
-    {
-        Vector3 childUpdated = transform.parent.rotation * Vector3.Scale(particlePosition, transform.parent.lossyScale);
-
-        return childUpdated + transform.parent.position;
-    }
-
     private int getIndexInActor(int particle)
     {
         return _rope.solver.particleToActor[particle].indexInActor;
@@ -73,7 +66,7 @@ public class SwingingRope : RidableObject
             {
                 detachPlayerFromParticle(_currentParticle);
                 int prevParticle = _rope.solverIndices[indexInActor - 1];
-                PlayerLogic.PlayerObiCol.transform.position = getGlobalParticlePos(_rope.solver.positions[prevParticle]);
+                PlayerLogic.PlayerObiCol.transform.position = RopeCalcs.GetGlobalParticlePos(transform, _rope.solver.positions[prevParticle]);
                 attachPlayerToParticle(prevParticle);
             }
         }
@@ -84,7 +77,7 @@ public class SwingingRope : RidableObject
             {
                 detachPlayerFromParticle(_currentParticle);
                 int nextParticle = _rope.solverIndices[indexInActor + 1];
-                PlayerLogic.PlayerObiCol.transform.position = getGlobalParticlePos(_rope.solver.positions[nextParticle]);
+                PlayerLogic.PlayerObiCol.transform.position = RopeCalcs.GetGlobalParticlePos(transform, _rope.solver.positions[nextParticle]);
                 attachPlayerToParticle(nextParticle);
             }
         }
@@ -139,7 +132,7 @@ public class SwingingRope : RidableObject
     {
         if (PlayerIsAttached && _playerHasJumped)
         {
-            Vector3 particlePos = getGlobalParticlePos(_rope.solver.positions[_currentParticle]);
+            Vector3 particlePos = RopeCalcs.GetGlobalParticlePos(transform, _rope.solver.positions[_currentParticle]);
             bool awayFromRope = Vector2.Distance(particlePos, PlayerLogic.PlayerObiCol.transform.position) > _jumpedEnoughDistance;
 
             if (awayFromRope)
@@ -174,7 +167,7 @@ public class SwingingRope : RidableObject
         _rope.SetConstraintsDirty(Oni.ConstraintType.Pin);
         _currentParticle = toParticle;
 
-        PlayerLogic.SetPlayerZPosition(getGlobalParticlePos(_rope.solver.positions[toParticle]).z);
+        PlayerLogic.SetPlayerZPosition(RopeCalcs.GetGlobalParticlePos(transform, _rope.solver.positions[toParticle]).z);
     }
 
     private void detachPlayerFromParticle(int fromParticle)
