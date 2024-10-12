@@ -7,7 +7,11 @@ public class SwingingRope : RidableObject
     private ObiRope _rope;
     private static float _jumpedEnoughDistance;
 
+    [Help("Particle 0 is mostly the first (top) particle")]
+    [SerializeField] private int _noClimbingParticlesUntil = 4;
+
     public override event Action<int, bool> PlayerOnThisObject;
+    public bool PlayerIsInRange { get; set; }
 
     private int _currentParticle = -1;
     private ObiPinConstraintsBatch _playerBatch;
@@ -23,6 +27,7 @@ public class SwingingRope : RidableObject
     protected override void Start()
     {
         base.Start();
+        PlayerIsInRange = false;
         _jumpedEnoughDistance = PlayerLogic.Player.Stats.RopeJumpedDistance;
     }
 
@@ -57,10 +62,11 @@ public class SwingingRope : RidableObject
     // indexInActor: https://obi.virtualmethodstudio.com/forum/thread-4019-post-14919.html#pid14919
     private void HandleRopeClimb()
     {
-        if (!PlayerIsAttached) return;
+        if (!PlayerIsInRange) return;
 
         if (FrameInputReader.FrameInput.InputDir.y > 0)
         {
+            if (!PlayerIsAttached) PlayerIsAttached = true;
             int indexInActor = getIndexInActor(_currentParticle);
             if (indexInActor - 1 > 0 /* first particle in visible rope */)
             {
@@ -72,6 +78,7 @@ public class SwingingRope : RidableObject
         }
         else if (FrameInputReader.FrameInput.InputDir.y < 0)
         {
+            if (!PlayerIsAttached) PlayerIsAttached = true;
             int indexInActor = getIndexInActor(_currentParticle);
             if (indexInActor + 1 < _rope.elements.Count + 1 /* total number of particles in visible rope */)
             {
@@ -103,10 +110,15 @@ public class SwingingRope : RidableObject
                 {
                     /* do collsion of bodyA particles */
                     int particle = _rope.solver.simplices[contact.bodyA];
-                    attachPlayerToParticle(particle);
-                    PlayerOnThisObject?.Invoke(gameObject.GetInstanceID(), true);
-                    PlayerIsAttached = true;
-                    PlayerLogic.PlayerObiCol.enabled = false;
+                    if (particle > _noClimbingParticlesUntil)
+                    {
+                        attachPlayerToParticle(particle);
+                        PlayerOnThisObject?.Invoke(gameObject.GetInstanceID(), true);
+                        PlayerLogic.PlayerObiCol.enabled = false;
+                        PlayerIsInRange = true;
+                        PlayerIsAttached = true;
+                    }
+                    _currentParticle = particle;
 
                     break;
                 }
@@ -119,6 +131,7 @@ public class SwingingRope : RidableObject
         if (PlayerIsAttached)
         {
             _playerHasJumped = true;
+            PlayerIsInRange = false;
             PlayerOnThisObject?.Invoke(gameObject.GetInstanceID(), false);
             detachPlayerFromParticle(_currentParticle);
             EnableRopeCollision(false);

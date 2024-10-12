@@ -14,4 +14,12 @@ public class SwingingRopeTopTriggerJump : MonoBehaviour
             PlayerLogic.SetPlayerXYPos(transform.position);
         }
     }
+
+    private void OnTriggerStay2D(Collider2D col)
+    {
+        if (FrameInputReader.FrameInput.InputDir.y < 0 && col.CompareTag("Player"))
+        {
+            _rope.PlayerIsInRange = true;
+        }
+    }
 }
