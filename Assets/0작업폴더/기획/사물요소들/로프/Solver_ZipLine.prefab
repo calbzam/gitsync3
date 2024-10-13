@@ -67,8 +67,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f18723921f89c0b4f80f4b8d9bd2eba0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _meshRenderer: {fileID: 2336173997930309685}
-  _rope: {fileID: 4962533997360738355}
   _additionalChildObjectsToDisable:
   - {fileID: 5590876485938196971}
 --- !u!114 &4081489736378474001
@@ -953,7 +951,7 @@ MonoBehaviour:
     evaluationOrder: 0
     iterations: 1
     SORFactor: 1
-    enabled: 1
+    enabled: 0
   particleFrictionConstraintParameters:
     evaluationOrder: 0
     iterations: 2
@@ -981,8 +979,8 @@ MonoBehaviour:
     enabled: 0
   shapeMatchingConstraintParameters:
     evaluationOrder: 0
-    iterations: 2
-    SORFactor: 2
+    iterations: 1
+    SORFactor: 1
     enabled: 1
   tetherConstraintParameters:
     evaluationOrder: 1
