@@ -135,7 +135,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: 0.01005422, w: 0.99994946}
   m_LocalPosition: {x: 847.2896, y: -227.55, z: 0.25}
-  m_LocalScale: {x: 5.823625, y: 0.3935072, z: 1.7848788}
+  m_LocalScale: {x: 7.2795315, y: 0.3935072, z: 1.7848788}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1155094647053742612}
@@ -155,7 +155,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6a6204ca5368e74f8c774b6dd5852d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _childRbsToToggleBodytype: {fileID: 0}
+  _childRbsToActivate: []
 --- !u!61 &8072704392674520043
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -164,7 +164,7 @@ BoxCollider2D:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3093811453924189951}
   m_Enabled: 1
-  m_Density: 1
+  m_Density: 0.8
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -281,7 +281,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.5, y: 0, z: 0}
-  m_LocalScale: {x: 0.09111243, y: 0.9466859, z: 0.5357037}
+  m_LocalScale: {x: 0.12, y: 0.12, z: 0.12}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6685961836715221926}
@@ -362,7 +362,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.5, y: 0, z: 0}
-  m_LocalScale: {x: 0.09111243, y: 0.9466859, z: 0.5357037}
+  m_LocalScale: {x: 0.12, y: 0.12, z: 0.12}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6685961836715221926}

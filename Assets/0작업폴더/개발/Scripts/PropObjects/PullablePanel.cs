@@ -4,12 +4,9 @@ using UnityEngine.InputSystem;
 
 public class PullablePanel : MonoBehaviour
 {
-    [Help("Needs HingeJoint2D on this object")]
-
-    [SerializeField] private GameObject _childRbsToToggleBodytype;
+    [SerializeField] private GameObject[] _childRbsToActivate;
 
     private HingeJoint2D _joint;
-    private Rigidbody2D[] _rbsToToggleBodytype;
 
     public event Action<bool> PlayerIsInRange;
     public void InvokePlayerIsInRange(bool playerIsInRange) => PlayerIsInRange?.Invoke(playerIsInRange);
@@ -44,18 +41,25 @@ public class PullablePanel : MonoBehaviour
 
     private void initRbsBodytype()
     {
-        if (_childRbsToToggleBodytype != null)
+        if (_childRbsToActivate != null)
         {
-            _rbsToToggleBodytype = _childRbsToToggleBodytype.GetComponentsInChildren<Rigidbody2D>();
-            foreach (var rb in _rbsToToggleBodytype) rb.bodyType = RigidbodyType2D.Kinematic;
+            foreach (var parentRb in _childRbsToActivate)
+            {
+                var _childRbArray = parentRb.GetComponentsInChildren<Rigidbody2D>();
+                if (_childRbArray != null) foreach (var rb in _childRbArray) rb.bodyType = RigidbodyType2D.Kinematic;
+            }
         }
     }
 
     private void toggleRbsBodytype()
     {
-        if (_childRbsToToggleBodytype != null)
+        if (_childRbsToActivate != null)
         {
-            foreach (var rb in _rbsToToggleBodytype) rb.bodyType = RigidbodyType2D.Dynamic;
+            foreach (var parentRb in _childRbsToActivate)
+            {
+                var _childRbArray = parentRb.GetComponentsInChildren<Rigidbody2D>();
+                if (_childRbArray != null) foreach (var rb in _childRbArray) rb.bodyType = RigidbodyType2D.Dynamic;
+            }
         }
     }
 
