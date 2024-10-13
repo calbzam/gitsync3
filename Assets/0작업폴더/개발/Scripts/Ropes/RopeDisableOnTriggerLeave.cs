@@ -8,21 +8,43 @@ public class RopeDisableOnTriggerLeave : MonoBehaviour
     [SerializeField] private ObiSolver _solverToDisable;
     [SerializeField] private GameObject[] _additionalObjectsToDisable;
 
-    private ColBounds3D _triggerColBounds;
-    private Collider _mainCameraCol;
+    private ColBounds2D _triggerColBounds;
+
+    private void Start()
+    {
+        _triggerColBounds = new ColBounds2D(gameObject.GetComponent<BoxCollider2D>());
+        evalPlayerIsInSelf();
+    }
+
+    private void evalPlayerIsInSelf()
+    {
+        SetActiveObjs(_triggerColBounds.OtherIsInSelf(PlayerLogic.Player.transform));
+    }
 
     private void OnTriggerEnter2D(Collider2D col)
     {
         if (col.CompareTag("Player"))
         {
-            _solverToDisable.gameObject.SetActive(true);
-            foreach (var obj in _additionalObjectsToDisable) obj.SetActive(true);
+            SetActiveObjs(true);
         }
     }
 
     private void OnTriggerExit2D(Collider2D col)
     {
         if (col.CompareTag("Player"))
+        {
+            SetActiveObjs(false);
+        }
+    }
+
+    private void SetActiveObjs(bool enabled)
+    {
+        if (enabled)
+        {
+            _solverToDisable.gameObject.SetActive(true);
+            foreach (var obj in _additionalObjectsToDisable) obj.SetActive(true);
+        }
+        else
         {
             foreach (var obj in _additionalObjectsToDisable) obj.SetActive(false);
             _solverToDisable.gameObject.SetActive(false);
