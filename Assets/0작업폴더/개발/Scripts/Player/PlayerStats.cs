@@ -26,6 +26,7 @@ public class PlayerStats : ScriptableObject
 
     public float JumpUpGravityScale = 1.8f;
     public float FallDownGravityScale = 3f;
+    public float InWaterGravityScale = 2.4f;
 
 
     [Header("Acceleration")]

@@ -28,9 +28,9 @@ MonoBehaviour:
   AirDecelerationX: 20
   GroundingForce: -1.5
   GrounderDistance: -0.2
-  GrounderDistanceInWater: -0.4
+  GrounderDistanceOnWater: -0.4
   GroundCheckerAddRadius: -0.01
-  GroundCheckerAddRadiusInWater: 0.2
+  GroundCheckerAddRadiusOnWater: 0.2
   JumpPower: 9
   CoyoteTime: 0.15
   JumpBuffer: 0.1

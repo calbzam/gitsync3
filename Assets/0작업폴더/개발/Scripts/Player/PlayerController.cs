@@ -65,10 +65,7 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         _cachedQueryStartInColliders = Physics2D.queriesStartInColliders;
-    }
 
-    private void Start()
-    {
         RespawnButtonAllowed = true;
 
         DirInputActive = true;
@@ -143,7 +140,8 @@ public class PlayerController : MonoBehaviour
 
         if (FrameInputReader.FrameInput.JumpStarted)
         {
-            _jumpToConsume = true;
+            if (IsOnWater || IsInWater) { if (OnGround) _jumpToConsume = true; } // allow jump in water only if OnGround == true
+            else _jumpToConsume = true;
             _timeJumpWasPressed = _time;
         }
     }
@@ -188,7 +186,6 @@ public class PlayerController : MonoBehaviour
         //if (col) { swingingGroundHit = true; /*swingingGround = col.attachedRigidbody;*/ }
         //bool groundHit = swingingGroundHit || normalGroundHit;
 
-        //if (!GroundCheckAllowed) Debug.Log("not allowed");
         if (GroundCheckAllowed)
         {
             _groundCol = Physics2D.OverlapCircle(groundCheckerPos, groundCheckerRadius, Layers.GroundLayer.MaskValue);
@@ -214,14 +211,16 @@ public class PlayerController : MonoBehaviour
         // Hit a Ceiling: cancel jumping from there
         //if (ceilingHit) /*_frameVelocity.y = Mathf.Min(0, _frameVelocity.y);*/_rb.velocity = new Vector2(_rb.velocity.x, Mathf.Min(0, _rb.velocity.y));
 
-
         // Landed on the Ground
         if (!OnGround && _groundHit)
         {
             OnGround = true;
-            _coyoteUsable = true;
-            _bufferedJumpUsable = true;
-            _endedJumpEarly = false;
+            //if (!IsOnWater && !IsInWater)
+            //{
+                _coyoteUsable = true;
+                _bufferedJumpUsable = true;
+                _endedJumpEarly = false;
+            //}
             GroundedChanged?.Invoke(true, Mathf.Abs(/*_frameVelocity.y*/_rb.velocity.y));
         }
         // Left the Ground
@@ -540,7 +539,11 @@ public class PlayerController : MonoBehaviour
         {
             _rb.gravityScale = 0;
         }
-        else if (!IsInWater)
+        else if (IsInWater)
+        {
+            _rb.gravityScale = _stats.InWaterGravityScale;
+        }
+        else // not IsOnLadder nor IsInWater = in air or OnGround
         {
             if (_rb.velocity.y > 0)
             {
