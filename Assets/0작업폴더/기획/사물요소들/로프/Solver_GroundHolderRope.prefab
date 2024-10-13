@@ -153,9 +153,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8794505185815624455}
-  - component: {fileID: 4914028885733171342}
+  - component: {fileID: 5014119982773251839}
   - component: {fileID: 9108562364367554367}
   - component: {fileID: 6620342112157373425}
+  - component: {fileID: 3112945855246601383}
   - component: {fileID: 1192392582233305261}
   - component: {fileID: 3610087080149068347}
   - component: {fileID: 8443046218711972125}
@@ -187,7 +188,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1148334959116898649}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4914028885733171342
+--- !u!114 &5014119982773251839
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -196,7 +197,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8166802073044386269}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 45e48c09583a90448b38925bfa30a510, type: 3}
+  m_Script: {fileID: 11500000, guid: 71909c233d57d3147b8f7af19cf9b70a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &9108562364367554367
@@ -223,6 +224,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12c6c8f3a3cea264594448b402bc5b67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _makeRopeFloat: {fileID: 3112945855246601383}
+--- !u!114 &3112945855246601383
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8166802073044386269}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e1b225bb9f25434dbcedb8b4c80d87c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _collliderType: 1
+  _colsCount: 22
+  _eachColDensity: 3.5
+  _eachColScale: 0.1
+  _playerReaderScale: 1.6
+  _maxDistanceOnly: 1
+  _buoyColsPushSpeed: 4
 --- !u!114 &1192392582233305261
 MonoBehaviour:
   m_ObjectHideFlags: 0

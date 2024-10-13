@@ -21,6 +21,7 @@ MonoBehaviour:
   UnderwaterRotationSpeed: 240
   JumpUpGravityScale: 1.8
   FallDownGravityScale: 3
+  InWaterGravityScale: 2.4
   GroundAccelerationX: 25
   WaterAccelerationX: 35
   GroundDecelerationX: 30

@@ -1,8 +1,10 @@
 using Obi;
+using UnityEngine;
 
 public class BreakRopeAttachsOnLeverActivate : LeverConnectedObject
 {
     private ObiParticleAttachment[] _ropeAttachments;
+    [SerializeField] private MakeRopeFloatOnWater _makeRopeFloat;
 
     public bool IsBroken { get; private set; }
 
@@ -16,5 +18,6 @@ public class BreakRopeAttachsOnLeverActivate : LeverConnectedObject
     {
         foreach (var attachment in _ropeAttachments) attachment.enabled = false;
         IsBroken = true;
+        _makeRopeFloat.AttachFloatingColliders();
     }
 }
