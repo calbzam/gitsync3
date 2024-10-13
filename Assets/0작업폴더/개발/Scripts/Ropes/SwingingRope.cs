@@ -62,11 +62,11 @@ public class SwingingRope : RidableObject
     // indexInActor: https://obi.virtualmethodstudio.com/forum/thread-4019-post-14919.html#pid14919
     private void HandleRopeClimb()
     {
-        if (!PlayerIsInRange) return;
+        if (!PlayerIsInRange || PlayerOnOtherObject) return;
 
         if (FrameInputReader.FrameInput.InputDir.y > 0)
         {
-            if (!PlayerIsAttached) PlayerIsAttached = true;
+            if (!PlayerIsAttached) announcePlayerOnThisObject();
             int indexInActor = getIndexInActor(_currentParticle);
             if (indexInActor - 1 > 0 /* first particle in visible rope */)
             {
@@ -78,7 +78,7 @@ public class SwingingRope : RidableObject
         }
         else if (FrameInputReader.FrameInput.InputDir.y < 0)
         {
-            if (!PlayerIsAttached) PlayerIsAttached = true;
+            if (!PlayerIsAttached) announcePlayerOnThisObject();
             int indexInActor = getIndexInActor(_currentParticle);
             if (indexInActor + 1 < _rope.elements.Count + 1 /* total number of particles in visible rope */)
             {
@@ -90,13 +90,20 @@ public class SwingingRope : RidableObject
         }
     }
 
+    private void announcePlayerOnThisObject()
+    {
+        PlayerIsAttached = true;
+        PlayerOnOtherObject = false;
+        PlayerOnThisObject?.Invoke(gameObject.GetInstanceID(), true);
+    }
+
     private void Solver_OnCollision(object sender, ObiSolver.ObiCollisionEventArgs e)
     {
         CheckRopePlayerDisconnectedDistance();
         
         //Debug.Log(_ropeAttached + ", " + _ropeJumped); // start from: false, false
         if (PlayerIsAttached) return;
-        if (_playerOnOtherObject) return;
+        if (PlayerOnOtherObject) return;
 
         var world = ObiColliderWorld.GetInstance();
         foreach (var contact in e.contacts)
@@ -113,10 +120,9 @@ public class SwingingRope : RidableObject
                     if (particle > _noClimbingParticlesUntil)
                     {
                         attachPlayerToParticle(particle);
-                        PlayerOnThisObject?.Invoke(gameObject.GetInstanceID(), true);
+                        announcePlayerOnThisObject();
                         PlayerLogic.PlayerObiCol.enabled = false;
                         PlayerIsInRange = true;
-                        PlayerIsAttached = true;
                     }
                     _currentParticle = particle;
 
