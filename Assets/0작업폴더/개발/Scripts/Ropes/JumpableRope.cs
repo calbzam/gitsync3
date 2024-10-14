@@ -1,10 +1,9 @@
-using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 // refer to Test_ColorParticleCollisions.cs
 
-public class GroundHolderRope : RopeParticleCollisionReaderBase
+public class JumpableRope : RopeParticleCollisionReaderBase
 {
     protected override void OnEnable()
     {
