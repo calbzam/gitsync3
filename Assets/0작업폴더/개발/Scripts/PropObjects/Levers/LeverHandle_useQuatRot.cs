@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class LeverHandle_useQuatRot : MonoBehaviour
 {
@@ -11,14 +12,13 @@ public class LeverHandle_useQuatRot : MonoBehaviour
     [SerializeField] private LeverHandleReader _leverHandleReader;
     [SerializeField] private LeverBatteryReader_useQuatRot _batteryReader;
 
-    private bool _toggleStarted;
+    private bool _isToggling;
     private bool _onState;
 
     [Header("")] // useQuatRot variables
     [SerializeField] private float _activatedRot = 0f;
     [SerializeField] private float _deactivatedRot = 45f;
     [SerializeField] private float _rotationSpeed = 100f;
-    private float _currentAngle;
     private float _targetAngle;
 
     private void OnEnable()
@@ -33,7 +33,7 @@ public class LeverHandle_useQuatRot : MonoBehaviour
 
     private void Start()
     {
-        _toggleStarted = false;
+        _isToggling = false;
         _onState = false;
     }
 
@@ -63,37 +63,29 @@ public class LeverHandle_useQuatRot : MonoBehaviour
     {
         _leverActivate.ToggleActivateBool();
         ToggleRotateLeverHandle();
-        _toggleStarted = true;
+        _isToggling = true;
     }
 
     public void ToggleActivateLeverHandle()
     {
         _leverActivate.ToggleActivateBool();
         ToggleRotateLeverHandle();
-        _toggleStarted = true;
+        _isToggling = true;
         OnStateEvalActivate();
     }
 
     public void ToggleRotateLeverHandle()
     {
-        _currentAngle = transform.rotation.eulerAngles.z;
         _targetAngle = _leverActivate.IsActivated ? _activatedRot : _deactivatedRot;
     }
 
     private void RotateLeverHandle()
     {
-        if (_toggleStarted)
+        if (_isToggling)
         {
-            _currentAngle = Mathf.MoveTowardsAngle(_currentAngle, _targetAngle, Time.deltaTime * _rotationSpeed);
-            transform.rotation = Quaternion.Euler(0, 0, _currentAngle);
+            if (MyMath.RotateAndEvalDone(transform, _targetAngle, _rotationSpeed)) _isToggling = false;
 
-            if (_leverActivate.IsActivated) { if (_currentAngle <= _targetAngle) _toggleStarted = false; }
-            else { if (_currentAngle >= _targetAngle) _toggleStarted = false; }
-
-            if (!_toggleStarted) // 직전에 if (_toggleStarted) 안에서 수정된 _toggleStarted
-            {
-                OnStateEvalActivate();
-            }
+            if (!_isToggling) OnStateEvalActivate();
         }
     }
 }

@@ -26,6 +26,7 @@ public class PlayerStats : ScriptableObject
 
     public float JumpUpGravityScale = 1.8f;
     public float FallDownGravityScale = 3f;
+    public float InWaterGravityScale = 2.4f;
 
 
     [Header("Acceleration")]
@@ -46,7 +47,10 @@ public class PlayerStats : ScriptableObject
 
     [Tooltip("The detection distance for grounding and roof detection"), Range(-0.3f, 0.3f)]
     public float GrounderDistance = -0.2f; // -0.21f
-    public float GroundCheckerAddRadius = 0.01f; // -0.01f
+    [Range(-0.9f, 0.3f)]
+    public float GrounderDistanceOnWater = -0.4f; // -0.21f
+    public float GroundCheckerAddRadius = -0.01f; // -0.01f
+    public float GroundCheckerAddRadiusOnWater = 0.2f; // -0.01f
     //public Vector2 GroundCheckCapsuleSize = new Vector2(0.2f, 1.2f);
 
 

@@ -3,9 +3,17 @@ using UnityEngine;
 
 public class RopeActive_useOnBecameVisible_byEachRopeObj : MonoBehaviour
 {
-    [SerializeField] private MeshRenderer _meshRenderer;
-    [SerializeField] private ObiRope _rope;
+    [Help("Needs ObiRope and MeshRenderer on this object")]
+    private ObiRope _rope;
+    private MeshRenderer _meshRenderer;
+
     [SerializeField] private GameObject[] _additionalChildObjectsToDisable;
+
+    private void Awake()
+    {
+        _rope = gameObject.GetComponent<ObiRope>();
+        _meshRenderer = gameObject.GetComponent<MeshRenderer>();
+    }
 
     private void Start()
     {

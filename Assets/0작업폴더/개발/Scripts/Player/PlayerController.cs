@@ -26,12 +26,15 @@ public class PlayerController : MonoBehaviour
     public bool LimitXVelocity { get; set; } // assigned false when speed boost from other object, assigned true when player hits ground
     public bool ZPosSetToGround { get; set; }
 
-    private Rigidbody2D _swingingGround;
+    private Collider2D _groundCol;
+    private bool _groundHit;
 
     public bool GroundCheckAllowed { get; set; }
-    private Vector3 _groundCheckerPos;
-    private float _groundCheckerRadius;
+    private Vector3 _groundCheckerPos, _groundCheckerPosOnWater;
+    private Vector3 _groundCheckerOffset, _groundCheckerOffsetOnWater;
+    private float _groundCheckerRadius, _groundCheckerRadiusOnWater;
     private Vector3 _ceilCheckerPos;
+    private Vector3 _ceilCheckerOffset;
     private float _ceilCheckerRadius;
 
     /* Time */
@@ -43,7 +46,7 @@ public class PlayerController : MonoBehaviour
 
     /* Collisions */
     private float _frameLeftGrounded = float.MinValue;
-    public bool OnGround { get; private set; }
+    public bool OnGround { get; set; }
     public bool IsOnWater { get; set; }
     public bool IsInWater { get; set; }
 
@@ -62,10 +65,7 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         _cachedQueryStartInColliders = Physics2D.queriesStartInColliders;
-    }
 
-    private void Start()
-    {
         RespawnButtonAllowed = true;
 
         DirInputActive = true;
@@ -76,6 +76,8 @@ public class PlayerController : MonoBehaviour
         IsInWater = false;
 
         GroundCheckAllowed = true;
+        setGroundCheckerParams();
+
         LadderClimbAllowed = true;
         JumpingFromLadder = false;
         _drawGizmosEnabled = true;
@@ -138,7 +140,8 @@ public class PlayerController : MonoBehaviour
 
         if (FrameInputReader.FrameInput.JumpStarted)
         {
-            _jumpToConsume = true;
+            if (IsOnWater || IsInWater) { if (OnGround) _jumpToConsume = true; } // allow jump in water only if OnGround == true
+            else _jumpToConsume = true;
             _timeJumpWasPressed = _time;
         }
     }
@@ -151,22 +154,33 @@ public class PlayerController : MonoBehaviour
     //_col.size: (x=0.50, y=1.26)
     //_col.direction: Vertical
 
-    private Collider2D _groundCol;
-    private bool _groundHit;
+    private void setGroundCheckerParams()
+    {
+        _groundCheckerOffset = (_col.size.y / 2 + _stats.GrounderDistance) * Vector3.down;
+        _groundCheckerOffsetOnWater = (_col.size.y / 2 + _stats.GrounderDistanceOnWater) * Vector3.down;
+        _groundCheckerRadius = _col.size.x / 2 + _stats.GroundCheckerAddRadius;
+        _groundCheckerRadiusOnWater = _col.size.x / 2 + _stats.GroundCheckerAddRadiusOnWater;
+
+        _ceilCheckerOffset = (_col.size.y / 2 + _stats.GrounderDistance) * Vector3.up;
+        _ceilCheckerRadius = _groundCheckerRadius;
+    }
 
     private void CheckCollisions()
     {
         Physics2D.queriesStartInColliders = false;
 
-
         // Ground and Ceiling
 
         // add later: Enum groundHitType - static ground, moving ground
 
-        _groundCheckerPos = _col.bounds.center + Vector3.down * (_col.size.y / 2 + _stats.GrounderDistance);
-        _groundCheckerRadius = _col.size.x / 2 + _stats.GroundCheckerAddRadius;
-        _ceilCheckerPos = _col.bounds.center + Vector3.up * (_col.size.y / 2 + _stats.GrounderDistance);
-        _ceilCheckerRadius = _groundCheckerRadius;
+        _groundCheckerPos = _col.bounds.center + _groundCheckerOffset;
+        _groundCheckerPosOnWater = _col.bounds.center + _groundCheckerOffsetOnWater;
+        _ceilCheckerPos = _col.bounds.center + _ceilCheckerOffset;
+
+        Vector3 groundCheckerPos;
+        float groundCheckerRadius;
+        if (IsOnWater) { groundCheckerPos = _groundCheckerPosOnWater; groundCheckerRadius = _groundCheckerRadiusOnWater; }
+        else { groundCheckerPos = _groundCheckerPos; groundCheckerRadius = _groundCheckerRadius; }
 
         //Collider2D col = Physics2D.OverlapCircle(groundCheckerPos, groundCheckerRadius, Layers.SwingingGroundLayer);
         //if (col) { swingingGroundHit = true; /*swingingGround = col.attachedRigidbody;*/ }
@@ -174,7 +188,7 @@ public class PlayerController : MonoBehaviour
 
         if (GroundCheckAllowed)
         {
-            _groundCol = Physics2D.OverlapCircle(_groundCheckerPos, _groundCheckerRadius, Layers.GroundLayer.MaskValue);
+            _groundCol = Physics2D.OverlapCircle(groundCheckerPos, groundCheckerRadius, Layers.GroundLayer.MaskValue);
             _groundHit = _groundCol;
             if (!IsOnLadder && _groundCol != null)
             {
@@ -197,14 +211,16 @@ public class PlayerController : MonoBehaviour
         // Hit a Ceiling: cancel jumping from there
         //if (ceilingHit) /*_frameVelocity.y = Mathf.Min(0, _frameVelocity.y);*/_rb.velocity = new Vector2(_rb.velocity.x, Mathf.Min(0, _rb.velocity.y));
 
-
         // Landed on the Ground
         if (!OnGround && _groundHit)
         {
             OnGround = true;
-            _coyoteUsable = true;
-            _bufferedJumpUsable = true;
-            _endedJumpEarly = false;
+            //if (!IsOnWater && !IsInWater)
+            //{
+                _coyoteUsable = true;
+                _bufferedJumpUsable = true;
+                _endedJumpEarly = false;
+            //}
             GroundedChanged?.Invoke(true, Mathf.Abs(/*_frameVelocity.y*/_rb.velocity.y));
         }
         // Left the Ground
@@ -243,7 +259,7 @@ public class PlayerController : MonoBehaviour
         if (!IsOnLadder && (OnGround || CanUseCoyote)) ExecuteJump();
     }
 
-    private void ExecuteJump()
+    public void ExecuteJump()
     {
         _jumpToConsume = false;
         _endedJumpEarly = false;
@@ -416,11 +432,9 @@ public class PlayerController : MonoBehaviour
         _col.density = Mathf.MoveTowards(_col.density, targetDensity, _stats.UnderwaterSinkFloatSpeed * Time.fixedDeltaTime);
     }
 
-    private void MovePlayerRotationTo(float targetEulerAngles)
+    private void MovePlayerRotationTo(float targetEulerAngle)
     {
-        if (Mathf.Abs(transform.localEulerAngles.z - targetEulerAngles) < 0.001f) return;
-        float angle = Mathf.MoveTowardsAngle(transform.localEulerAngles.z, targetEulerAngles, _stats.UnderwaterRotationSpeed * Time.deltaTime);
-        transform.localEulerAngles = new Vector3(0, 0, angle);
+        MyMath.RotateAndEvalDone(transform, targetEulerAngle, _stats.UnderwaterRotationSpeed);
     }
 
     private void HandleSwimmingVertical()
@@ -525,7 +539,11 @@ public class PlayerController : MonoBehaviour
         {
             _rb.gravityScale = 0;
         }
-        else if (!IsInWater)
+        else if (IsInWater)
+        {
+            _rb.gravityScale = _stats.InWaterGravityScale;
+        }
+        else // not IsOnLadder nor IsInWater = in air or OnGround
         {
             if (_rb.velocity.y > 0)
             {
@@ -594,6 +612,7 @@ public class PlayerController : MonoBehaviour
         if (_drawGizmosEnabled)
         {
             Handles.DrawWireDisc(_groundCheckerPos, Vector3.back, _groundCheckerRadius);
+            Handles.DrawWireDisc(_groundCheckerPosOnWater, Vector3.back, _groundCheckerRadiusOnWater);
             //Handles.DrawWireDisc(ceilCheckerPos, Vector3.back, ceilCheckerRadius);
 
             //Gizmos.DrawWireCube(_col.bounds.center, _col.size);

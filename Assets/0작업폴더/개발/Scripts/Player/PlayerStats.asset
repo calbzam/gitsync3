@@ -21,6 +21,7 @@ MonoBehaviour:
   UnderwaterRotationSpeed: 240
   JumpUpGravityScale: 1.8
   FallDownGravityScale: 3
+  InWaterGravityScale: 2.4
   GroundAccelerationX: 25
   WaterAccelerationX: 35
   GroundDecelerationX: 30
@@ -28,7 +29,9 @@ MonoBehaviour:
   AirDecelerationX: 20
   GroundingForce: -1.5
   GrounderDistance: -0.2
-  GroundCheckerAddRadius: 0.01
+  GrounderDistanceOnWater: -0.4
+  GroundCheckerAddRadius: -0.01
+  GroundCheckerAddRadiusOnWater: 0.2
   JumpPower: 9
   CoyoteTime: 0.15
   JumpBuffer: 0.1

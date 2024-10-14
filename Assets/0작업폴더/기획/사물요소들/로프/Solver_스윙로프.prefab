@@ -66,8 +66,8 @@ MonoBehaviour:
   worldAngularInertiaScale: 0
   distanceConstraintParameters:
     evaluationOrder: 0
-    iterations: 3
-    SORFactor: 1.4
+    iterations: 2
+    SORFactor: 1
     enabled: 1
   bendingConstraintParameters:
     evaluationOrder: 1
@@ -78,7 +78,7 @@ MonoBehaviour:
     evaluationOrder: 0
     iterations: 1
     SORFactor: 1
-    enabled: 1
+    enabled: 0
   particleFrictionConstraintParameters:
     evaluationOrder: 0
     iterations: 2
@@ -106,8 +106,8 @@ MonoBehaviour:
     enabled: 0
   shapeMatchingConstraintParameters:
     evaluationOrder: 0
-    iterations: 2
-    SORFactor: 2
+    iterations: 1
+    SORFactor: 1
     enabled: 1
   tetherConstraintParameters:
     evaluationOrder: 1
@@ -210,8 +210,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f18723921f89c0b4f80f4b8d9bd2eba0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _meshRenderer: {fileID: 8909498849510046010}
-  _rope: {fileID: 881971457722786287}
   _additionalChildObjectsToDisable: []
 --- !u!114 &8308634432569987140
 MonoBehaviour:
@@ -226,6 +224,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerOnOtherObject: 0
+  _noClimbingParticlesUntil: 4
 --- !u!114 &3451459896291438397
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -430,7 +429,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   decimation: 0
-  smoothing: 0
+  smoothing: 1
   twist: 0
 --- !u!114 &8496679337350745373
 MonoBehaviour:

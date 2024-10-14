@@ -91,7 +91,7 @@ GameObject:
   - component: {fileID: 6999740247947870386}
   - component: {fileID: 1005681466564828333}
   m_Layer: 0
-  m_Name: Square
+  m_Name: square
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -175,7 +175,7 @@ GameObject:
   - component: {fileID: 4512470686550635326}
   - component: {fileID: 1681526250655093758}
   m_Layer: 0
-  m_Name: "\uC190\uC7A1\uC774 \uBAB8\uCCB4"
+  m_Name: stick
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -344,7 +344,7 @@ HingeJoint2D:
   m_BreakAction: 3
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: 0, y: 0}
-  m_ConnectedAnchor: {x: 721.97, y: -106.72}
+  m_ConnectedAnchor: {x: 739.76, y: -122.200005}
   m_UseMotor: 1
   m_Motor:
     m_MotorSpeed: 120
@@ -363,7 +363,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3801294537864375632}
   m_Layer: 0
-  m_Name: "\uBAB8\uD1B5"
+  m_Name: "\uBAB8\uD1B5\uBAA8\uC591"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -396,7 +396,7 @@ GameObject:
   - component: {fileID: 8294675887137008311}
   - component: {fileID: 4048350010675201890}
   m_Layer: 0
-  m_Name: "\uC190\uC7A1\uC774 \uB05D\uBD80\uBD84"
+  m_Name: end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
