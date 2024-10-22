@@ -18,14 +18,14 @@ public class RopeDisableOnTriggerLeave : MonoBehaviour
 
     private void evalPlayerIsInSelf()
     {
-        SetActiveObjs(_triggerColBounds.OtherIsInSelf(PlayerLogic.Player.transform));
+        SetObjectsActive(_triggerColBounds.OtherIsInSelf(PlayerLogic.Player.transform));
     }
 
     private void OnTriggerEnter2D(Collider2D col)
     {
         if (col.CompareTag("Player"))
         {
-            SetActiveObjs(true);
+            SetObjectsActive(true);
         }
     }
 
@@ -33,11 +33,11 @@ public class RopeDisableOnTriggerLeave : MonoBehaviour
     {
         if (col.CompareTag("Player"))
         {
-            SetActiveObjs(false);
+            SetObjectsActive(false);
         }
     }
 
-    private void SetActiveObjs(bool enabled)
+    private void SetObjectsActive(bool enabled)
     {
         if (enabled)
         {

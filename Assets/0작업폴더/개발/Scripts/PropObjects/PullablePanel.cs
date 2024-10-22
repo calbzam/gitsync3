@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 
 public class PullablePanel : MonoBehaviour
 {
-    [SerializeField] private GameObject[] _childRbsToActivate;
+    [SerializeField] private GameObject[] _gameobjsToActivateChildRbsOnPullStart;
 
     private HingeJoint2D _joint;
 
@@ -41,9 +41,9 @@ public class PullablePanel : MonoBehaviour
 
     private void initRbsBodytype()
     {
-        if (_childRbsToActivate != null)
+        if (_gameobjsToActivateChildRbsOnPullStart != null)
         {
-            foreach (var parentRb in _childRbsToActivate)
+            foreach (var parentRb in _gameobjsToActivateChildRbsOnPullStart)
             {
                 var _childRbArray = parentRb.GetComponentsInChildren<Rigidbody2D>();
                 if (_childRbArray != null) foreach (var rb in _childRbArray) rb.bodyType = RigidbodyType2D.Kinematic;
@@ -53,9 +53,9 @@ public class PullablePanel : MonoBehaviour
 
     private void toggleRbsBodytype()
     {
-        if (_childRbsToActivate != null)
+        if (_gameobjsToActivateChildRbsOnPullStart != null)
         {
-            foreach (var parentRb in _childRbsToActivate)
+            foreach (var parentRb in _gameobjsToActivateChildRbsOnPullStart)
             {
                 var _childRbArray = parentRb.GetComponentsInChildren<Rigidbody2D>();
                 if (_childRbArray != null) foreach (var rb in _childRbArray) rb.bodyType = RigidbodyType2D.Dynamic;

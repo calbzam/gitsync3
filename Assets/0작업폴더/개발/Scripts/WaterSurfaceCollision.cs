@@ -4,10 +4,13 @@ using UnityEngine;
 
 public class WaterSurfaceCollision : MonoBehaviour
 {
+    [SerializeField] private bool _diveSwimAllowed = true;
+
     private void OnTriggerEnter2D(Collider2D col)
     {
         if (col.CompareTag("Player"))
         {
+            PlayerLogic.Player.DiveSwimAllowed = _diveSwimAllowed;
             PlayerLogic.Player.IsOnWater = true;
         }
     }

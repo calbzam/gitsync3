@@ -520,3 +520,6 @@ MonoBehaviour:
   _updateCheckpointOnActivate: 0
   IsAutomatic: 0
   NeedBattery: 0
+  _transitionCamOnActivate: 1
+  _camTransitionDuration: 0.6
+  _camTransitionHoldDuration: 1.3

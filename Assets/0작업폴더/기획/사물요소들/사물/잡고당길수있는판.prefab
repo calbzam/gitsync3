@@ -155,7 +155,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6a6204ca5368e74f8c774b6dd5852d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _childRbsToActivate: []
+  _gameobjsToActivateChildRbsOnPullStart:
+  - {fileID: 3093811453924189951}
 --- !u!61 &8072704392674520043
 BoxCollider2D:
   m_ObjectHideFlags: 0
