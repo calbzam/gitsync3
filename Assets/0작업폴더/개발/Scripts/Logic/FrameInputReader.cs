@@ -8,7 +8,7 @@ public class FrameInputReader : MonoBehaviour
     {
         public static bool JumpStarted = false;
         public static bool JumpHeld = false;
-        public static Vector2 Move;
+        public static Vector2 InputDir;
     }
 
     //public InputControls Input;
@@ -55,7 +55,7 @@ public class FrameInputReader : MonoBehaviour
     {
         FrameInput.JumpStarted = true;
         FrameInput.JumpHeld = true;
-        FrameInput.Move = CentralInputReader.Input.Player.Movement.ReadValue<Vector2>();
+        FrameInput.InputDir = CentralInputReader.Input.Player.Movement.ReadValue<Vector2>();
 
         JumpPressed?.Invoke();
     }
@@ -68,6 +68,6 @@ public class FrameInputReader : MonoBehaviour
 
         FrameInput.JumpStarted = JumpTriggered;
         FrameInput.JumpHeld = JumpHolding;
-        FrameInput.Move = CentralInputReader.Input.Player.Movement.ReadValue<Vector2>();
+        FrameInput.InputDir = CentralInputReader.Input.Player.Movement.ReadValue<Vector2>();
     }
 }

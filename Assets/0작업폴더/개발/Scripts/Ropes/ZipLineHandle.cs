@@ -77,7 +77,7 @@ public class ZipLineHandle : RidableObject
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        if (_playerOnOtherObject) return;
+        if (PlayerOnOtherObject) return;
 
         if (col.CompareTag("Player"))
         {

@@ -132,7 +132,7 @@ public class MovePlayerToDir : MonoBehaviour
         //PlayerLogic.IgnorePlayerGroundCollision(false);
         PlayerLogic.FreePlayer();
 
-        if (PlayerLogic.Player.IsOnLadder) PlayerLogic.Player.SetPlayerOnLadder(true);
+        if (PlayerLogic.Player.IsOnLadder) PlayerLogic.Player.SetPlayerOnLadder(true, PlayerLogic.Player.CurrentLadder);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

@@ -7,34 +7,51 @@ public class SwingingRope : RidableObject
     private ObiRope _rope;
     private static float _jumpedEnoughDistance;
 
-    public override event Action<int, bool> PlayerOnThisObject;
+    [Help("Particle 0 is mostly the first (top) particle")]
+    [SerializeField] private int _noClimbingParticlesUntil = 4;
 
-    private int _currentParticle = -1;
+    public override event Action<int, bool> PlayerOnThisObject;
+    public bool PlayerIsInRange { get; set; }
+
+    private int _currentParticle;
+    private int _currentIndexInElements;
+    private ObiConstraints<ObiPinConstraintsBatch> _ropePinConstraints;
     private ObiPinConstraintsBatch _playerBatch;
+
+    public bool InitializingComplete { get; private set; }
 
     //private bool[] particleHasCollision;
 
-    private void Awake()
+    private void Awake() // is called every time when scene is reloaded!
     {
         _rope = gameObject.GetComponent<ObiRope>();
+        _currentParticle = -1;
+        _currentIndexInElements = -2;
+
         //particleHasCollision = new bool[rope.particleCount];
     }
 
     protected override void Start()
     {
         base.Start();
+        PlayerIsInRange = false;
         _jumpedEnoughDistance = PlayerLogic.Player.Stats.RopeJumpedDistance;
+
+        //GetRopePinConstraints();
+        //InitPlayerBatch();
     }
 
     protected override void OnEnable()
     {
         base.OnEnable();
+
         _rope.solver.OnCollision += Solver_OnCollision;
     }
 
     protected override void OnDisable()
     {
         base.OnDisable();
+
         _rope.solver.OnCollision -= Solver_OnCollision;
     }
 
@@ -43,60 +60,76 @@ public class SwingingRope : RidableObject
         HandleRopeClimb();
     }
 
-    private void EnableRopeCollision(bool enabled)
+    private void GetRopePinConstraints()
+    {
+        _ropePinConstraints = _rope.GetConstraintsByType(Oni.ConstraintType.Pin) as ObiConstraints<ObiPinConstraintsBatch>;
+    }
+
+    private void ClearRopePinConstraints()
+    {
+        _ropePinConstraints.Clear(); // remove all batches from the constraint type we want, so we start clean:
+    }
+
+    private void EnablePlayerRopeCollision(bool enabled)
     {
         _rope.solver.particleCollisionConstraintParameters.enabled = enabled;
         _rope.solver.collisionConstraintParameters.enabled = enabled;
     }
 
-    private Vector3 getGlobalParticlePos(Vector3 particlePosition)
+    private int GetPrevParticleInElements()
     {
-        Vector3 childUpdated = transform.parent.rotation * Vector3.Scale(particlePosition, transform.parent.lossyScale);
-
-        return childUpdated + transform.parent.position;
+        if (_currentIndexInElements == 0) return _rope.elements[_currentIndexInElements--].particle1;
+        else return _rope.elements[--_currentIndexInElements].particle2;
     }
 
-    private int getIndexInActor(int particle)
+    private int GetNextParticleInElements()
     {
-        return _rope.solver.particleToActor[particle].indexInActor;
+        return _rope.elements[++_currentIndexInElements].particle2;
     }
 
     // indexInActor: https://obi.virtualmethodstudio.com/forum/thread-4019-post-14919.html#pid14919
     private void HandleRopeClimb()
     {
-        if (!PlayerIsAttached) return;
+        if (!PlayerIsInRange || PlayerOnOtherObject) return;
 
-        if (FrameInputReader.FrameInput.Move.y > 0)
+        if (FrameInputReader.FrameInput.InputDir.y > 0)
         {
-            int indexInActor = getIndexInActor(_currentParticle);
-            if (indexInActor - 1 > 0 /* first particle in visible rope */)
+            if (!PlayerIsAttached) AnnouncePlayerOnThisObject();
+            if (_currentIndexInElements > -1 /* first particle in visible rope */)
             {
-                detachPlayerFromParticle(_currentParticle);
-                int prevParticle = _rope.solverIndices[indexInActor - 1];
-                PlayerLogic.PlayerObiCol.transform.position = getGlobalParticlePos(_rope.solver.positions[prevParticle]);
-                attachPlayerToParticle(prevParticle);
+                DetachPlayerFromParticle(_currentParticle);
+                int prevParticle = GetPrevParticleInElements();
+                PlayerLogic.PlayerObiCol.transform.position = RopeCalcs.GetGlobalParticlePos(transform, _rope.solver.positions[prevParticle]);
+                AttachPlayerToParticle(prevParticle);
             }
         }
-        else if (FrameInputReader.FrameInput.Move.y < 0)
+        else if (FrameInputReader.FrameInput.InputDir.y < 0)
         {
-            int indexInActor = getIndexInActor(_currentParticle);
-            if (indexInActor + 1 < _rope.elements.Count + 1 /* total number of particles in visible rope */)
+            if (!PlayerIsAttached) AnnouncePlayerOnThisObject();
+            if (_currentIndexInElements < _rope.elements.Count - 1 /* last particle in visible rope */)
             {
-                detachPlayerFromParticle(_currentParticle);
-                int nextParticle = _rope.solverIndices[indexInActor + 1];
-                PlayerLogic.PlayerObiCol.transform.position = getGlobalParticlePos(_rope.solver.positions[nextParticle]);
-                attachPlayerToParticle(nextParticle);
+                DetachPlayerFromParticle(_currentParticle);
+                int nextParticle = GetNextParticleInElements();
+                PlayerLogic.PlayerObiCol.transform.position = RopeCalcs.GetGlobalParticlePos(transform, _rope.solver.positions[nextParticle]);
+                AttachPlayerToParticle(nextParticle);
             }
         }
     }
 
+    private void AnnouncePlayerOnThisObject()
+    {
+        PlayerIsAttached = true;
+        PlayerOnOtherObject = false;
+        PlayerOnThisObject?.Invoke(gameObject.GetInstanceID(), true);
+        _currentIndexInElements = RopeCalcs.GetElementIndexOfParticle(_rope, _currentParticle);
+    }
+
     private void Solver_OnCollision(object sender, ObiSolver.ObiCollisionEventArgs e)
     {
-        CheckRopePlayerDisconnectedDistance();
-        
-        //Debug.Log(_ropeAttached + ", " + _ropeJumped); // start from: false, false
+        if (!RopePlayerDisconnectedDistanceSatisfied()) return;
+
         if (PlayerIsAttached) return;
-        if (_playerOnOtherObject) return;
+        if (PlayerOnOtherObject) return;
 
         var world = ObiColliderWorld.GetInstance();
         foreach (var contact in e.contacts)
@@ -109,11 +142,14 @@ public class SwingingRope : RidableObject
                 if (col != null && col.CompareTag("Player"))
                 {
                     /* do collsion of bodyA particles */
-                    int particle = _rope.solver.simplices[contact.bodyA];
-                    attachPlayerToParticle(particle);
-                    PlayerOnThisObject?.Invoke(gameObject.GetInstanceID(), true);
-                    PlayerIsAttached = true;
-                    PlayerLogic.PlayerObiCol.enabled = false;
+                    _currentParticle = _rope.solver.simplices[contact.bodyA];
+                    if (_currentParticle > _noClimbingParticlesUntil)
+                    {
+                        AttachPlayerToParticle(_currentParticle);
+                        AnnouncePlayerOnThisObject();
+                        PlayerLogic.PlayerObiCol.enabled = false;
+                        PlayerIsInRange = true;
+                    }
 
                     break;
                 }
@@ -126,73 +162,80 @@ public class SwingingRope : RidableObject
         if (PlayerIsAttached)
         {
             _playerHasJumped = true;
+            PlayerIsInRange = false;
             PlayerOnThisObject?.Invoke(gameObject.GetInstanceID(), false);
-            detachPlayerFromParticle(_currentParticle);
-            EnableRopeCollision(false);
+            DetachPlayerFromParticle(_currentParticle);
+            //EnableRopeCollision(false);
 
             PlayerLogic.PlayerObiCol.enabled = true;
             PlayerLogic.DisconnectedPlayerAddJump();
         }
     }
 
-    private void CheckRopePlayerDisconnectedDistance()
+    private bool RopePlayerDisconnectedDistanceSatisfied()
     {
         if (PlayerIsAttached && _playerHasJumped)
         {
-            Vector3 particlePos = getGlobalParticlePos(_rope.solver.positions[_currentParticle]);
+            Vector3 particlePos = RopeCalcs.GetGlobalParticlePos(transform, _rope.solver.positions[_currentParticle]);
             bool awayFromRope = Vector2.Distance(particlePos, PlayerLogic.PlayerObiCol.transform.position) > _jumpedEnoughDistance;
 
             if (awayFromRope)
             {
                 PlayerIsAttached = _playerHasJumped = false;
-                EnableRopeCollision(true);
+                EnablePlayerRopeCollision(true);
                 _currentParticle = -1;
             }
+
+            return awayFromRope;
         }
+        else return true;
     }
 
     // Scripting constraints http://obi.virtualmethodstudio.com/manual/6.3/scriptingconstraints.html
 
-    private void initPlayerBatch()
+    private void InitPlayerBatch()
     {
-        var pinConstraints = _rope.GetConstraintsByType(Oni.ConstraintType.Pin) as ObiConstraints<ObiPinConstraintsBatch>;
-        pinConstraints.Clear(); // remove all batches from the constraint type we want, so we start clean:
+        GetRopePinConstraints();
+        //_ropePinConstraints.Clear(); // remove all batches (including all constraints manually added in the Unity Editor) from the constraint type we want, so we start clean:
 
         // add a new pin constraints batch
         _playerBatch = new ObiPinConstraintsBatch();
-        pinConstraints.AddBatch(_playerBatch);
+        _ropePinConstraints.AddBatch(_playerBatch);
     }
 
-    private void attachPlayerToParticle(int toParticle)
+    private void AttachPlayerToParticle(int toParticle)
     {
-        initPlayerBatch();
+        InitPlayerBatch();
 
+        PlayerLogic.SetPlayerZPosition(RopeCalcs.GetGlobalParticlePos(transform, _rope.solver.positions[toParticle]).z);
         _playerBatch.AddConstraint(toParticle, PlayerLogic.PlayerRopeRiderCol, Vector3.zero, Quaternion.identity, 0, 0, float.PositiveInfinity);
         _playerBatch.activeConstraintCount = 1;
 
         // this will cause the solver to rebuild pin constraints at the beginning of the next frame:
         _rope.SetConstraintsDirty(Oni.ConstraintType.Pin);
-        _currentParticle = toParticle;
 
-        PlayerLogic.SetPlayerZPosition(getGlobalParticlePos(_rope.solver.positions[toParticle]).z);
+        _currentParticle = toParticle;
     }
 
-    private void detachPlayerFromParticle(int fromParticle)
+    private void DetachPlayerFromParticle(int fromParticle)
     {
-        var pinConstraints = _rope.GetConstraintsByType(Oni.ConstraintType.Pin) as ObiConstraints<ObiPinConstraintsBatch>;
-        pinConstraints.RemoveBatch(_playerBatch);
+        GetRopePinConstraints();
+        _ropePinConstraints.RemoveBatch(_playerBatch);
 
         _rope.SetConstraintsDirty(Oni.ConstraintType.Pin);
     }
 
-    private void repinPlayerToParticle(int fromParticle, int toParticle)
+    private void RepinPlayerToParticle(int fromParticle, int toParticle) // rather unstable without SetConstraintsDirty, i assume
     {
-        _playerBatch.RemoveConstraint(fromParticle);
+        if (_playerBatch.activeConstraintCount > 0)
+            /*_playerBatch.RemoveConstraint(fromParticle);*/ _playerBatch.Clear();
 
         _playerBatch.AddConstraint(toParticle, PlayerLogic.PlayerObiCol, Vector3.zero, Quaternion.identity, 0, 0, float.PositiveInfinity);
         _playerBatch.activeConstraintCount = 1;
 
         _rope.SetConstraintsDirty(Oni.ConstraintType.Pin);
+
+        PlayerLogic.SetPlayerZPosition(RopeCalcs.GetGlobalParticlePos(transform, _rope.solver.positions[toParticle]).z);
         _currentParticle = toParticle;
     }
 }

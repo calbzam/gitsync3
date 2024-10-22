@@ -26,13 +26,16 @@ public class PlayerController : MonoBehaviour
     public bool LimitXVelocity { get; set; } // assigned false when speed boost from other object, assigned true when player hits ground
     public bool ZPosSetToGround { get; set; }
 
-    private Rigidbody2D swingingGround;
+    private Collider2D _groundCol;
+    private bool _groundHit;
 
     public bool GroundCheckAllowed { get; set; }
-    private Vector3 groundCheckerPos;
-    private float groundCheckerRadius;
-    private Vector3 ceilCheckerPos;
-    private float ceilCheckerRadius;
+    private Vector3 _groundCheckerPos, _groundCheckerPosOnWater;
+    private Vector3 _groundCheckerOffset, _groundCheckerOffsetOnWater;
+    private float _groundCheckerRadius, _groundCheckerRadiusOnWater;
+    private Vector3 _ceilCheckerPos;
+    private Vector3 _ceilCheckerOffset;
+    private float _ceilCheckerRadius;
 
     /* Time */
     private float _time = 1f; // 1f > 0 + 0.1:  prevent character from jumping without input at scene start
@@ -43,43 +46,52 @@ public class PlayerController : MonoBehaviour
 
     /* Collisions */
     private float _frameLeftGrounded = float.MinValue;
-    public bool OnGround { get; private set; }
+    public bool OnGround { get; set; }
+    public bool IsOnWater { get; set; }
     public bool IsInWater { get; set; }
+    public bool DiveSwimAllowed { get; set; } = false;
 
     public bool LadderClimbAllowed { get; set; }
-    public bool IsInLadderRange { get; set; }
-    public bool IsOnLadder { get; set; }
+    private bool _isInLadderRange => (CurrentLadder != null ? CurrentLadder.PlayerIsInRange : false);
+    public bool IsOnLadder => (CurrentLadder != null ? CurrentLadder.PlayerIsOnLadder : false);
+    public bool JumpingFromLadder { get; set; }
     public LadderTrigger CurrentLadder { get; set; }
+    private float _ladderStepProgress;
 
-    //private bool disableYVelocity = false;
-    //private bool swingingGroundHit = false;
+    private bool _drawGizmosEnabled = false;
+
+    //private bool _disableYVelocity = false;
+    //private bool _swingingGroundHit = false;
 
     private void Awake()
     {
         _cachedQueryStartInColliders = Physics2D.queriesStartInColliders;
-    }
 
-    private void Start()
-    {
         RespawnButtonAllowed = true;
 
         DirInputActive = true;
         LimitXVelocity = true;
         ZPosSetToGround = false;
 
+        IsOnWater = false;
+        IsInWater = false;
+
         GroundCheckAllowed = true;
+        setGroundCheckerParams();
+
         LadderClimbAllowed = true;
-        drawGizmosEnabled = true;
+        JumpingFromLadder = false;
+        _drawGizmosEnabled = true;
     }
 
     private void OnEnable()
     {
-        drawGizmosEnabled = true;
+        _drawGizmosEnabled = true;
     }
 
     private void OnDisable()
     {
-        drawGizmosEnabled = false;
+        _drawGizmosEnabled = false;
     }
 
     private void Update()
@@ -96,28 +108,46 @@ public class PlayerController : MonoBehaviour
 
         HandleJump();
         if (LadderClimbAllowed) HandleLadderClimb();
+        HandleSwimmingVertical();
 
-        HandleDirection();
+        HandleSwimmingRotation();
+
+        HandleMovementHorizontal();
         HandleGravity();
 
         //ApplyMovement();
     }
+
+    private Collider2D OverlapPlayerCapsule(LayerStruct layerToCheck)
+    {
+        return Physics2D.OverlapCapsule(_rb.position, _col.size, _col.direction, 0, layerToCheck.MaskValue);
+    }
+
+    private Collider2D[] OverlapPlayerCapsuleAll(LayerStruct layerToCheck)
+    {
+        return Physics2D.OverlapCapsuleAll(_rb.position, _col.size, _col.direction, 0, layerToCheck.MaskValue);
+    }
+
+    #region Input
 
     private void RefineInput()
     {
         //// unneeded as arrow keys are automatically snapped
         //if (_stats.SnapInput)
         //{
-        //    InputReader.FrameInput.Move.x = Mathf.Abs(InputReader.FrameInput.Move.x) < _stats.HorizontalDeadZoneThreshold ? 0 : Mathf.Sign(InputReader.FrameInput.Move.x);
-        //    InputReader.FrameInput.Move.y = Mathf.Abs(InputReader.FrameInput.Move.y) < _stats.VerticalDeadZoneThreshold ? 0 : Mathf.Sign(InputReader.FrameInput.Move.y);
+        //    InputReader.FrameInput.InputDir.x = Mathf.Abs(InputReader.FrameInput.InputDir.x) < _stats.HorizontalDeadZoneThreshold ? 0 : Mathf.Sign(InputReader.FrameInput.InputDir.x);
+        //    InputReader.FrameInput.InputDir.y = Mathf.Abs(InputReader.FrameInput.InputDir.y) < _stats.VerticalDeadZoneThreshold ? 0 : Mathf.Sign(InputReader.FrameInput.InputDir.y);
         //}
 
         if (FrameInputReader.FrameInput.JumpStarted)
         {
-            _jumpToConsume = true;
+            if (IsOnWater || IsInWater) { if (OnGround) _jumpToConsume = true; } // allow jump in water only if OnGround == true
+            else _jumpToConsume = true;
             _timeJumpWasPressed = _time;
         }
     }
+
+    #endregion
 
     #region Collisions
 
@@ -125,22 +155,33 @@ public class PlayerController : MonoBehaviour
     //_col.size: (x=0.50, y=1.26)
     //_col.direction: Vertical
 
-    private Collider2D _groundCol;
-    private bool _groundHit;
+    private void setGroundCheckerParams()
+    {
+        _groundCheckerOffset = (_col.size.y / 2 + _stats.GrounderDistance) * Vector3.down;
+        _groundCheckerOffsetOnWater = (_col.size.y / 2 + _stats.GrounderDistanceOnWater) * Vector3.down;
+        _groundCheckerRadius = _col.size.x / 2 + _stats.GroundCheckerAddRadius;
+        _groundCheckerRadiusOnWater = _col.size.x / 2 + _stats.GroundCheckerAddRadiusOnWater;
+
+        _ceilCheckerOffset = (_col.size.y / 2 + _stats.GrounderDistance) * Vector3.up;
+        _ceilCheckerRadius = _groundCheckerRadius;
+    }
 
     private void CheckCollisions()
     {
         Physics2D.queriesStartInColliders = false;
 
-
         // Ground and Ceiling
 
         // add later: Enum groundHitType - static ground, moving ground
 
-        groundCheckerPos = _col.bounds.center + Vector3.down * (_col.size.y / 2 + _stats.GrounderDistance);
-        groundCheckerRadius = _col.size.x / 2 + _stats.GroundCheckerAddRadius;
-        ceilCheckerPos = _col.bounds.center + Vector3.up * (_col.size.y / 2 + _stats.GrounderDistance);
-        ceilCheckerRadius = groundCheckerRadius;
+        _groundCheckerPos = _col.bounds.center + _groundCheckerOffset;
+        _groundCheckerPosOnWater = _col.bounds.center + _groundCheckerOffsetOnWater;
+        _ceilCheckerPos = _col.bounds.center + _ceilCheckerOffset;
+
+        Vector3 groundCheckerPos;
+        float groundCheckerRadius;
+        if (IsOnWater) { groundCheckerPos = _groundCheckerPosOnWater; groundCheckerRadius = _groundCheckerRadiusOnWater; }
+        else { groundCheckerPos = _groundCheckerPos; groundCheckerRadius = _groundCheckerRadius; }
 
         //Collider2D col = Physics2D.OverlapCircle(groundCheckerPos, groundCheckerRadius, Layers.SwingingGroundLayer);
         //if (col) { swingingGroundHit = true; /*swingingGround = col.attachedRigidbody;*/ }
@@ -153,7 +194,7 @@ public class PlayerController : MonoBehaviour
             if (!IsOnLadder && _groundCol != null)
             {
                 if (!_groundCol.CompareTag("SpeedBoost Ground")) LimitXVelocity = true;
-                
+
                 // Set Z-pos to the Z-pos of the ground that Player hit
                 PlayerLogic.SetPlayerZPosition(_groundCol.transform.position.z);
                 ZPosSetToGround = true;
@@ -171,14 +212,16 @@ public class PlayerController : MonoBehaviour
         // Hit a Ceiling: cancel jumping from there
         //if (ceilingHit) /*_frameVelocity.y = Mathf.Min(0, _frameVelocity.y);*/_rb.velocity = new Vector2(_rb.velocity.x, Mathf.Min(0, _rb.velocity.y));
 
-
         // Landed on the Ground
         if (!OnGround && _groundHit)
         {
             OnGround = true;
-            _coyoteUsable = true;
-            _bufferedJumpUsable = true;
-            _endedJumpEarly = false;
+            //if (!IsOnWater && !IsInWater)
+            //{
+                _coyoteUsable = true;
+                _bufferedJumpUsable = true;
+                _endedJumpEarly = false;
+            //}
             GroundedChanged?.Invoke(true, Mathf.Abs(/*_frameVelocity.y*/_rb.velocity.y));
         }
         // Left the Ground
@@ -217,7 +260,7 @@ public class PlayerController : MonoBehaviour
         if (!IsOnLadder && (OnGround || CanUseCoyote)) ExecuteJump();
     }
 
-    private void ExecuteJump()
+    public void ExecuteJump()
     {
         _jumpToConsume = false;
         _endedJumpEarly = false;
@@ -239,25 +282,85 @@ public class PlayerController : MonoBehaviour
 
     #region Ladder Climb
 
-    public void SetPlayerOnLadder(bool onLadder)
+    private Vector2 GetLadderPosClosestToPlayer()
     {
-        if (onLadder)
-        {
-            IsOnLadder = true; // 사다리에서 방향키를 처음 눌렀을 때
-            CurrentLadder.StepProgress = CurrentLadder.StepSize;
+        // no 2x2 matrix in unity
+        // use 2 linear eqns (x, y) instead
 
-            base.transform.position = new Vector3(CurrentLadder.transform.position.x, base.transform.position.y, CurrentLadder.transform.position.z - 0.1f);
+        // ladder line: p1(x1,y1), p2(x2,y2)
+        // player line: p3(x3,y3), p4(x4,y4)
+        // y = (y2-y1)/(x2-x1)*(x-x1)+y1 , x = (y-y1)/((y2-y1)/(x2-x1))+x1
+        // y = (y4-y3)/(x4-x3)*(x-x3)+y3 , x = (y-y3)/((y4-y3)/(x4-x3))+x3
+
+        // solve for x:  (y2-y1)/(x2-x1)*(x-x1)+y1 = (y4-y3)/(x4-x3)*(x-x3)+y3
+        // x = ( y3-y1 + (y2-y1)/(x2-x1)*x1 -(y4-y3)/(x4-x3)*x3 ) / ( (y2-y1)/(x2-x1) - (y4-y3)/(x4-x3) )
+        // y3==y4:  x = ( y3-y1 + (y2-y1)/(x2-x1)*x1 -(y3-y3)/(x4-x3)*x3 ) / ( (y2-y1)/(x2-x1) - (y3-y3)/(x4-x3) )
+        //            = ( y3-y1 + (y2-y1)/(x2-x1)*x1 -(0)/(x4-x3)*x3 ) / ( (y2-y1)/(x2-x1) - (0)/(x4-x3) )
+        //            = ( y3-y1 + (y2-y1)/(x2-x1)*x1 ) / ( (y2-y1)/(x2-x1) )
+        //            = ( y3-y1 + (y2-y1)/(x2-x1)*x1 ) / (y2-y1) * (x2-x1)
+
+        // solve for y:  (y-y1)/((y2-y1)/(x2-x1))+x1 = (y-y3)/((y4-y3)/(x4-x3))+x3
+        // y = ( x3-x1 + y1/((y2-y1)/(x2-x1)) - y3/((y4-y3)/(x4-x3)) ) / ( 1/((y2-y1)/(x2-x1)) - 1/((y4-y3)/(x4-x3)) )
+        //   = ( x3-x1 + y1/(y2-y1)*(x2-x1) - y3/(y4-y3)*(x4-x3) ) / ( 1/(y2-y1)*(x2-x1) - 1/(y4-y3)*(x4-x3) )
+        // x3==x4:  y = ( x3-x1 + y1/(y2-y1)*(x2-x1) - y3/(y4-y3)*(x3-x3) ) / ( 1/(y2-y1)*(x2-x1) - 1/(y4-y3)*(x3-x3) )
+        //            = ( x3-x1 + y1/(y2-y1)*(x2-x1) - y3/(y4-y3)*(0) ) / ( 1/(y2-y1)*(x2-x1) - 1/(y4-y3)*(0) )
+        //            = ( x3-x1 + y1/(y2-y1)*(x2-x1) ) / ( 1/(y2-y1)*(x2-x1) )
+
+        float x1 = CurrentLadder.TopPoint.position.x, y1 = CurrentLadder.TopPoint.position.y;
+        float x2 = CurrentLadder.BottomPoint.position.x, y2 = CurrentLadder.BottomPoint.position.y;
+        float x3 = transform.position.x - 2, y3 = transform.position.y;
+        float x4 = transform.position.x + 2, y4 = 0;
+        float ladderIntersectX = (y3 - y1 + (y2 - y1) / (x2 - x1) * x1) / (y2 - y1) * (x2 - x1);
+
+        x3 = x4 = transform.position.x;
+        y3 = transform.position.y - 2; y4 = transform.position.y + 2;
+        float ladderIntersectY = (x3 - x1 + y1 / (y2 - y1) * (x2 - x1)) / (1 / (y2 - y1) * (x2 - x1));
+
+        Vector2 usePlayerX = new Vector2(transform.position.x, ladderIntersectY);
+        Vector2 usePlayerY = new Vector2(ladderIntersectX, transform.position.y);
+        Vector2 ladderIntersect = Vector2.Distance(usePlayerX, transform.position) < Vector2.Distance(usePlayerY, transform.position) ? usePlayerX : usePlayerY;
+
+        return ladderIntersect;
+    }
+
+    public void SetPlayerInLadderRange(LadderTrigger ladder)
+    {
+        CurrentLadder = ladder;
+        CurrentLadder.PlayerIsInRange = true;
+    }
+
+    public void SetPlayerOnLadder(bool onThisLadder, LadderTrigger ladder)
+    {
+        if (onThisLadder)
+        {
+            ladder.PlayerIsOnLadder = true; // 사다리에서 방향키를 처음 눌렀을 때
+
+            Vector2 ladderIntersect;
+            if (Math.Abs(ladder.Direction.x) < 0.001/*slope = inf*/) ladderIntersect = new Vector2(ladder.transform.position.x, transform.position.y);
+            else if (Math.Abs(ladder.Direction.y) < 0.001/*slope = 0*/) ladderIntersect = new Vector2(transform.position.x, ladder.transform.position.y);
+            else ladderIntersect = GetLadderPosClosestToPlayer();
+
+            transform.position = new Vector3(ladderIntersect.x, ladderIntersect.y, ladder.transform.position.z - 0.1f);
             _rb.velocity = Vector2.zero;
 
-            if (CurrentLadder.BypassGroundCollision) PlayerLogic.IgnorePlayerGroundCollision(true);
+            if (ladder.BypassGroundCollision) PlayerLogic.IgnorePlayerGroundCollision(true);
             DirInputActive = false;
+
+            CurrentLadder = ladder;
+            JumpingFromLadder = false;
         }
         else
         {
-            IsOnLadder = false;
+            ladder.PlayerIsOnLadder = false;
+            ladder.PlayerIsInRange = false;
 
-            PlayerLogic.IgnorePlayerGroundCollision(false);
-            DirInputActive = true;
+            // disable "ladder movement" only if the trigger-exited ladder is the ladder the Player is currently on
+            if (ladder == CurrentLadder)
+            {
+                PlayerLogic.IgnorePlayerGroundCollision(false);
+                DirInputActive = true;
+                CurrentLadder = null;
+            }
         }
 
         Physics2D.SyncTransforms();
@@ -265,36 +368,114 @@ public class PlayerController : MonoBehaviour
 
     private bool PlayerAtLadderEnd()
     {
-        return (FrameInputReader.FrameInput.Move.y > 0 && _rb.position.y > CurrentLadder.TopPoint.position.y)
-            || (FrameInputReader.FrameInput.Move.y < 0 && _rb.position.y < CurrentLadder.BottomPoint.position.y);
+        return (FrameInputReader.FrameInput.InputDir.y > 0 && _rb.position.y > CurrentLadder.TopPoint.position.y)
+            || (FrameInputReader.FrameInput.InputDir.y < 0 && _rb.position.y < CurrentLadder.BottomPoint.position.y);
     }
 
     private void HandleLadderClimb()
     {
-        if (IsInLadderRange)
+        if (_isInLadderRange)
         {
-            if (FrameInputReader.FrameInput.Move.y != 0)
+            if (FrameInputReader.FrameInput.InputDir.y != 0)
             {
                 if (!IsOnLadder)
                 {
-                    if (PlayerAtLadderEnd()) return;
-                    if (CurrentLadder.JumpingFromLadder) CurrentLadder.JumpingFromLadder = false;
-                    SetPlayerOnLadder(true);
+                    if (CurrentLadder.StopClimbingUpwards && FrameInputReader.FrameInput.InputDir.y > 0) return;
+                    else if (CurrentLadder.StopClimbingDownwards && FrameInputReader.FrameInput.InputDir.y < 0) return;
+
+                    SetPlayerOnLadder(true, CurrentLadder);
                 }
 
-                CurrentLadder.StepProgress += CurrentLadder.ClimbSpeed;
-                if (CurrentLadder.StepProgress > CurrentLadder.StepSize)
+                _ladderStepProgress += CurrentLadder.ClimbSpeed * Time.fixedDeltaTime;
+                if (_ladderStepProgress > CurrentLadder.StepSize)
                 {
-                    _rb.MovePosition(_rb.position + CurrentLadder.StepSize * Mathf.Sign(FrameInputReader.FrameInput.Move.y) * Vector2.up);
-                    if (PlayerAtLadderEnd()) CurrentLadder.JumpFromLadder();
-                    CurrentLadder.StepProgress = 0;
+                    _rb.MovePosition(_rb.position + CurrentLadder.StepSize * Mathf.Sign(FrameInputReader.FrameInput.InputDir.y) * CurrentLadder.Direction);
+                    if (PlayerAtLadderEnd()) // 2 ladders connection evaluation
+                    {
+                        Collider2D[] cols = OverlapPlayerCapsuleAll(Layers.LadderLayer);
+                        LadderTrigger upperLadder, lowerLadder;
+
+                        if (cols.Length < 2) CurrentLadder.JumpFromLadder();
+                        else
+                        {
+                            if (FrameInputReader.FrameInput.InputDir.y > 0)
+                            {
+                                upperLadder = (cols[0].transform.position.y > cols[1].transform.position.y) ? cols[0].GetComponent<LadderTrigger>() : cols[1].GetComponent<LadderTrigger>();
+                                if (ReferenceEquals(CurrentLadder.gameObject, upperLadder.gameObject)) CurrentLadder.JumpFromLadder();
+                                else SetPlayerOnLadder(true, upperLadder);
+                            }
+                            else // FrameInputReader.FrameInput.InputDir.y < 0
+                            {
+                                lowerLadder = (cols[0].transform.position.y < cols[1].transform.position.y) ? cols[0].GetComponent<LadderTrigger>() : cols[1].GetComponent<LadderTrigger>();
+                                if (ReferenceEquals(CurrentLadder.gameObject, lowerLadder.gameObject)) CurrentLadder.JumpFromLadder();
+                                else SetPlayerOnLadder(true, lowerLadder);
+                            }
+                        }
+                    }
+                    _ladderStepProgress = 0;
                 }
             }
 
             else // no climbing input
             {
-                CurrentLadder.StepProgress = CurrentLadder.StepSize;
+                _ladderStepProgress = CurrentLadder.StepSize;
             }
+        }
+    }
+
+    #endregion
+
+    #region Swimming
+
+    private void UpdateSinkFloatDensity(float targetDensity)
+    {
+        if (Mathf.Abs(_col.density - targetDensity) < 0.001f) return;
+        _col.density = Mathf.MoveTowards(_col.density, targetDensity, _stats.UnderwaterSinkFloatSpeed * Time.fixedDeltaTime);
+    }
+
+    private void MovePlayerRotationTo(float targetEulerAngle)
+    {
+        MyMath.RotateAndEvalDone(transform, targetEulerAngle, _stats.UnderwaterRotationSpeed);
+    }
+
+    private void HandleSwimmingVertical()
+    {
+        if (!DiveSwimAllowed) return;
+
+        if (IsInWater)
+        {
+            if (FrameInputReader.FrameInput.InputDir.y > 0)
+            {
+                UpdateSinkFloatDensity(_stats.DensitySwimmingUp);
+            }
+            else if (FrameInputReader.FrameInput.InputDir.y < 0)
+            {
+                UpdateSinkFloatDensity(_stats.DensitySwimmingDown);
+            }
+            else
+            {
+                UpdateSinkFloatDensity(_stats.DensitySwimmingIdle);
+            }
+        }
+        else
+        {
+            //if (IsOnWater && FrameInputReader.FrameInput.InputDir.y < 0) IsInWater = true;
+            //else
+            //{
+                _col.density = _stats.DensityOnGround;
+                if (Mathf.Abs(transform.localEulerAngles.z) > 0.001f) MovePlayerRotationTo(0);
+            //}
+        }
+    }
+
+    private void HandleSwimmingRotation()
+    {
+        if (!DiveSwimAllowed) return;
+
+        if (IsInWater)
+        {
+            if (FrameInputReader.FrameInput.InputDir == Vector2.zero) MovePlayerRotationTo(0);
+            else MovePlayerRotationTo(Mathf.Atan2(FrameInputReader.FrameInput.InputDir.y, FrameInputReader.FrameInput.InputDir.x) * Mathf.Rad2Deg - 90);
         }
     }
 
@@ -302,11 +483,11 @@ public class PlayerController : MonoBehaviour
 
     #region Horizontal Movement
 
-    private void HandleDirection()
+    private void HandleMovementHorizontal()
     {
         if (!DirInputActive) return;
 
-        if (FrameInputReader.FrameInput.Move.x == 0)
+        if (FrameInputReader.FrameInput.InputDir.x == 0)
         {
             if (_rb.velocity.x != 0)
             {
@@ -324,9 +505,9 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            //_frameVelocity.x = Mathf.MoveTowards(_frameVelocity.x, _stats.MaxSpeedX * InputReader.FrameInput.Move.x, _stats.AccelerationX * Time.fixedDeltaTime);
-            if (IsInWater) _rb.AddForce(_stats.WaterAccelerationX * FrameInputReader.FrameInput.Move.x * Vector2.right, ForceMode2D.Force);
-            else _rb.AddForce(_stats.GroundAccelerationX * FrameInputReader.FrameInput.Move.x * Vector2.right, ForceMode2D.Force);
+            //_frameVelocity.x = Mathf.MoveTowards(_frameVelocity.x, _stats.MaxSpeedX * InputReader.FrameInput.InputDir.x, _stats.AccelerationX * Time.fixedDeltaTime);
+            if (IsInWater) _rb.AddForce(_stats.WaterAccelerationX * FrameInputReader.FrameInput.InputDir.x * Vector2.right, ForceMode2D.Force);
+            else _rb.AddForce(_stats.GroundAccelerationX * FrameInputReader.FrameInput.InputDir.x * Vector2.right, ForceMode2D.Force);
 
             if (LimitXVelocity) LimitXVelocityTo(_stats.MaxSpeedX);
         }
@@ -363,13 +544,20 @@ public class PlayerController : MonoBehaviour
         {
             _rb.gravityScale = 0;
         }
-        else if (_rb.velocity.y > 0)
+        else if (IsInWater)
         {
-            _rb.gravityScale = _stats.JumpUpGravityScale;
+            _rb.gravityScale = _stats.InWaterGravityScale;
         }
-        else
+        else // not IsOnLadder nor IsInWater = in air or OnGround
         {
-            _rb.gravityScale = _stats.FallDownGravityScale;
+            if (_rb.velocity.y > 0)
+            {
+                _rb.gravityScale = _stats.JumpUpGravityScale;
+            }
+            else
+            {
+                _rb.gravityScale = _stats.FallDownGravityScale;
+            }
         }
     }
 
@@ -423,13 +611,13 @@ public class PlayerController : MonoBehaviour
     //}
 
 
-    private bool drawGizmosEnabled = false;
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
-        if (drawGizmosEnabled)
+        if (_drawGizmosEnabled)
         {
-            Handles.DrawWireDisc(groundCheckerPos, Vector3.back, groundCheckerRadius);
+            Handles.DrawWireDisc(_groundCheckerPos, Vector3.back, _groundCheckerRadius);
+            Handles.DrawWireDisc(_groundCheckerPosOnWater, Vector3.back, _groundCheckerRadiusOnWater);
             //Handles.DrawWireDisc(ceilCheckerPos, Vector3.back, ceilCheckerRadius);
 
             //Gizmos.DrawWireCube(_col.bounds.center, _col.size);

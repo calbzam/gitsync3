@@ -27,13 +27,13 @@ public class RidableObjectEnabler : MonoBehaviour
         }
     }
 
-    // on == true: on this rope
-    // on == false: off this rope
-    private void PlayerOnThisObject(int instanceID, bool on)
+    // playerOnOther == true: on other rope
+    // playerOnOther == false: off other rope
+    private void PlayerOnThisObject(int instanceID, bool playerOnOther)
     {
         foreach (var rope in ropes)
         {
-            if (instanceID != rope.GetInstanceID()) rope._playerOnOtherObject = on;
+            if (instanceID != rope.gameObject.GetInstanceID()) rope.PlayerOnOtherObject = playerOnOther;
         }
     }
 }

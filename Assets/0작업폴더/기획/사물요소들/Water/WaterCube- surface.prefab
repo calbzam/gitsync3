@@ -90,7 +90,7 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 4762088f1894fe843ab79c711d8c0673, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 5279248424680285600}
+      addedObject: {fileID: 8202174187436944000}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 4762088f1894fe843ab79c711d8c0673, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2911471903328036738}
@@ -106,7 +106,7 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 4762088f1894fe843ab79c711d8c0673, type: 3}
   m_PrefabInstance: {fileID: 2239057419002910539}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &5279248424680285600
+--- !u!114 &8202174187436944000
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -115,11 +115,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1428717563609754138}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f81305e50966bcc4d93c545b5a479d83, type: 3}
+  m_Script: {fileID: 11500000, guid: 73c51f9974924074d968e00e9903399f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _waterCol: {fileID: 0}
-  _effector: {fileID: 0}
 --- !u!61 &2911471903328036738
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -176,7 +174,7 @@ BuoyancyEffector2D:
   m_UseColliderMask: 1
   m_ColliderMask:
     serializedVersion: 2
-    m_Bits: 1791
+    m_Bits: 9951
   m_SurfaceLevel: 0
   m_Density: 4
   m_LinearDrag: 10

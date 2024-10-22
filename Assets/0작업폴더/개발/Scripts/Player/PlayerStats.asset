@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f7b053d93e8a8b49bc28fe0047f7fef, type: 3}
+  m_Name: PlayerStats
+  m_EditorClassIdentifier: 
+  SnapInput: 1
+  VerticalDeadZoneThreshold: 0.3
+  HorizontalDeadZoneThreshold: 0.1
+  MaxSpeedX: 6
+  MinSpeedX: 0.5
+  UnderwaterSinkFloatSpeed: 20
+  UnderwaterRotationSpeed: 240
+  JumpUpGravityScale: 1.8
+  FallDownGravityScale: 3
+  InWaterGravityScale: 2.4
+  GroundAccelerationX: 25
+  WaterAccelerationX: 35
+  GroundDecelerationX: 30
+  WaterDecelerationX: 25
+  AirDecelerationX: 20
+  GroundingForce: -1.5
+  GrounderDistance: -0.2
+  GrounderDistanceOnWater: -0.4
+  GroundCheckerAddRadius: -0.01
+  GroundCheckerAddRadiusOnWater: 0.2
+  JumpPower: 9
+  CoyoteTime: 0.15
+  JumpBuffer: 0.1
+  RopeJumpedDistance: 2
+  RopeJumpedPlayerAddForce: 2
+  PlayerAttachedObjectAddVelocity: 12
+  DensityOnGround: 1.5
+  DensitySwimmingUp: 1.8
+  DensitySwimmingDown: 8
+  DensitySwimmingIdle: 4.5
