@@ -1,22 +1,23 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class DeadZone : MonoBehaviour
+public class DeadZone : ScreenFadeRespawn
 {
-    private void OnTriggerEnter2D(Collider2D col)
+    [SerializeField] private int _playerMaxDistanceFromCenterToStop = 1;
+
+    protected override void BeforeScreenFadeOut()
     {
-        if (col.gameObject.CompareTag("Player"))
-        {
-            PlayerLogic.Player.RespawnPlayer();
-        }
+        StartCoroutine(LockPlayerAfterSmallMove());
     }
 
-    private void OnTriggerStay2D(Collider2D col)
+    protected override void AfterRespawned()
     {
-        if (col.gameObject.CompareTag("Player"))
-        {
-            PlayerLogic.Player.RespawnPlayer();
-        }
+
+    }
+
+    private IEnumerator LockPlayerAfterSmallMove()
+    {
+        yield return new WaitUntil(() => MyMath.Vector2DiffOrLessThan(PlayerLogic.Player.transform.position, transform.position, _playerMaxDistanceFromCenterToStop));
+        PlayerLogic.LockPlayer();
     }
 }
