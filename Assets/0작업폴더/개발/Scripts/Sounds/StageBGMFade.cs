@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class StageBGMFade : MonoBehaviour
@@ -5,10 +6,17 @@ public class StageBGMFade : MonoBehaviour
     [SerializeField] private AudioSource _stageBgm;
     [SerializeField] private BoxCollider2D _selfCol;
     private float _colTopY, _colBottomY;
+    private ColBounds2D _bgmBounds;
 
     [SerializeField] VolumeDir _volumeDir = VolumeDir.TopIsMaxVolume;
     [SerializeField] private float _volumeMin = 0.1f;
     private float _volumeMax;
+
+    [Header("Fade in BGM on scene load")]
+    [SerializeField] private bool _fadeInBGMOnSceneLoad = false;
+    [SerializeField] private BoxCollider2D _bgmLoadFadeInArea;
+    [SerializeField] private float _volumeFadeInSpeed = 1;
+
     public float VolumePercent { get; private set; }
 
     public bool PlayerInZone { get; private set; }
@@ -22,6 +30,7 @@ public class StageBGMFade : MonoBehaviour
 
         _volumeMax = _stageBgm.volume;
         EvalVolumePercentInt();
+        EvalFadeInBGM();
 
         PlayerInZone = false;
     }
@@ -30,6 +39,26 @@ public class StageBGMFade : MonoBehaviour
     {
         if (PlayerLogic.Player.transform.position.y > _colTopY) VolumePercent = _volumeMax;
         else if (PlayerLogic.Player.transform.position.y < _colBottomY) VolumePercent = _volumeMin;
+    }
+
+    private void EvalFadeInBGM()
+    {
+        if (_fadeInBGMOnSceneLoad)
+        {
+            _bgmBounds = new ColBounds2D(_bgmLoadFadeInArea);
+            if (_bgmBounds.OtherIsInSelf(PlayerLogic.Player.transform)) StartCoroutine(IncreaseBgmVolume());
+        }
+    }
+
+    private IEnumerator IncreaseBgmVolume()
+    {
+        _stageBgm.volume = 0;
+
+        yield return new WaitUntil(() =>
+        {
+            _stageBgm.volume = Mathf.MoveTowards(_stageBgm.volume, _volumeMax, _volumeFadeInSpeed * Time.deltaTime);
+            return _stageBgm.volume == _volumeMax;
+        });
     }
 
     private void OnTriggerEnter2D(Collider2D col)

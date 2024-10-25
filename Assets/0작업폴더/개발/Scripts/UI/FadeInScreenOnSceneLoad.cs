@@ -1,7 +1,6 @@
-using System.Collections;
 using UnityEngine;
 
-public class FadeInOnSceneLoad : MonoBehaviour
+public class FadeInScreenOnSceneLoad : MonoBehaviour
 {
     [SerializeField] private FadeInOut _fadeInOut;
     private CanvasGroup _fadeInOutUI;
