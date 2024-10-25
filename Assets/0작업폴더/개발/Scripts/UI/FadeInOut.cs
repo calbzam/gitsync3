@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class FadeInOut : MonoBehaviour
 {
-    [SerializeField] private float _fadeSpeed = 5;
-    [SerializeField] private float _fadeHoldDuration = 1;
+    [SerializeField] private float _fadeSpeed = 2.2f;
+    [SerializeField] private float _fadeHoldDuration = 0.7f;
     private float _fadeOutHoldTime;
 
     private CanvasGroup _fadeInOutUI;

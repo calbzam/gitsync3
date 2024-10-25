@@ -65,11 +65,13 @@ public class LeverActivate : MonoBehaviour
                 {
                     _leverActivatedVirtualCam.enabled = false;
                     _camHoldEndTime = Time.time;
+
+                    CanvasLogic.Letterboxes.Activateboxes(false);
                 }
             }
             else // measure until LeverActivatedVirtualCam -> DefaultVirtualCam transition
             {
-                if (Time.time - _camHoldEndTime > _camTransitionDuration)
+                if (Time.time - _camHoldEndTime > _camTransitionDuration + 0.1f)
                 {
                     _mainCamCinemachineBrain.m_DefaultBlend.m_Time = _camTransitionDurOrig;
                     _defaultVirtualCam.m_Transitions.m_InheritPosition = false;
@@ -101,6 +103,7 @@ public class LeverActivate : MonoBehaviour
             _startCamTransition = true;
 
             PlayerLogic.LockPlayer();
+            CanvasLogic.Letterboxes.Activateboxes(true);
         }
 
         foreach (var obj in _connectedObjects) obj.ActivatedAction(IsActivated);

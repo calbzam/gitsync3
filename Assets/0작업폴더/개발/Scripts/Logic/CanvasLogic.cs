@@ -7,9 +7,13 @@ public class CanvasLogic : MonoBehaviour
     [SerializeField] private FadeInOut _respawnFadeInOut;
     public static FadeInOut RespawnFadeInOut;
 
+    [SerializeField] private Letterboxes _letterboxes;
+    public static Letterboxes Letterboxes;
+
     private void Awake()
     {
         RespawnFadeInOut = _respawnFadeInOut;
+        Letterboxes = _letterboxes;
     }
 
     public static void EvalAndStartRespawnFade(int fromInstanceID)
