@@ -19,6 +19,11 @@ public static class MyMath
         return Mathf.Abs(v1.x - v2.x) < delta && Mathf.Abs(v1.y - v2.y) < delta;
     }
 
+    public static bool Vector2DiffOrLessThan(Vector2 v1, Vector2 v2, float delta)
+    {
+        return Mathf.Abs(v1.x - v2.x) < delta || Mathf.Abs(v1.y - v2.y) < delta;
+    }
+
     public static bool Vector3DiffLessThan(Vector3 v1, Vector3 v2, float delta)
     {
         return Mathf.Abs(v1.x - v2.x) < delta && Mathf.Abs(v1.y - v2.y) < delta && Mathf.Abs(v1.z - v2.z) < delta;

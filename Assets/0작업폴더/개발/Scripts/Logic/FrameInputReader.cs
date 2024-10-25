@@ -27,12 +27,14 @@ public class FrameInputReader : MonoBehaviour
         //Input.Enable();
         CentralInputReader.Input.Player.Jump.started += JumpStartedAction;
         CentralInputReader.Input.Player.Respawn.started += RespawnPressedAction;
+        StartCoroutine(CanvasLogic.RespawnFadeInOut_AddReader(() => CanvasLogic.RespawnFadeInOut.FadeOutFinished += RespawnFadeFinishedAction));
     }
 
     private void OnDisable()
     {
         CentralInputReader.Input.Player.Jump.started -= JumpStartedAction;
         CentralInputReader.Input.Player.Respawn.started -= RespawnPressedAction;
+        CanvasLogic.RespawnFadeInOut.FadeOutFinished -= RespawnFadeFinishedAction;
     }
 
     private void Update()
@@ -43,6 +45,12 @@ public class FrameInputReader : MonoBehaviour
     private void RespawnPressedAction(InputAction.CallbackContext ctx)
     {
         if (PlayerLogic.Player.RespawnButtonAllowed)
+            CanvasLogic.EvalAndStartRespawnFade(GetInstanceID());
+    }
+
+    private void RespawnFadeFinishedAction(int fromInstanceID)
+    {
+        if (fromInstanceID == GetInstanceID())
             PlayerLogic.Player.RespawnPlayer();
     }
 

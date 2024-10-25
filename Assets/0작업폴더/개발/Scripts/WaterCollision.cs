@@ -24,7 +24,10 @@ public class WaterCollision : MonoBehaviour
     private void evalPlayerInitiallyInWater()
     {
         if (_colBounds.OtherIsInSelf(PlayerLogic.Player.transform))
+        {
             PlayerLogic.Player.IsInWater = true;
+            if (!PlayerLogic.Player.DiveSwimAllowed) PlayerLogic.Player.DiveSwimAllowed = true;
+        }
     }
 
     private void OnTriggerStay2D(Collider2D col)
