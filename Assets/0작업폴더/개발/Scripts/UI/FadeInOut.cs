@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using UnityEngine;
 
 public class FadeInOut : MonoBehaviour
@@ -18,14 +17,19 @@ public class FadeInOut : MonoBehaviour
     public enum FadingState
     {
         Ready,
-        IsFadingIn,
-        IsFadingOut,
+        IsFadingOut, // screen turning to black
+        IsFadingIn, // screen turning to scene
         HoldFade,
     }
 
     public void StartFadeOutIn(int fromInstanceID)
     {
         _fromInstanceID = fromInstanceID;
+        CurrentState = FadingState.IsFadingOut;
+    }
+
+    public void StartFadeInOnly()
+    {
         CurrentState = FadingState.IsFadingIn;
     }
 
@@ -33,11 +37,6 @@ public class FadeInOut : MonoBehaviour
     {
         CurrentState = FadingState.Ready;
         _fadeInOutUI = gameObject.GetComponent<CanvasGroup>();
-    }
-
-    private void Start()
-    {
-        _fadeInOutUI.alpha = 0;
     }
 
     private void Update()
@@ -49,7 +48,7 @@ public class FadeInOut : MonoBehaviour
     {
         switch (CurrentState)
         {
-            case FadingState.IsFadingIn:
+            case FadingState.IsFadingOut:
                 _fadeInOutUI.alpha = Mathf.MoveTowards(_fadeInOutUI.alpha, 1, _fadeSpeed * Time.deltaTime);
                 if (_fadeInOutUI.alpha >= 1)
                 {
@@ -61,10 +60,10 @@ public class FadeInOut : MonoBehaviour
 
             case FadingState.HoldFade:
                 if (Time.time - _fadeOutHoldTime > _fadeHoldDuration)
-                    CurrentState = FadingState.IsFadingOut;
+                    CurrentState = FadingState.IsFadingIn;
                 break;
 
-            case FadingState.IsFadingOut:
+            case FadingState.IsFadingIn:
                 _fadeInOutUI.alpha = Mathf.MoveTowards(_fadeInOutUI.alpha, 0, _fadeSpeed * Time.deltaTime);
                 if (_fadeInOutUI.alpha <= 0)
                 {

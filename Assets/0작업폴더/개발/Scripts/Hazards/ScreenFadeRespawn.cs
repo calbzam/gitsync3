@@ -21,12 +21,12 @@ public abstract class ScreenFadeRespawn : MonoBehaviour
 
     protected virtual void OnEnable()
     {
-        StartCoroutine(CanvasLogic.RespawnFadeInOut_AddReader(() => CanvasLogic.RespawnFadeInOut.FadeOutFinished += RespawnCalled));
+        StartCoroutine(CanvasLogic.RespawnFadeInOut_AddReader(() => CanvasLogic.RespawnFadeInOut.FadeOutFinished += CallRespawn));
     }
 
     protected virtual void OnDisable()
     {
-        CanvasLogic.RespawnFadeInOut.FadeOutFinished -= RespawnCalled;
+        CanvasLogic.RespawnFadeInOut.FadeOutFinished -= CallRespawn;
     }
 
     private void Update()
@@ -34,7 +34,7 @@ public abstract class ScreenFadeRespawn : MonoBehaviour
         RespawnDelayTimer();
     }
 
-    private void RespawnCalled(int fromInstanceID)
+    private void CallRespawn(int fromInstanceID)
     {
         if (fromInstanceID == _selfInstanceID)
         {
