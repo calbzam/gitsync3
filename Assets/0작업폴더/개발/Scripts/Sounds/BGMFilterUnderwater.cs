@@ -41,7 +41,7 @@ public class BGMFilterUnderwater : MonoBehaviour
         }
         else
         {
-            _underwaterLowpassFilter.cutoffFrequency = _abovewaterCutoffFreq;
+            _underwaterLowpassFilter.cutoffFrequency = _maxCutoffFreq;
             _underwaterEchoFilter.wetMix = _abovewaterWetMix;
             _underwaterPercent = 0;
         }
