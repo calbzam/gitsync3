@@ -38,8 +38,14 @@ public class MainMenuScene : MonoBehaviour
     {
         if (fromInstanceID == _selfInstanceID)
         {
-            _asyncLoad.allowSceneActivation = true;
+            StartCoroutine(WaitAfterFadeOut());
         }
+    }
+
+    private IEnumerator WaitAfterFadeOut()
+    {
+        yield return new WaitForSeconds(0.3f);
+        _asyncLoad.allowSceneActivation = true;
     }
 
     private IEnumerator LoadLevel()

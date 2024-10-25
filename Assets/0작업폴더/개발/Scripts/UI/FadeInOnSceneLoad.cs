@@ -14,12 +14,6 @@ public class FadeInOnSceneLoad : MonoBehaviour
     private void Start()
     {
         _fadeInOutUI.alpha = 1;
-        StartCoroutine(WaitBeforeFadeIn());
-    }
-
-    private IEnumerator WaitBeforeFadeIn()
-    {
-        yield return new WaitForSeconds(0.3f);
         _fadeInOut.StartFadeInOnly();
     }
 }
