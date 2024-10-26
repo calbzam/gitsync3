@@ -1,8 +1,5 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class FreeCamMove : MonoBehaviour
 {
@@ -33,7 +30,7 @@ public class FreeCamMove : MonoBehaviour
     {
         if (DragMouseEnabled && _readMouse.IsDragging)
         {
-            transform.position += _readMouse.MouseClickOrigin - _readMouse.GetWorldMousePos();
+            transform.position += _readMouse.MouseClickOrigin - ReadMouse.GetWorldMousePos(CamPosZ);
         }
 
         float scrollAmount;

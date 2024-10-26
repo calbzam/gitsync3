@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class CanvasLogic : MonoBehaviour
 {
+    [SerializeField] private RectTransform _canvasRectTransform;
+    public static RectTransform CanvasRectTransform;
+
     [SerializeField] private FadeInOut _respawnFadeInOut;
     public static FadeInOut RespawnFadeInOut;
 
@@ -12,6 +15,7 @@ public class CanvasLogic : MonoBehaviour
 
     private void Awake()
     {
+        CanvasRectTransform = _canvasRectTransform;
         RespawnFadeInOut = _respawnFadeInOut;
         Letterboxes = _letterboxes;
     }

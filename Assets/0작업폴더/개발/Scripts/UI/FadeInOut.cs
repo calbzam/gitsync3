@@ -3,11 +3,15 @@ using UnityEngine;
 
 public class FadeInOut : MonoBehaviour
 {
+    [SerializeField] private RectTransform _canvasRectTransform;
+    private Vector2 _canvasSize;
+
     [SerializeField] private float _fadeSpeed = 2.2f;
     [SerializeField] private float _fadeHoldDuration = 0.7f;
     private float _fadeOutHoldTime;
 
     private CanvasGroup _fadeInOutUI;
+    private RectTransform _fadeInOutUIRectTransform;
     public FadingState CurrentState { get; private set; }
 
     private int _fromInstanceID;
@@ -35,23 +39,25 @@ public class FadeInOut : MonoBehaviour
 
     private void Awake()
     {
+        _canvasSize = Vector2.zero;
         CurrentState = FadingState.Ready;
         _fadeInOutUI = gameObject.GetComponent<CanvasGroup>();
+        _fadeInOutUIRectTransform = _fadeInOutUI.GetComponent<RectTransform>();
     }
 
-    private void Start()
+    private void EvalFadeInOutUISize()
     {
-        SetFadeInOutUISize();
-    }
-
-    private void SetFadeInOutUISize()
-    {
-        RectTransform rectTransform = _fadeInOutUI.GetComponent<RectTransform>();
-        rectTransform.sizeDelta = new Vector2(Screen.width, Screen.height);
+        if (_canvasSize != _canvasRectTransform.rect.size)
+        {
+            //_canvasScreenSize = new Vector2(1920, 1920f / Screen.width * Screen.height);
+            _canvasSize = _canvasRectTransform.rect.size;
+            _fadeInOutUIRectTransform.sizeDelta = _canvasSize;
+        }
     }
 
     private void Update()
     {
+        EvalFadeInOutUISize();
         EvalFading();
     }
 
