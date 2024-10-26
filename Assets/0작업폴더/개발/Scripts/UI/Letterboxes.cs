@@ -25,7 +25,19 @@ public class Letterboxes : MonoBehaviour
 
     private void Start()
     {
-        _origDistance = _topLetterbox.anchoredPosition.y;
+        InitLetterboxesSizeAndPositions();
+    }
+
+    private void InitLetterboxesSizeAndPositions()
+    {
+        _topLetterbox.sizeDelta = new Vector2(Screen.width, Screen.height / 2);
+        _bottomLetterbox.sizeDelta = new Vector2(Screen.width, Screen.height / 2);
+
+        _origDistance = (Screen.height >> 1) + (Screen.height >> 2);
+        _activatedDistance = _activatedDistance / 1080 * Screen.height;
+
+        _topLetterbox.anchoredPosition = new Vector2(0, _origDistance);
+        _bottomLetterbox.anchoredPosition = new Vector2(0, -_origDistance);
     }
 
     private void MoveToTargetDistance(float target)
