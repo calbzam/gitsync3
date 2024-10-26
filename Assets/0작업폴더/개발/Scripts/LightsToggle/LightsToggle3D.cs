@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class LightsToggle3D : MonoBehaviour
@@ -7,12 +5,21 @@ public class LightsToggle3D : MonoBehaviour
     [SerializeField] private BoxCollider _triggerColToUse;
     private ColBounds3D _triggerColBounds;
     [SerializeField] private Light[] _lightsToToggle;
+    [SerializeField] private float[] _initalLightsIntensities;
+
+    [Header("Initial delay (when you want it to not immediately turn on)")]
+    [SerializeField] private bool evalLightsOnWhenEnabled = true;
+    [SerializeField] private float _firstDelayDur = 0;
+    private float _firstDelayTimer;
+    private bool _firstDelayTimerActivated;
     [SerializeField] private float _switchSpeed = 5;
 
     [Header("Turn on/off when entering/exiting trigger")]
     [SerializeField] private bool _turnOnEnabled = true;
     [SerializeField] private bool _turnOffEnabled = true;
 
+    private bool _inited = false;
+    private bool _checkedInitIntensities;
     private bool _presetAllSet;
 
     private Collider _mainCameraCol;
@@ -33,23 +40,44 @@ public class LightsToggle3D : MonoBehaviour
         return _camIsInTrigger = _triggerColBounds.OtherIsInSelf(PlayerLogic.Player.transform);
     }
 
-    private void Start()
+    private void OnEnable()
     {
-        _presetAllSet = false;
+        if (!_inited)
+        {
+            if (_firstDelayDur > 0.0001)
+            {
+                _firstDelayTimerActivated = true;
+                _firstDelayTimer = Time.time;
+            }
 
-        _triggerColBounds = new ColBounds3D(_triggerColToUse);
-        _mainCameraCol = Camera.main.GetComponentInChildren<Collider>();
+            _checkedInitIntensities = false;
+            _presetAllSet = false;
 
-        _toggleStarted = false;
-        _lightsCount = _lightsToToggle.Length;
+            _triggerColBounds = new ColBounds3D(_triggerColToUse);
+            _mainCameraCol = Camera.main.GetComponentInChildren<Collider>();
 
-        _toggleInProcess = new bool[_lightsCount];
-        _toIntensity = new float[_lightsCount];
-        _onIntensity = new float[_lightsCount];
-        _offIntensity = new float[_lightsCount];
+            _toggleStarted = false;
+            _lightsCount = _lightsToToggle.Length;
 
-        SetPresetIntensities();
-        EvalLightsInitialStates();
+            _toggleInProcess = new bool[_lightsCount];
+            _toIntensity = new float[_lightsCount];
+            _onIntensity = new float[_lightsCount];
+            _offIntensity = new float[_lightsCount];
+
+            CheckIfInitialIntensities();
+            SetPresetIntensities();
+            if (evalLightsOnWhenEnabled) EvalLightsInitialStates();
+            _inited = true;
+        }
+    }
+
+    private void CheckIfInitialIntensities()
+    {
+        for (int i = 0; i < _initalLightsIntensities.Length; ++i)
+        {
+            _onIntensity[i] = _initalLightsIntensities[i];
+        }
+        _checkedInitIntensities = true;
     }
 
     private void SetPresetIntensities()
@@ -82,7 +110,16 @@ public class LightsToggle3D : MonoBehaviour
 
     private void Update()
     {
-        if (!_presetAllSet) SetPresetIntensities(); // update _onIntensity[i] until "max" intensities are reached
+        //if (!_checkedInitIntensities) CheckIfInitialIntensities();
+        //if (!_presetAllSet) SetPresetIntensities(); // update _onIntensity[i] until "max" intensities are reached
+        if (!_inited) return;
+        if (_firstDelayTimerActivated)
+        {
+            if (Time.time - _firstDelayTimer > _firstDelayDur)
+                _firstDelayTimerActivated = false;
+            return;
+        }
+
 
         if (!_camIsInTrigger)
         {
