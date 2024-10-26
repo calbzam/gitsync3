@@ -1,6 +1,4 @@
 using Cinemachine;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -50,7 +48,7 @@ public class CameraLogic : MonoBehaviour
     public void SetFreeCam(bool freeCam)
     {
         _isFreeCam = freeCam;
-        if (freeCam) _freeVirtualCam.transform.position = new Vector3(_defaultVirtualCam.transform.position.x, _defaultVirtualCam.transform.position.y, _freeCamPosZ);
+        if (freeCam) _freeVirtualCam.transform.position = new Vector3(_defaultVirtualCam.transform.position.x, _defaultVirtualCam.transform.position.y + 6, _freeCamPosZ);
 
         _freeVirtualCam.gameObject.SetActive(freeCam);
         _toPlayerCamText.gameObject.SetActive(freeCam);

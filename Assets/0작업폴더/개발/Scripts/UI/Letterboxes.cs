@@ -2,14 +2,25 @@ using UnityEngine;
 
 public class Letterboxes : MonoBehaviour
 {
+    [SerializeField] private RectTransform _canvasRectTransform;
+    private Vector2 _canvasSize;
+
     [SerializeField] private RectTransform _topLetterbox;
     [SerializeField] private RectTransform _bottomLetterbox;
     [SerializeField] private float _moveSpeed = 0.4f;
-    [SerializeField] private float _activatedDistance = 700;
+    [SerializeField] private float _presetActivatedDistance = 700;
+    private float _activatedDistance;
     private float _origDistance;
 
     private bool _activated;
     private float _movePercent;
+
+    private bool temptoggleenable = false;
+    [ContextMenu("activate Letterboxes")]
+    public void activate()
+    {
+        Activateboxes(temptoggleenable = !temptoggleenable);
+    }
 
     public void Activateboxes(bool enabled)
     {
@@ -21,20 +32,35 @@ public class Letterboxes : MonoBehaviour
     {
         _activated = false;
         _movePercent = 0;
+        _canvasSize = Vector2.zero;
     }
 
-    private void Start()
+    private void Update()
     {
-        InitLetterboxesSizeAndPositions();
+        if (_canvasSize != _canvasRectTransform.rect.size)
+        {
+            //_canvasScreenSize = new Vector2(1920, 1920f / Screen.width * Screen.height);
+            _canvasSize = _canvasRectTransform.rect.size;
+            SetLetterboxesSizeAndPositions();
+        }
+
+        if (_activated)
+        {
+            MoveToTargetDistance(_activatedDistance);
+        }
+        else
+        {
+            MoveToTargetDistance(_origDistance);
+        }
     }
 
-    private void InitLetterboxesSizeAndPositions()
+    private void SetLetterboxesSizeAndPositions()
     {
-        _topLetterbox.sizeDelta = new Vector2(Screen.width, Screen.height / 2);
-        _bottomLetterbox.sizeDelta = new Vector2(Screen.width, Screen.height / 2);
+        _topLetterbox.sizeDelta = new Vector2(_canvasSize.x, _canvasSize.y / 2);
+        _bottomLetterbox.sizeDelta = new Vector2(_canvasSize.x, _canvasSize.y / 2);
 
-        _origDistance = (Screen.height >> 1) + (Screen.height >> 2);
-        _activatedDistance = _activatedDistance / 1080 * Screen.height;
+        _origDistance = (_canvasSize.y / 2) + (_canvasSize.y / 4);
+        _activatedDistance = _presetActivatedDistance / 1080 * _canvasSize.y;
 
         _topLetterbox.anchoredPosition = new Vector2(0, _origDistance);
         _bottomLetterbox.anchoredPosition = new Vector2(0, -_origDistance);
@@ -50,17 +76,5 @@ public class Letterboxes : MonoBehaviour
         newY = Mathf.Lerp(newY, target, _movePercent);
         _topLetterbox.anchoredPosition = new Vector2(_topLetterbox.anchoredPosition.x, newY);
         _bottomLetterbox.anchoredPosition = new Vector2(_bottomLetterbox.anchoredPosition.x, -newY);
-    }
-
-    private void Update()
-    {
-        if (_activated)
-        {
-            MoveToTargetDistance(_activatedDistance);
-        }
-        else
-        {
-            MoveToTargetDistance(_origDistance);
-        }
     }
 }
