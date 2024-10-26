@@ -49,6 +49,7 @@ public class PlayerController : MonoBehaviour
     public bool OnGround { get; set; }
     public bool IsOnWater { get; set; }
     public bool IsInWater { get; set; }
+    public bool DiveSwimAllowed { get; set; } = false;
 
     public bool LadderClimbAllowed { get; set; }
     private bool _isInLadderRange => (CurrentLadder != null ? CurrentLadder.PlayerIsInRange : false);
@@ -439,6 +440,8 @@ public class PlayerController : MonoBehaviour
 
     private void HandleSwimmingVertical()
     {
+        if (!DiveSwimAllowed) return;
+
         if (IsInWater)
         {
             if (FrameInputReader.FrameInput.InputDir.y > 0)
@@ -467,6 +470,8 @@ public class PlayerController : MonoBehaviour
 
     private void HandleSwimmingRotation()
     {
+        if (!DiveSwimAllowed) return;
+
         if (IsInWater)
         {
             if (FrameInputReader.FrameInput.InputDir == Vector2.zero) MovePlayerRotationTo(0);
