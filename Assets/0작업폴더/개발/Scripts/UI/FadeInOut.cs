@@ -39,6 +39,17 @@ public class FadeInOut : MonoBehaviour
         _fadeInOutUI = gameObject.GetComponent<CanvasGroup>();
     }
 
+    private void Start()
+    {
+        SetFadeInOutUISize();
+    }
+
+    private void SetFadeInOutUISize()
+    {
+        RectTransform rectTransform = _fadeInOutUI.GetComponent<RectTransform>();
+        rectTransform.sizeDelta = new Vector2(Screen.width, Screen.height);
+    }
+
     private void Update()
     {
         EvalFading();
