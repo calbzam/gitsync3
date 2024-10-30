@@ -50,6 +50,8 @@ public class PlayerController : MonoBehaviour
     public bool IsOnWater { get; set; }
     public bool IsInWater { get; set; }
     public bool DiveSwimAllowed { get; set; } = false;
+    
+    public bool RopeClimbAllowed { get; set; }
 
     public bool LadderClimbAllowed { get; set; }
     private bool _isInLadderRange => (CurrentLadder != null ? CurrentLadder.PlayerIsInRange : false);
@@ -79,6 +81,7 @@ public class PlayerController : MonoBehaviour
         GroundCheckAllowed = true;
         setGroundCheckerParams();
 
+        RopeClimbAllowed = true;
         LadderClimbAllowed = true;
         JumpingFromLadder = false;
         _drawGizmosEnabled = true;
@@ -98,6 +101,7 @@ public class PlayerController : MonoBehaviour
     {
         _time += Time.deltaTime;
         RefineInput();
+        //Debug.Log(PlayerLogic.Player.OnGround);
 
         //CheckRespawn();
     }

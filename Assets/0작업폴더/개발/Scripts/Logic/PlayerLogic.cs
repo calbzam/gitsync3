@@ -117,9 +117,9 @@ public class PlayerLogic : MonoBehaviour
         if (_freePlayerDragEnabled) _freePlayerDragUI.MoveUIToPlayerPosition();
     }
 
-    public static void IgnorePlayerGroundCollision(bool bypass)
+    public static void IgnorePlayerGroundCollision(bool ignore)
     {
-        Physics2D.IgnoreLayerCollision(Layers.PlayerLayer.LayerValue, Layers.GroundLayer.LayerValue, bypass);
+        Physics2D.IgnoreLayerCollision(Layers.PlayerLayer.LayerValue, Layers.GroundLayer.LayerValue, ignore);
     }
 
     //public static void IgnorePlayerLadderCollision(bool bypass)
