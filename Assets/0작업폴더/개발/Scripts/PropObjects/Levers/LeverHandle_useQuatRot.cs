@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class LeverHandle_useQuatRot : MonoBehaviour
 {
@@ -44,34 +41,35 @@ public class LeverHandle_useQuatRot : MonoBehaviour
 
     private void PickupActivateStarted(InputAction.CallbackContext ctx)
     {
-        if (!_leverActivate.IsAutomatic && (!_leverActivate.NeedBattery || _batteryReader.BatteryInserted) && _leverHandleReader.PlayerIsInRange)
+        // !_leverActivate.IsAutomatic: react on player input only when lever isn't automatic
+        if (/*!_leverActivate.IsAutomatic &&*/ (!_leverActivate.NeedBattery || _batteryReader.BatteryInserted) && _leverHandleReader.PlayerIsInRange)
         {
-            ToggleActivateLeverHandle_RotateOnly();
+            ToggleLeverMovement();
         }
     }
 
-    private void OnStateEvalActivate() // run after lever rotation end
+    private void EvalActivate() // run after lever rotation end
     {
         bool _prevOnState = _onState;
-        if ((_onState = (_targetAngle == _activatedRot)) != _prevOnState)
+        if ((_onState = (_targetAngle == _activatedRot)) != _prevOnState) // when lever isn't immediately toggled twice
         {
             _leverActivate.ActivatedAction();
         }
     }
 
-    public void ToggleActivateLeverHandle_RotateOnly()
+    public void ToggleLeverMovement()
     {
         _leverActivate.ToggleActivateBool();
         ToggleRotateLeverHandle();
         _isToggling = true;
     }
 
-    public void ToggleActivateLeverHandle()
+    public void ToggleLever()
     {
         _leverActivate.ToggleActivateBool();
         ToggleRotateLeverHandle();
         _isToggling = true;
-        OnStateEvalActivate();
+        EvalActivate();
     }
 
     public void ToggleRotateLeverHandle()
@@ -85,7 +83,7 @@ public class LeverHandle_useQuatRot : MonoBehaviour
         {
             if (MyMath.RotateAndEvalDone(transform, _targetAngle, _rotationSpeed)) _isToggling = false;
 
-            if (!_isToggling) OnStateEvalActivate();
+            if (!_isToggling) EvalActivate();
         }
     }
 }

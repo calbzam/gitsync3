@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -37,16 +35,17 @@ public class LeverHandle_useHingeJointMotor : MonoBehaviour
 
     private void PickupActivateStarted(InputAction.CallbackContext ctx)
     {
-        if (!_leverActivate.IsAutomatic && (!_leverActivate.NeedBattery || _batteryReader.BatteryInserted) && _leverHandleReader.PlayerIsInRange)
+        // !_leverActivate.IsAutomatic: react on player input only when lever isn't automatic
+        if (/*!_leverActivate.IsAutomatic &&*/ (!_leverActivate.NeedBattery || _batteryReader.BatteryInserted) && _leverHandleReader.PlayerIsInRange)
         {
-            ToggleActivateLeverHandle_RotateOnly();
+            ToggleLeverMovement();
         }
     }
 
-    private void OnStateEvalActivate() // run after lever rotation end
+    private void EvalActivate() // run after lever rotation end
     {
         bool _prevOnState = _onState;
-        if ((_onState = (_hingeJoint.motor.motorSpeed > 0)) != _prevOnState)
+        if ((_onState = (_hingeJoint.motor.motorSpeed > 0)) != _prevOnState) // when lever isn't immediately toggled twice
         {
             _leverActivate.ActivatedAction();
         }
@@ -59,29 +58,29 @@ public class LeverHandle_useHingeJointMotor : MonoBehaviour
             if (_hingeJoint.motor.motorSpeed > 0 && _hingeJoint.limits.max - _hingeJoint.jointAngle < 0.1)
             {
                 _toggleStarted = false;
-                OnStateEvalActivate();
+                EvalActivate();
             }
             else if (_hingeJoint.motor.motorSpeed < 0 && _hingeJoint.jointAngle - _hingeJoint.limits.min < 0.1)
             {
                 _toggleStarted = false;
-                OnStateEvalActivate();
+                EvalActivate();
             }
         }
     }
 
-    public void ToggleActivateLeverHandle_RotateOnly()
+    public void ToggleLeverMovement()
     {
         _leverActivate.ToggleActivateBool();
         ToggleRotateLeverHandle();
         _toggleStarted = true;
     }
 
-    public void ToggleActivateLeverHandle()
+    public void ToggleLever()
     {
         _leverActivate.ToggleActivateBool();
         ToggleRotateLeverHandle();
         _toggleStarted = true;
-        OnStateEvalActivate();
+        EvalActivate();
     }
 
     private void ToggleRotateLeverHandle()

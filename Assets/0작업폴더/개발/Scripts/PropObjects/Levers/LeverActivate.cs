@@ -90,7 +90,7 @@ public class LeverActivate : MonoBehaviour
 
     public void ActivatedAction()
     {
-        if (_transitionCamOnActivate)
+        if (_transitionCamOnActivate) // transition camera to "VirtualCam - LeverActivated"
         {
             _mainCamCinemachineBrain.m_DefaultBlend.m_Time = _camTransitionDuration;
             _defaultVirtualCam.m_Transitions.m_InheritPosition = true;
