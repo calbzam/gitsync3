@@ -7,7 +7,10 @@ public class SwingingRope : RidableObject
     private ObiRope _rope;
     private static float _jumpedEnoughDistance;
 
-    [Help("Particle 0 is mostly the first (top) particle")]
+    [Header("Disable Player-Ground collision while climbing")]
+    [SerializeField] private bool _disablePlayerGroundCollision = false;
+
+    [Header("Particle 0 is mostly the first (top) particle")]
     [SerializeField] private int _noClimbingParticlesUntil = 4;
 
     public override event Action<int, bool> PlayerOnThisObject;
@@ -70,10 +73,19 @@ public class SwingingRope : RidableObject
         _ropePinConstraints.Clear(); // remove all batches from the constraint type we want, so we start clean:
     }
 
-    private void EnablePlayerRopeCollision(bool enabled)
+    private void EnablePlayerGroundCollision(bool enabled)
     {
-        _rope.solver.particleCollisionConstraintParameters.enabled = enabled;
-        _rope.solver.collisionConstraintParameters.enabled = enabled;
+        PlayerLogic.IgnorePlayerGroundCollision(!enabled);
+        PlayerLogic.Player.GroundCheckAllowed = enabled;
+    }
+
+    public static void EnablePlayerRopeCollision(bool enabled)
+    {
+        if (PlayerLogic.PlayerObiCol.enabled != enabled)
+            PlayerLogic.PlayerObiCol.enabled = enabled;
+
+        //_rope.solver.particleCollisionConstraintParameters.enabled = enabled; // these disable rope collision entirely, not just with Player
+        //_rope.solver.collisionConstraintParameters.enabled = enabled;
     }
 
     private int GetPrevParticleInElements()
@@ -90,6 +102,7 @@ public class SwingingRope : RidableObject
     // indexInActor: https://obi.virtualmethodstudio.com/forum/thread-4019-post-14919.html#pid14919
     private void HandleRopeClimb()
     {
+        if (!PlayerLogic.Player.RopeClimbAllowed) return;
         if (!PlayerIsInRange || PlayerOnOtherObject) return;
 
         if (FrameInputReader.FrameInput.InputDir.y > 0)
@@ -122,6 +135,7 @@ public class SwingingRope : RidableObject
         PlayerOnOtherObject = false;
         PlayerOnThisObject?.Invoke(gameObject.GetInstanceID(), true);
         _currentIndexInElements = RopeCalcs.GetElementIndexOfParticle(_rope, _currentParticle);
+        if (_disablePlayerGroundCollision) EnablePlayerGroundCollision(false);
     }
 
     private void Solver_OnCollision(object sender, ObiSolver.ObiCollisionEventArgs e)
@@ -132,6 +146,7 @@ public class SwingingRope : RidableObject
         if (PlayerOnOtherObject) return;
 
         var world = ObiColliderWorld.GetInstance();
+
         foreach (var contact in e.contacts)
         {
             if (contact.distance < 0.01)
@@ -143,17 +158,34 @@ public class SwingingRope : RidableObject
                 {
                     /* do collsion of bodyA particles */
                     _currentParticle = _rope.solver.simplices[contact.bodyA];
-                    if (_currentParticle > _noClimbingParticlesUntil)
+                    PlayerIsInRange = true;
+                    if (PlayerLogic.Player.RopeClimbAllowed && _currentParticle > _noClimbingParticlesUntil)
                     {
                         AttachPlayerToParticle(_currentParticle);
                         AnnouncePlayerOnThisObject();
                         PlayerLogic.PlayerObiCol.enabled = false;
-                        PlayerIsInRange = true;
                     }
 
                     break;
                 }
+                else
+                {
+                    PlayerIsInRange = false;
+                }
             }
+        }
+    }
+
+    public void DisconnectPlayerKeepRangeNoJump()
+    {
+        if (PlayerIsAttached)
+        {
+            _playerHasJumped = true;
+            PlayerOnThisObject?.Invoke(gameObject.GetInstanceID(), false);
+            if (_disablePlayerGroundCollision) EnablePlayerGroundCollision(true);
+            DetachPlayerFromParticle(_currentParticle);
+
+            PlayerLogic.PlayerObiCol.enabled = true;
         }
     }
 
@@ -164,11 +196,11 @@ public class SwingingRope : RidableObject
             _playerHasJumped = true;
             PlayerIsInRange = false;
             PlayerOnThisObject?.Invoke(gameObject.GetInstanceID(), false);
+            if (_disablePlayerGroundCollision) EnablePlayerGroundCollision(true);
             DetachPlayerFromParticle(_currentParticle);
-            //EnableRopeCollision(false);
 
-            PlayerLogic.PlayerObiCol.enabled = true;
             PlayerLogic.DisconnectedPlayerAddJump();
+            PlayerLogic.PlayerObiCol.enabled = true;
         }
     }
 

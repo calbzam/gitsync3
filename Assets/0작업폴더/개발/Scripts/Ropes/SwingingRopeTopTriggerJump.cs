@@ -1,26 +1,53 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SwingingRopeTopTriggerJump : MonoBehaviour
 {
     [SerializeField] private SwingingRope _rope;
-    [SerializeField] private bool _playerIsInRangeOnTriggerStay = true;
+    [SerializeField] private bool _resetPlayerPosToTriggerJump = true;
+
+    [Header("If unchecked, disconnect only if Player is grounded")]
+    [SerializeField] private bool _disconnectAlways = true;
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        if (_rope.PlayerIsAttached && col.CompareTag("Player"))
+        if (col.CompareTag("Player"))
         {
-            _rope.DisconnectPlayer();
-            PlayerLogic.SetPlayerXYPos(transform.position);
+            if (!_disconnectAlways && !PlayerLogic.Player.OnGround) return;
+            if (_rope.PlayerIsAttached)
+            {
+                if (_resetPlayerPosToTriggerJump) PlayerLogic.SetPlayerXYPos(transform.position);
+                _rope.DisconnectPlayer();
+            }
+
+            SwingingRope.EnablePlayerRopeCollision(false);
+            PlayerLogic.Player.RopeClimbAllowed = false;
         }
     }
 
     private void OnTriggerStay2D(Collider2D col)
     {
-        if (FrameInputReader.FrameInput.InputDir.y < 0 && col.CompareTag("Player"))
+        if (col.CompareTag("Player"))
         {
-            _rope.PlayerIsInRange = _playerIsInRangeOnTriggerStay;
+            if (_rope.PlayerIsAttached) _rope.DisconnectPlayerKeepRangeNoJump();
+
+            if (FrameInputReader.FrameInput.InputDir.y == 0)
+            {
+                SwingingRope.EnablePlayerRopeCollision(false);
+            }
+            else
+            {
+                PlayerLogic.Player.RopeClimbAllowed = true;
+                SwingingRope.EnablePlayerRopeCollision(true);
+            }
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D col)
+    {
+        if (col.CompareTag("Player"))
+        {
+            PlayerLogic.Player.RopeClimbAllowed = true;
+            SwingingRope.EnablePlayerRopeCollision(true);
         }
     }
 }
