@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class WaterCollision : MonoBehaviour
@@ -32,7 +30,7 @@ public class WaterCollision : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D col)
     {
-        if (col.CompareTag("Player"))
+        if (col.CompareTag(Tags.PlayerTag))
         {
             if (!PlayerLogic.Player.IsInWater)
             {
@@ -44,7 +42,7 @@ public class WaterCollision : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D col)
     {
-        if (col.CompareTag("Player"))
+        if (col.CompareTag(Tags.PlayerTag))
         {
             PlayerLogic.Player.IsInWater = false;
         }

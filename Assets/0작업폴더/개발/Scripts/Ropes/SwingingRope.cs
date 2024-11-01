@@ -154,7 +154,7 @@ public class SwingingRope : RidableObject
                 /* do collsion of bodyB */
                 var col = world.colliderHandles[contact.bodyB].owner;
 
-                if (col != null && col.CompareTag("Player"))
+                if (col != null && col.CompareTag(Tags.PlayerTag))
                 {
                     /* do collsion of bodyA particles */
                     _currentParticle = _rope.solver.simplices[contact.bodyA];

@@ -197,7 +197,7 @@ public class PlayerController : MonoBehaviour
             _groundHit = _groundCol;
             if (!IsOnLadder && _groundCol != null)
             {
-                if (!_groundCol.CompareTag("SpeedBoost Ground")) LimitXVelocity = true;
+                if (!_groundCol.CompareTag(Tags.SpeedBoostGroundTag)) LimitXVelocity = true;
 
                 // Set Z-pos to the Z-pos of the ground that Player hit
                 PlayerLogic.SetPlayerZPosition(_groundCol.transform.position.z);

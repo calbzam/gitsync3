@@ -26,6 +26,7 @@ public static class Layers
     public static LayerStruct DoNotRenderLayer = new LayerStruct(LayerMask.GetMask("Do Not Render"));
 
     public static LayerStruct LadderLayer = new LayerStruct(LayerMask.GetMask("Ladder"));
+    public static LayerStruct WaterLayer = new LayerStruct(LayerMask.GetMask("Water")); // not used at the moment
 
     public static int GetLayerMask(int layerValue)
     {

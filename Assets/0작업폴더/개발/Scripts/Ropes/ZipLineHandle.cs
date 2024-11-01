@@ -79,7 +79,7 @@ public class ZipLineHandle : RidableObject
     {
         if (PlayerOnOtherObject) return;
 
-        if (col.CompareTag("Player"))
+        if (col.CompareTag(Tags.PlayerTag))
         {
             StopMovingPulley = false;
             ConnectPlayer();
@@ -107,8 +107,8 @@ public class ZipLineHandle : RidableObject
         foreach (Collider col in cols)
         {
             if (col.transform.parent != _pulleyRb.transform.parent) continue;
-            if (moveDir < 0 && col.CompareTag("ZipLineStoppingStartBlock")) return;
-            if (moveDir > 0 && col.CompareTag("ZipLineStoppingEndBlock")) return;
+            if (moveDir < 0 && col.CompareTag(Tags.ZipLineStoppingStartBlockTag)) return;
+            if (moveDir > 0 && col.CompareTag(Tags.ZipLineStoppingEndBlockTag)) return;
         }
         //if (moveDir < 0 && transform.position.x - _startBlock.position.x < _pulleyHitStopMargin) return;
         //if (moveDir > 0 && _endBlock.position.x - transform.position.x < _pulleyHitStopMargin) return;

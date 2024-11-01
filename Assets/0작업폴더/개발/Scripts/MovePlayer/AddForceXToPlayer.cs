@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class AddForceXToPlayer : MonoBehaviour
@@ -12,7 +10,7 @@ public class AddForceXToPlayer : MonoBehaviour
 
     private void OnCollisionStay2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag(Tags.PlayerTag))
         {
             if (PlayerLogic.Player.LimitXVelocity) PlayerLogic.Player.LimitXVelocity = false;
             PlayerLogic.Player.Rb.AddForce(_addForceAmount * (int)_moveDir * Vector2.right, ForceMode2D.Force);

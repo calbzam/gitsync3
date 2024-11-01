@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -67,7 +65,7 @@ public class LadderTrigger : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.gameObject.CompareTag("Player"))
+        if (col.gameObject.CompareTag(Tags.PlayerTag))
         {
             PlayerLogic.Player.SetPlayerInLadderRange(this);
 
@@ -82,7 +80,7 @@ public class LadderTrigger : MonoBehaviour
     private void OnTriggerStay2D(Collider2D col)
     {
         if (PlayerLogic.Player.ZPosSetToGround) // runs only once
-            if (col.gameObject.CompareTag("Player"))
+            if (col.gameObject.CompareTag(Tags.PlayerTag))
             {
                 PlayerLogic.SetPlayerZPosition(transform.position.z - 0.1f);
                 PlayerLogic.Player.ZPosSetToGround = false;
@@ -91,7 +89,7 @@ public class LadderTrigger : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D col)
     {
-        if (col.gameObject.CompareTag("Player"))
+        if (col.gameObject.CompareTag(Tags.PlayerTag))
         {
             if (PlayerLogic.Player.CurrentLadder == this)
                 PlayerLogic.Player.JumpingFromLadder = false; // player sufficiently away from ladder

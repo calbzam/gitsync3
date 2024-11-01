@@ -42,10 +42,10 @@ public class LeverActivate : MonoBehaviour
         _mainCamCinemachineBrain = Camera.main.GetComponent<CinemachineBrain>();
         _camTransitionDurOrig = _mainCamCinemachineBrain.m_DefaultBlend.m_Time;
 
-        _defaultVirtualCam = GameObject.FindGameObjectWithTag("DefaultVirtualCam").GetComponent<CinemachineVirtualCamera>();
+        _defaultVirtualCam = GameObject.FindGameObjectWithTag(Tags.DefaultVirtualCamTag).GetComponent<CinemachineVirtualCamera>();
         _defaultVirtualCam.m_Transitions.m_InheritPosition = false;
 
-        _leverActivatedVirtualCam = GameObject.FindGameObjectWithTag("LeverActivatedVirtualCam").GetComponent<CinemachineVirtualCamera>();
+        _leverActivatedVirtualCam = GameObject.FindGameObjectWithTag(Tags.LeverActivatedVirtualCamTag).GetComponent<CinemachineVirtualCamera>();
         _leverActivatedVirtualCamConfiner = _leverActivatedVirtualCam.GetComponent<CinemachineConfiner>();
         _leverActivatedVirtualCam.enabled = false;
     }

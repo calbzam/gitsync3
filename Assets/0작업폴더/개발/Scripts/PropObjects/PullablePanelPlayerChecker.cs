@@ -7,7 +7,7 @@ public class PullablePanelPlayerChecker : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.CompareTag("Player"))
+        if (col.CompareTag(Tags.PlayerTag))
         {
             _pullableBase.InvokePlayerIsInRange(true);
         }
@@ -15,7 +15,7 @@ public class PullablePanelPlayerChecker : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D col)
     {
-        if (col.CompareTag("Player"))
+        if (col.CompareTag(Tags.PlayerTag))
         {
             _pullableBase.InvokePlayerIsInRange(false);
         }

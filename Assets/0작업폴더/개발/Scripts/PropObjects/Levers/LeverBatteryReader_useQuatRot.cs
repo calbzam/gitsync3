@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class LeverBatteryReader_useQuatRot : MonoBehaviour
@@ -27,7 +25,7 @@ public class LeverBatteryReader_useQuatRot : MonoBehaviour
     {
         if (!BatteryInserted)
         {
-            if (col.CompareTag("Battery"))
+            if (col.CompareTag(Tags.BatteryTag))
             {
                 BatteryPickup battery = col.GetComponent<BatteryPickup>();
                 if (!battery.IsHeldByPlayer) InsertBatteryToLever(battery);

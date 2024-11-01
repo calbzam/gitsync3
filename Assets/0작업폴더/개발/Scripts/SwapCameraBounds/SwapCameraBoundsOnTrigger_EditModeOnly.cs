@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 
@@ -21,7 +19,7 @@ public class SwapCameraBoundsOnTrigger_EditModeOnly : MonoBehaviour
         else
         {
             _triggerColBounds = new ColBounds2D(_triggerColSelf);
-            _playerTransform = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+            _playerTransform = GameObject.FindGameObjectWithTag(Tags.PlayerTag).GetComponent<Transform>();
         }
     }
 

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class LadderReEnableGroundCollision : MonoBehaviour
@@ -14,7 +12,7 @@ public class LadderReEnableGroundCollision : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.gameObject.CompareTag("Player"))
+        if (col.gameObject.CompareTag(Tags.PlayerTag))
         {
             if (PlayerLogic.Player.CurrentLadder == _ladder)
             {
@@ -26,7 +24,7 @@ public class LadderReEnableGroundCollision : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D col)
     {
-        if (col.gameObject.CompareTag("Player"))
+        if (col.gameObject.CompareTag(Tags.PlayerTag))
         {
             if (PlayerLogic.Player.CurrentLadder == _ladder)
             {

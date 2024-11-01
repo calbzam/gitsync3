@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class WaterSurfaceCollision : MonoBehaviour
@@ -8,7 +6,7 @@ public class WaterSurfaceCollision : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.CompareTag("Player"))
+        if (col.CompareTag(Tags.PlayerTag))
         {
             PlayerLogic.Player.DiveSwimAllowed = _diveSwimAllowed;
             PlayerLogic.Player.IsOnWater = true;
@@ -17,7 +15,7 @@ public class WaterSurfaceCollision : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D col)
     {
-        if (col.CompareTag("Player"))
+        if (col.CompareTag(Tags.PlayerTag))
         {
             if (FrameInputReader.FrameInput.InputDir.y < 0)
                 PlayerLogic.Player.IsInWater = true;
@@ -28,7 +26,7 @@ public class WaterSurfaceCollision : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D col)
     {
-        if (col.CompareTag("Player"))
+        if (col.CompareTag(Tags.PlayerTag))
         {
             PlayerLogic.Player.IsOnWater = false;
         }

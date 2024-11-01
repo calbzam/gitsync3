@@ -23,7 +23,7 @@ public class RopeDisableOnTriggerLeave : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.CompareTag("Player"))
+        if (col.CompareTag(Tags.PlayerTag))
         {
             SetObjectsActive(true);
         }
@@ -31,7 +31,7 @@ public class RopeDisableOnTriggerLeave : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D col)
     {
-        if (col.CompareTag("Player"))
+        if (col.CompareTag(Tags.PlayerTag))
         {
             SetObjectsActive(false);
         }

@@ -59,7 +59,7 @@ public abstract class ScreenFadeRespawn : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.gameObject.CompareTag("Player"))
+        if (col.gameObject.CompareTag(Tags.PlayerTag))
         {
             GetReadyForFadeRespawn();
         }
@@ -67,7 +67,7 @@ public abstract class ScreenFadeRespawn : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D col)
     {
-        if (col.gameObject.CompareTag("Player"))
+        if (col.gameObject.CompareTag(Tags.PlayerTag))
         {
             GetReadyForFadeRespawn();
         }

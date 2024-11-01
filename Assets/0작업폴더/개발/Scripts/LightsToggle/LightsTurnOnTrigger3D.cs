@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class LightsTurnOnTrigger3D : MonoBehaviour
@@ -55,7 +53,7 @@ public class LightsTurnOnTrigger3D : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("MainCamera Collider"))
+        if (other.gameObject.CompareTag(Tags.MainCameraColliderTag))
         {
             _turnOnStarted = true;
             for (int i = 0; i < _lightsCount; ++i) { _isTurningOnLight[i] = true; }

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CheckpointTrigger : MonoBehaviour
@@ -8,7 +6,7 @@ public class CheckpointTrigger : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.CompareTag("Player"))
+        if (col.CompareTag(Tags.PlayerTag))
         {
             col.GetComponent<PlayerController>().SetRespawnPoint(_checkPoint);
         }

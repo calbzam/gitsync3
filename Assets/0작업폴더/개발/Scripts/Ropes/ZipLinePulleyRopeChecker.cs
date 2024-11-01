@@ -47,7 +47,7 @@ private void OnEnable()
                 if (contact.bodyB >= world.colliderHandles.Count) break;
                 var col = world.colliderHandles[contact.bodyB].owner;
 
-                if (col != null && col.CompareTag("ZipLinePulley RopeChecker"))
+                if (col != null && col.CompareTag(Tags.ZipLinePulleyRopeCheckerTag))
                 {
                     if (++contactCnt > 1)
                     {

@@ -10,7 +10,7 @@ public class SwingingRopeTopTriggerJump : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.CompareTag("Player"))
+        if (col.CompareTag(Tags.PlayerTag))
         {
             if (!_disconnectAlways && !PlayerLogic.Player.OnGround) return;
             if (_rope.PlayerIsAttached)
@@ -26,7 +26,7 @@ public class SwingingRopeTopTriggerJump : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D col)
     {
-        if (col.CompareTag("Player"))
+        if (col.CompareTag(Tags.PlayerTag))
         {
             if (_rope.PlayerIsAttached) _rope.DisconnectPlayerKeepRangeNoJump();
 
@@ -44,7 +44,7 @@ public class SwingingRopeTopTriggerJump : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D col)
     {
-        if (col.CompareTag("Player"))
+        if (col.CompareTag(Tags.PlayerTag))
         {
             PlayerLogic.Player.RopeClimbAllowed = true;
             SwingingRope.EnablePlayerRopeCollision(true);

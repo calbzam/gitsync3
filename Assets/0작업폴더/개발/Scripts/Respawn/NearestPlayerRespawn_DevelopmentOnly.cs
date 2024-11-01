@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class NearestPlayerRespawn_DevelopmentOnly : MonoBehaviour
@@ -12,7 +10,7 @@ public class NearestPlayerRespawn_DevelopmentOnly : MonoBehaviour
 
     private void Start()
     {
-        _player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        _player = GameObject.FindGameObjectWithTag(Tags.PlayerTag).GetComponent<PlayerController>();
 
         RefreshCheckpoints();
         _player.SetRespawnPoint(_initialSpawnPoint);

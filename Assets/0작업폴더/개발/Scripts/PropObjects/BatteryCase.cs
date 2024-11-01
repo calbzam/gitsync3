@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class BatteryCase : MonoBehaviour
 {
@@ -11,7 +8,7 @@ public class BatteryCase : MonoBehaviour
     {
         if (_battery.BatteryIsInBox)
         {
-            if (col.CompareTag("Player"))
+            if (col.CompareTag(Tags.PlayerTag))
                 _battery.PlayerIsInRange = true;
         }
     }
@@ -20,7 +17,7 @@ public class BatteryCase : MonoBehaviour
     {
         if (_battery.BatteryIsInBox)
         {
-            if (col.CompareTag("Player"))
+            if (col.CompareTag(Tags.PlayerTag))
                 _battery.PlayerIsInRange = false;
         }
     }

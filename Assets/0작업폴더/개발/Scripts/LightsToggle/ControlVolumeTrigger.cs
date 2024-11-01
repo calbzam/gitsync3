@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -48,7 +46,7 @@ public class ControlVolumeTrigger: MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("MainCamera Collider"))
+        if (other.CompareTag(Tags.MainCameraColliderTag))
         {
             _toWeight = 1;
             _isInTransition = true;
@@ -57,7 +55,7 @@ public class ControlVolumeTrigger: MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("MainCamera Collider"))
+        if (other.CompareTag(Tags.MainCameraColliderTag))
         {
             _toWeight = 0;
             _isInTransition = true;
