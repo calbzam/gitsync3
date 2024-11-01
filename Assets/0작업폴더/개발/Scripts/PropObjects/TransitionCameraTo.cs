@@ -6,6 +6,9 @@ public class TransitionCameraTo : MonoBehaviour
     [Header("Camera settings")]
     [SerializeField] private CinemachineVirtualCamera _toVirtualCam;
     public Transform ZoomInTo;
+    [SerializeField] private DestCamMode _destinationCameraMode = DestCamMode.ZoomIntoObject;
+    [SerializeField] private TransitionMode _camTransitionMode = TransitionMode.SwapToDestCamThenToMainCam;
+    [SerializeField] private bool _activateLetterboxesOnTransition = true;
 
     [Header("Duration settings")]
     [SerializeField] private float _camTransitionDuration = 0.6f;
@@ -16,27 +19,52 @@ public class TransitionCameraTo : MonoBehaviour
     private float _camTransitionStartTime;
     private float _camHoldEndTime;
 
+    private bool _swapBackToMainCamCalled;
+
     private static CinemachineBrain _mainCamCinemachineBrain;
     private static CinemachineVirtualCamera _mainVirtualCam;
     private static CinemachineConfiner _toVirtualCamConfiner;
 
-    public void StartCameraTransition()
+    private enum DestCamMode
     {
+        ZoomIntoObject,
+        DestCamStaysPut,
+    }
+
+    private enum TransitionMode
+    {
+        SwapToDestCamThenToMainCam,
+        SwapToDestCamAndStay,
+    }
+
+    public void TransitionBackToDefaultCam()
+    {
+        _swapBackToMainCamCalled = true;
+        SwapBackToDefaultCam();
+    }
+
+    public void StartTransitionToDestCam()
+    {
+        if (_startCamTransition) return; // transition already started
+
         _mainCamCinemachineBrain.m_DefaultBlend.m_Time = _camTransitionDuration;
         _mainVirtualCam.m_Transitions.m_InheritPosition = true;
 
-        _toVirtualCam.Follow = ZoomInTo;
-        //_toVirtualCam.Follow = (ZoomInTo != null) ? ZoomInTo.transform : _connectedObjects[0].transform;
+        if (_destinationCameraMode == DestCamMode.ZoomIntoObject) _toVirtualCam.Follow = ZoomInTo;
         _toVirtualCamConfiner.m_BoundingShape2D = CameraBounds.VirtualCamDefaultConfiner.m_BoundingShape2D;
         _toVirtualCam.enabled = true;
 
         _camTransitionStartTime = Time.time;
         _startCamTransition = true;
+
+        if (_camTransitionMode != TransitionMode.SwapToDestCamAndStay) PlayerLogic.LockPlayer();
+        if (_activateLetterboxesOnTransition) CanvasLogic.Letterboxes.Activateboxes(true);
     }
 
     private void Awake()
     {
         _startCamTransition = false;
+        _swapBackToMainCamCalled = false;
     }
 
     private void Start()
@@ -53,35 +81,47 @@ public class TransitionCameraTo : MonoBehaviour
 
     private void Update()
     {
-        EvalCamTransition();
+        EvalSwapBackToMainCam();
     }
     
-    private void EvalCamTransition()
+    private void EvalSwapBackToMainCam()
     {
+        if (!_swapBackToMainCamCalled && _camTransitionMode == TransitionMode.SwapToDestCamAndStay) return;
+
         if (_startCamTransition)
         {
             if (_toVirtualCam.enabled) // measure duration of looking at activated target
             {
                 if (Time.time - _camTransitionStartTime > _camTransitionHoldDuration)
                 {
-                    _toVirtualCam.enabled = false;
-                    _camHoldEndTime = Time.time;
-
-                    CanvasLogic.Letterboxes.Activateboxes(false);
+                    SwapBackToDefaultCam();
                 }
             }
             else // measure until LeverActivatedVirtualCam -> DefaultVirtualCam transition
             {
                 if (Time.time - _camHoldEndTime > _camTransitionDuration + 0.1f)
                 {
-                    _mainCamCinemachineBrain.m_DefaultBlend.m_Time = _camTransitionDurOrig;
-                    _mainVirtualCam.m_Transitions.m_InheritPosition = false;
-                    _startCamTransition = false;
-
-                    PlayerLogic.FreePlayer();
+                    if (_swapBackToMainCamCalled) _swapBackToMainCamCalled = false;
+                    EndSwapBackToDefaultCam();
                 }
             }
         }
     }
 
+    private void SwapBackToDefaultCam()
+    {
+        _toVirtualCam.enabled = false;
+        _camHoldEndTime = Time.time;
+
+        if (_activateLetterboxesOnTransition) CanvasLogic.Letterboxes.Activateboxes(false);
+    }
+
+    private void EndSwapBackToDefaultCam()
+    {
+        _mainCamCinemachineBrain.m_DefaultBlend.m_Time = _camTransitionDurOrig;
+        _mainVirtualCam.m_Transitions.m_InheritPosition = false;
+        _startCamTransition = false;
+
+        PlayerLogic.FreePlayer();
+    }
 }

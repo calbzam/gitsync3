@@ -38,10 +38,7 @@ public class LeverActivate : MonoBehaviour
     {
         if (_transitionCameraTo != null) // transition camera to "VirtualCam - LeverActivated"
         {
-            _transitionCameraTo.StartCameraTransition();
-
-            PlayerLogic.LockPlayer();
-            CanvasLogic.Letterboxes.Activateboxes(true);
+            _transitionCameraTo.StartTransitionToDestCam();
         }
 
         foreach (var obj in _connectedObjects) obj.ActivatedAction(IsActivated);

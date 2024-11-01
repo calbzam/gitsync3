@@ -1,17 +1,10 @@
 using UnityEngine;
 
-public class LeverBatteryReader_useHingeJointMotor : MonoBehaviour
+public class LeverBatteryReader_useHingeJointMotor : LeverBatteryReader
 {
+    [Header("")]
     [SerializeField] private LeverActivate _leverActivate;
     [SerializeField] private /*LeverHandle_useQuatRot*/LeverHandle_useHingeJointMotor _leverHandle;
-
-    [Header("")]
-    [SerializeField] private Transform _batteryInsertPoint;
-    [SerializeField] private float _insertedZRotation = -45;
-    private Vector3 _offsetVec3;
-    private Quaternion _insertedQuatRot;
-
-    public bool BatteryInserted { get; private set; }
 
     private void Start()
     {
