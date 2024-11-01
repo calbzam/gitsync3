@@ -18,5 +18,6 @@ public static class Tags
 
     public static string LeverActivatedVirtualCamTag = "LeverActivatedVirtualCam";
     public static string DefaultVirtualCamTag = "DefaultVirtualCam";
+
     public static string PullablePanelTag = "PullablePanel";
 }
