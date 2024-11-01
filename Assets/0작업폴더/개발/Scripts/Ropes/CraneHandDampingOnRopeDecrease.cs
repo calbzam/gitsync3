@@ -4,7 +4,7 @@ using RopeLengthStatus = LeverConnectedCraneRope.RopeLengthStatus;
 public class CraneHandDampingOnRopeDecrease : MonoBehaviour
 {
     [SerializeField] private LeverConnectedCraneRope _craneRope;
-    [SerializeField] private float _rbDampingAmount = 3;
+    [SerializeField] private float _rbDampingAmount = 5;
 
     private RopeLengthStatus _ropeLengthStatus;
     private Rigidbody2D _rb;
@@ -31,8 +31,21 @@ public class CraneHandDampingOnRopeDecrease : MonoBehaviour
 
     private void EvalDragAmount()
     {
-        if (_ropeLengthStatus == RopeLengthStatus.Increasing) _rb.drag = 0;
-        else _rb.drag = _rbDampingAmount;
+        switch (_ropeLengthStatus)
+        {
+            case RopeLengthStatus.Increasing:
+                _rb.drag = 0;
+                break;
+
+            case RopeLengthStatus.Decreasing:
+                _rb.drag = _rbDampingAmount;
+                break;
+
+            case RopeLengthStatus.Unchanging:
+            default:
+                _rb.drag = 3;
+                break;
+        }
 
         // reset damped velocities
         _rb.velocity = Vector2.zero;

@@ -2284,7 +2284,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _craneRope: {fileID: 1034268440887328872}
-  _rbDampingAmount: 3
+  _rbDampingAmount: 5
 --- !u!50 &190422991553704043
 Rigidbody2D:
   serializedVersion: 4
