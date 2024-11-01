@@ -690,10 +690,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7397104515434212796}
+  - component: {fileID: 8596786955215638053}
   - component: {fileID: 5321171524169380261}
   - component: {fileID: 3436230272260071550}
   m_Layer: 0
-  m_Name: "\uB3C4\uB974\uB798 \uB05D"
+  m_Name: "\uB3C4\uB974\uB798 \uD0D1\uC2B9\uC11D"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -718,6 +719,20 @@ Transform:
   - {fileID: 5854737429316499955}
   m_Father: {fileID: 1374328027166762495}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8596786955215638053
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2178310652274161037}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47faf6ee250214243ab8ad39379cc630, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _craneRope: {fileID: 1851108533852179164}
+  _rbDampingAmount: 3
 --- !u!50 &5321171524169380261
 Rigidbody2D:
   serializedVersion: 4
@@ -1052,7 +1067,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6048409290922909223}
   m_Layer: 0
-  m_Name: "\uB3C4\uB974\uB798 \uBA38\uB9AC"
+  m_Name: "\uB3C4\uB974\uB798 \uBCF8\uCCB4"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1815,8 +1830,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2527935943209908380}
   - component: {fileID: 976707925865101652}
-  - component: {fileID: 82163804479867947}
   - component: {fileID: 1851108533852179164}
+  - component: {fileID: 82163804479867947}
   - component: {fileID: 8571942142313969303}
   - component: {fileID: 4742971862327765963}
   - component: {fileID: 5956546096330966097}
@@ -1825,6 +1840,7 @@ GameObject:
   - component: {fileID: 3703791302233767214}
   - component: {fileID: 5361850078133340178}
   - component: {fileID: 6448208268656693005}
+  - component: {fileID: 3739130465934131918}
   - component: {fileID: 1846118158206220502}
   - component: {fileID: 3827342889879120157}
   - component: {fileID: 7276463962073244714}
@@ -1862,21 +1878,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45e48c09583a90448b38925bfa30a510, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &82163804479867947
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8311231113668912033}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49203ec79639d7747aff9a8611c937d5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PlayerOnOtherObject: 0
-  _disablePlayerGroundCollision: 1
-  _noClimbingParticlesUntil: 4
 --- !u!114 &1851108533852179164
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1892,6 +1893,21 @@ MonoBehaviour:
   _ropeSpeed: 4
   _maxRopeLength: 55
   _minRopeLength: 18
+--- !u!114 &82163804479867947
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8311231113668912033}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49203ec79639d7747aff9a8611c937d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PlayerOnOtherObject: 0
+  _disablePlayerGroundCollision: 1
+  _noClimbingParticlesUntil: 4
 --- !u!114 &8571942142313969303
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2285,8 +2301,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 958c969cfb16745f192d4d7bd28b7178, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  decimation: 0
-  smoothing: 1
+  decimation: 1
+  smoothing: 2
   twist: 0
 --- !u!114 &3703791302233767214
 MonoBehaviour:
@@ -2341,6 +2357,25 @@ MonoBehaviour:
   m_Actor: {fileID: 4779103998428599350}
   m_Target: {fileID: 5351458877506404382}
   m_ParticleGroup: {fileID: 7375444400928674960, guid: c9caf567e49dd104d86e73e9d775b05e, type: 2}
+  m_AttachmentType: 0
+  m_ConstrainOrientation: 0
+  m_Compliance: 0
+  m_BreakThreshold: Infinity
+--- !u!114 &3739130465934131918
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8311231113668912033}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d03c9194b7ab4aaba4dfa5afec22c69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actor: {fileID: 4779103998428599350}
+  m_Target: {fileID: 5351458877506404382}
+  m_ParticleGroup: {fileID: 4743419332964760005, guid: c9caf567e49dd104d86e73e9d775b05e, type: 2}
   m_AttachmentType: 0
   m_ConstrainOrientation: 0
   m_Compliance: 0
