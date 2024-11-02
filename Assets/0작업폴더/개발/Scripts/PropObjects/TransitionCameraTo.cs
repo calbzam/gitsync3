@@ -39,13 +39,16 @@ public class TransitionCameraTo : MonoBehaviour
 
     public void TransitionBackToDefaultCam()
     {
+        if (_swapBackToMainCamCalled) return; // transition already started
         _swapBackToMainCamCalled = true;
+
         SwapBackToDefaultCam();
     }
 
     public void StartTransitionToDestCam()
     {
-        if (_startCamTransition) return; // transition already started
+        if (_toVirtualCam.enabled) return; // transition already started
+        _swapBackToMainCamCalled = false;
 
         _mainCamCinemachineBrain.m_DefaultBlend.m_Time = _camTransitionDuration;
         _mainVirtualCam.m_Transitions.m_InheritPosition = true;
@@ -97,7 +100,7 @@ public class TransitionCameraTo : MonoBehaviour
                     SwapBackToDefaultCam();
                 }
             }
-            else // measure until LeverActivatedVirtualCam -> DefaultVirtualCam transition
+            else // measure until LeverActivatedVirtualCam -> DefaultVirtualCam transition end
             {
                 if (Time.time - _camHoldEndTime > _camTransitionDuration + 0.1f)
                 {

@@ -59,7 +59,7 @@ public class MovePlayerTo : MonoBehaviour
             if (checkValidEnter())
             {
                 PlayerLogic.LockPlayer();
-                PlayerLogic.IgnorePlayerGroundCollision(true);
+                PlayerLogic.EnablePlayerGroundCollision(false);
                 _isMovingPlayer = true;
                 PlayerLogic.Player.RespawnButtonAllowed = false;
 
@@ -72,7 +72,7 @@ public class MovePlayerTo : MonoBehaviour
     {
         _isMovingPlayer = false;
         PlayerLogic.Player.RespawnButtonAllowed = true;
-        PlayerLogic.IgnorePlayerGroundCollision(false);
+        PlayerLogic.EnablePlayerGroundCollision(true);
         PlayerLogic.FreePlayer();
 
         if (PlayerLogic.Player.IsOnLadder) PlayerLogic.Player.SetPlayerOnLadder(true, PlayerLogic.Player.CurrentLadder);

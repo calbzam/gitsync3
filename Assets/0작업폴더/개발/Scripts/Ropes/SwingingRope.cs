@@ -73,12 +73,6 @@ public class SwingingRope : RidableObject
         _ropePinConstraints.Clear(); // remove all batches from the constraint type we want, so we start clean:
     }
 
-    private void EnablePlayerGroundCollision(bool enabled)
-    {
-        PlayerLogic.IgnorePlayerGroundCollision(!enabled);
-        PlayerLogic.Player.GroundCheckAllowed = enabled;
-    }
-
     public static void EnablePlayerRopeCollision(bool enabled)
     {
         if (PlayerLogic.PlayerObiCol.enabled != enabled)
@@ -135,7 +129,7 @@ public class SwingingRope : RidableObject
         PlayerOnOtherObject = false;
         PlayerOnThisObject?.Invoke(gameObject.GetInstanceID(), true);
         _currentIndexInElements = RopeCalcs.GetElementIndexOfParticle(_rope, _currentParticle);
-        if (_disablePlayerGroundCollision) EnablePlayerGroundCollision(false);
+        if (_disablePlayerGroundCollision) PlayerLogic.EnablePlayerGroundCollision(false);
     }
 
     private void Solver_OnCollision(object sender, ObiSolver.ObiCollisionEventArgs e)
@@ -182,7 +176,7 @@ public class SwingingRope : RidableObject
         {
             _playerHasJumped = true;
             PlayerOnThisObject?.Invoke(gameObject.GetInstanceID(), false);
-            if (_disablePlayerGroundCollision) EnablePlayerGroundCollision(true);
+            if (_disablePlayerGroundCollision) PlayerLogic.EnablePlayerGroundCollision(true);
             DetachPlayerFromParticle(_currentParticle);
 
             PlayerLogic.PlayerObiCol.enabled = true;
@@ -196,7 +190,7 @@ public class SwingingRope : RidableObject
             _playerHasJumped = true;
             PlayerIsInRange = false;
             PlayerOnThisObject?.Invoke(gameObject.GetInstanceID(), false);
-            if (_disablePlayerGroundCollision) EnablePlayerGroundCollision(true);
+            if (_disablePlayerGroundCollision) PlayerLogic.EnablePlayerGroundCollision(true);
             DetachPlayerFromParticle(_currentParticle);
 
             PlayerLogic.DisconnectedPlayerAddJump();

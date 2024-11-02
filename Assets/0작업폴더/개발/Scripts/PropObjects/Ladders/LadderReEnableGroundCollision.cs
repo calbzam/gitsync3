@@ -17,7 +17,7 @@ public class LadderReEnableGroundCollision : MonoBehaviour
             if (PlayerLogic.Player.CurrentLadder == _ladder)
             {
                 _ladder.BypassGroundCollision = false;
-                PlayerLogic.IgnorePlayerGroundCollision(false);
+                PlayerLogic.EnablePlayerGroundCollision(true);
             }
         }
     }
@@ -30,7 +30,7 @@ public class LadderReEnableGroundCollision : MonoBehaviour
             {
                 _ladder.BypassGroundCollision = _bypassGroundPrevState;
                 if (PlayerLogic.Player.IsOnLadder)
-                    PlayerLogic.IgnorePlayerGroundCollision(_bypassGroundPrevState);
+                    PlayerLogic.EnablePlayerGroundCollision(!_bypassGroundPrevState);
             }
         }
     }
