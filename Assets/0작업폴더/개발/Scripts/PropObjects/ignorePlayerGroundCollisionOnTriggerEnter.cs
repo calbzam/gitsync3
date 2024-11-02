@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ignorePlayerGroundCollisionOnTriggerEnter : MonoBehaviour
+public class IgnorePlayerGroundCollisionOnTriggerEnter : MonoBehaviour
 {
     [SerializeField] private Collider2D[] _groundCollidersToIgnore;
 
