@@ -548,7 +548,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6700493391073968532}
-  - component: {fileID: 7909172312031862860}
+  - component: {fileID: 8837981737482389590}
   - component: {fileID: 1566451910580525364}
   m_Layer: 0
   m_Name: "PlayerGround\uCDA9\uB3CC\uD574\uC81C\uC601\uC5ED"
@@ -572,7 +572,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 834666209541503876}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7909172312031862860
+--- !u!114 &8837981737482389590
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -581,10 +581,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 4011049124891150476}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 610220209f5c8cd4eb5b78c7edeb6e65, type: 3}
+  m_Script: {fileID: 11500000, guid: 6b22cb2552950834095625d272049787, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _collidersToIgnore: []
+  _groundCollidersToIgnore:
+  - {fileID: 0}
 --- !u!61 &1566451910580525364
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1726,6 +1727,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 834666209541503876}
+  - component: {fileID: 3956429317559542477}
   - component: {fileID: 1690383777187434404}
   - component: {fileID: 8953304307526983875}
   - component: {fileID: 8993642369140182023}
@@ -1756,6 +1758,19 @@ Transform:
   - {fileID: 6700493391073968532}
   m_Father: {fileID: 2548171942102864206}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3956429317559542477
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7914769468026967642}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2455320c86e8978429b8b92fb619c902, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _craneRope: {fileID: 2752645597377224952}
 --- !u!114 &1690383777187434404
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1966,7 +1981,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7745186291357004675}
-  - component: {fileID: 5869080150857486323}
   - component: {fileID: 2752645597377224952}
   - component: {fileID: 7114233401386721828}
   - component: {fileID: 8666930033006137758}
@@ -2003,18 +2017,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2548171942102864206}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5869080150857486323
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8532356925502052360}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 45e48c09583a90448b38925bfa30a510, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &2752645597377224952
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2029,7 +2031,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _ropeSpeed: 4
   _switchDelay: 4
-  _maxRopeLength: 56
+  _maxRopeLength: 57
   _minRopeLength: 20
 --- !u!114 &7114233401386721828
 MonoBehaviour:

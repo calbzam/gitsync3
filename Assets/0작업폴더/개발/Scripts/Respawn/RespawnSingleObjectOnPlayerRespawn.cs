@@ -2,17 +2,17 @@ using UnityEngine;
 
 public class RespawnSingleObjectOnPlayerRespawn : MonoBehaviour
 {
-    private Transform _initialParent;
-    private Vector3 _initialPos;
-    private Quaternion _initialRot;
+    protected Transform _initialParent;
+    protected Vector3 _initialPos;
+    protected Quaternion _initialRot;
 
-    private Rigidbody2D _rb2D;
-    private Rigidbody _rb3D;
+    protected Rigidbody2D _rb2D;
+    protected Rigidbody _rb3D;
 
-    private Vector3 _initialVelocity;
+    protected Vector3 _initialVelocity;
 
-    private float _rb2DInitialAngularVelocity;
-    private Vector3 _rb3DInitialAngularVelocity;
+    protected float _rb2DInitialAngularVelocity;
+    protected Vector3 _rb3DInitialAngularVelocity;
 
     private void Start()
     {
@@ -45,7 +45,7 @@ public class RespawnSingleObjectOnPlayerRespawn : MonoBehaviour
         ResetRb();
     }
 
-    private void ResetTransform()
+    protected virtual void ResetTransform()
     {
         transform.position = _initialPos;
         transform.rotation = _initialRot;

@@ -280,7 +280,7 @@ BoxCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 72
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -442,7 +442,7 @@ BoxCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 72
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -1162,7 +1162,7 @@ BoxCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 72
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -1324,7 +1324,7 @@ BoxCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 72
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -1471,7 +1471,7 @@ BoxCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 72
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -1526,7 +1526,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3293429883843877687}
-  - component: {fileID: 7746044231286849020}
+  - component: {fileID: 1932315836516572038}
   - component: {fileID: 3280028815728100464}
   - component: {fileID: 5636988767155138636}
   m_Layer: 6
@@ -1555,20 +1555,18 @@ Transform:
   - {fileID: 3752720307474790296}
   m_Father: {fileID: 2360120720214142942}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7746044231286849020
+--- !u!114 &1932315836516572038
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4805573926693810905}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 47faf6ee250214243ab8ad39379cc630, type: 3}
+  m_Script: {fileID: 11500000, guid: df943ef87dc1f744aa94d2d1789b9cbf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _craneRope: {fileID: 0}
-  _rbDampingAmount: 5
 --- !u!50 &3280028815728100464
 Rigidbody2D:
   serializedVersion: 4
@@ -1618,7 +1616,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1806468427421897958}
-  - component: {fileID: 5636802242946651568}
+  - component: {fileID: 3335875049727020000}
   - component: {fileID: 5194982801689768788}
   - component: {fileID: 9028884701601073280}
   m_Layer: 6
@@ -1647,20 +1645,18 @@ Transform:
   - {fileID: 8679542211371146915}
   m_Father: {fileID: 2360120720214142942}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5636802242946651568
+--- !u!114 &3335875049727020000
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5622258598619637969}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 47faf6ee250214243ab8ad39379cc630, type: 3}
+  m_Script: {fileID: 11500000, guid: df943ef87dc1f744aa94d2d1789b9cbf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _craneRope: {fileID: 0}
-  _rbDampingAmount: 5
 --- !u!50 &5194982801689768788
 Rigidbody2D:
   serializedVersion: 4
@@ -1817,7 +1813,7 @@ BoxCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 72
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -1964,7 +1960,7 @@ BoxCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 72
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -2111,7 +2107,7 @@ BoxCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 72
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2

@@ -7,14 +7,14 @@ public class LeverActivate : MonoBehaviour
     [SerializeField] private Checkpoint _checkPointToActivate;
     [SerializeField] private bool _updateCheckpointOnActivate = false;
 
-    [Header("Default (TransitionCameraTo.ZoomInTo) for LeverActivate is (ConnectedObjects[0])")]
-    [SerializeField] private TransitionCameraTo _transitionCameraTo;
+    public bool IsActivated { get; private set; }
 
     public bool IsAutomatic = true;
     public bool NeedBattery = true;
 
-    public bool IsActivated { get; private set; }
-
+    [Header("Default (TransitionCameraTo.ZoomInTo) for LeverActivate is (ConnectedObjects[0])")]
+    [SerializeField] private TransitionCameraTo _transitionCameraTo;
+    
     private void Awake()
     {
         IsActivated = false;
@@ -25,8 +25,11 @@ public class LeverActivate : MonoBehaviour
 
     private void Start()
     {
-        if (_transitionCameraTo.ZoomInTo == null)
-            _transitionCameraTo.ZoomInTo = _connectedObjects[0].transform;
+        if (_transitionCameraTo != null)
+        {
+            if (_transitionCameraTo.ZoomInTo == null)
+                _transitionCameraTo.ZoomInTo = _connectedObjects[0].transform;
+        }
     }
 
     public void ToggleActivateBool()
