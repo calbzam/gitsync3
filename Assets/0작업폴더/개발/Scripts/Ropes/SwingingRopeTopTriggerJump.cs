@@ -28,7 +28,12 @@ public class SwingingRopeTopTriggerJump : MonoBehaviour
     {
         if (col.CompareTag(Tags.PlayerTag))
         {
-            if (_rope.PlayerIsAttached) _rope.DisconnectPlayerKeepRangeNoJump();
+            // do not remove .InputDir.y==0 check here, or PlayerOnThisObject?.Invoke(false) will be called,
+            // then player will stick to other rope while climbing down from ground above
+            if (_rope.PlayerIsAttached && FrameInputReader.FrameInput.InputDir.y == 0)
+            {
+                _rope.DisconnectPlayerKeepRangeNoJump(); // be careful with this and PlayerOnOtherObject
+            }
 
             if (FrameInputReader.FrameInput.InputDir.y == 0)
             {
