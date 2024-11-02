@@ -2031,7 +2031,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _ropeSpeed: 4
   _switchDelay: 4
-  _maxRopeLength: 56
+  _maxRopeLength: 57
   _minRopeLength: 20
 --- !u!114 &7114233401386721828
 MonoBehaviour:
