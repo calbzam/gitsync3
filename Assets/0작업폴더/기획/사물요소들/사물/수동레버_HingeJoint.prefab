@@ -479,6 +479,7 @@ GameObject:
   m_Component:
   - component: {fileID: 252190334064407094}
   - component: {fileID: 341302676370139253}
+  - component: {fileID: 7406837979715246777}
   m_Layer: 0
   m_Name: "\uC218\uB3D9\uB808\uBC84_HingeJoint"
   m_TagString: Untagged
@@ -518,8 +519,22 @@ MonoBehaviour:
   _connectedObjects: []
   _checkPointToActivate: {fileID: 0}
   _updateCheckpointOnActivate: 0
+  _transitionCameraTo: {fileID: 7406837979715246777}
   IsAutomatic: 0
   NeedBattery: 0
-  _transitionCamOnActivate: 1
+--- !u!114 &7406837979715246777
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8396864855694009272}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83c8a36425337be4d8637d4dd10d2795, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _toVirtualCam: {fileID: 0}
+  ZoomInTo: {fileID: 0}
   _camTransitionDuration: 0.6
   _camTransitionHoldDuration: 1.3

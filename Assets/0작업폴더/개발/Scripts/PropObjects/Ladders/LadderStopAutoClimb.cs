@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class LadderStopAutoClimb : MonoBehaviour
@@ -15,7 +13,7 @@ public class LadderStopAutoClimb : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.gameObject.CompareTag("Player"))
+        if (col.gameObject.CompareTag(Tags.PlayerTag))
         {
             _autoClimbPrevState = _ladder.AutoClimbWhenJumpedOn;
             _ladder.AutoClimbWhenJumpedOn = false;
@@ -25,7 +23,7 @@ public class LadderStopAutoClimb : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D col)
     {
-        if (col.gameObject.CompareTag("Player"))
+        if (col.gameObject.CompareTag(Tags.PlayerTag))
         {
             _ladder.AutoClimbWhenJumpedOn = _autoClimbPrevState;
             stopClimbDir(false);

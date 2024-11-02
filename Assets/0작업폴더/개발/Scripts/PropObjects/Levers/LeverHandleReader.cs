@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class LeverHandleReader : MonoBehaviour
@@ -13,7 +11,7 @@ public class LeverHandleReader : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.CompareTag("Player"))
+        if (col.CompareTag(Tags.PlayerTag))
         {
             PlayerIsInRange = true;
         }
@@ -21,7 +19,7 @@ public class LeverHandleReader : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D col)
     {
-        if (col.CompareTag("Player"))
+        if (col.CompareTag(Tags.PlayerTag))
         {
             PlayerIsInRange = false;
         }

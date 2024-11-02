@@ -16,6 +16,7 @@ TagManager:
   - ZipLineStoppingEndBlock
   - LeverActivatedVirtualCam
   - DefaultVirtualCam
+  - PullablePanel
   layers:
   - Default
   - TransparentFX

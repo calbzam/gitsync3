@@ -43,14 +43,14 @@ public class PlayerLogic : MonoBehaviour
         AnimTools = AnimController.AnimTools;
 
         PlayerObiCol = Player.GetComponent<ObiCollider2D>();
-        PlayerRopeRiderCol = GameObject.FindGameObjectWithTag("Player ropeRider").GetComponent<ObiCollider2D>();
+        PlayerRopeRiderCol = GameObject.FindGameObjectWithTag(Tags.PlayerRopeRiderTag).GetComponent<ObiCollider2D>();
 
-        PlayerElectrocutedText = GameObject.FindGameObjectWithTag("Player electrocutedText").GetComponent<TMP_Text>();
+        PlayerElectrocutedText = GameObject.FindGameObjectWithTag(Tags.PlayerElectrocutedText).GetComponent<TMP_Text>();
         PlayerElectrocutedText.gameObject.SetActive(false);
 
         _origPlayerConstraints = Player.Rb.constraints;
 
-        _freePlayerDragUI = GameObject.FindGameObjectWithTag("FreePlayerMoveUI").GetComponent<FreePlayerDragUI>();
+        _freePlayerDragUI = GameObject.FindGameObjectWithTag(Tags.FreePlayerMoveUITag).GetComponent<FreePlayerDragUI>();
         _freePlayerDragEnabled = false;
         _freePlayerDragUI.gameObject.SetActive(false);
     }
@@ -117,9 +117,10 @@ public class PlayerLogic : MonoBehaviour
         if (_freePlayerDragEnabled) _freePlayerDragUI.MoveUIToPlayerPosition();
     }
 
-    public static void IgnorePlayerGroundCollision(bool ignore)
+    public static void EnablePlayerGroundCollision(bool enabled)
     {
-        Physics2D.IgnoreLayerCollision(Layers.PlayerLayer.LayerValue, Layers.GroundLayer.LayerValue, ignore);
+        Physics2D.IgnoreLayerCollision(Layers.PlayerLayer.LayerValue, Layers.GroundLayer.LayerValue, !enabled);
+        Player.GroundCheckAllowed = enabled;
     }
 
     //public static void IgnorePlayerLadderCollision(bool bypass)

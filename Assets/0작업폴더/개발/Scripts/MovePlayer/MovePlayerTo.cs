@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -61,7 +59,7 @@ public class MovePlayerTo : MonoBehaviour
             if (checkValidEnter())
             {
                 PlayerLogic.LockPlayer();
-                PlayerLogic.IgnorePlayerGroundCollision(true);
+                PlayerLogic.EnablePlayerGroundCollision(false);
                 _isMovingPlayer = true;
                 PlayerLogic.Player.RespawnButtonAllowed = false;
 
@@ -74,7 +72,7 @@ public class MovePlayerTo : MonoBehaviour
     {
         _isMovingPlayer = false;
         PlayerLogic.Player.RespawnButtonAllowed = true;
-        PlayerLogic.IgnorePlayerGroundCollision(false);
+        PlayerLogic.EnablePlayerGroundCollision(true);
         PlayerLogic.FreePlayer();
 
         if (PlayerLogic.Player.IsOnLadder) PlayerLogic.Player.SetPlayerOnLadder(true, PlayerLogic.Player.CurrentLadder);
@@ -103,7 +101,7 @@ public class MovePlayerTo : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.CompareTag("Player"))
+        if (col.CompareTag(Tags.PlayerTag))
         {
             _playerIsInRange = true;
             if (!_buttonPressRequired) startMovingPlayer();
@@ -112,7 +110,7 @@ public class MovePlayerTo : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D col)
     {
-        if (col.CompareTag("Player"))
+        if (col.CompareTag(Tags.PlayerTag))
         {
             _playerIsInRange = false;
         }

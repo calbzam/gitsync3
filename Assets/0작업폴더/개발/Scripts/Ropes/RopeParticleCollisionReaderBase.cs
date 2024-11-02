@@ -58,7 +58,7 @@ public class RopeParticleCollisionReaderBase : MonoBehaviour // may be edited to
             {
                 /* do collsion of bodyB */
                 var col = world.colliderHandles[contact.bodyB].owner;
-                if (col != null && col.CompareTag("Player"))
+                if (col != null && col.CompareTag(Tags.PlayerTag))
                 {
                     /* do collsion of bodyA particles */
                     int simplexStart = _rope.solver.simplexCounts.GetSimplexStartAndSize(contact.bodyA, out int simplexSize);

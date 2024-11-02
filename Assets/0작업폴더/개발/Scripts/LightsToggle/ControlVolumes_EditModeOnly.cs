@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -56,7 +54,7 @@ public class ControlVolumes_EditModeOnly : MonoBehaviour
     //    Collider[] colliders = Physics.OverlapBox(_triggerColToUse.bounds.center, _triggerColToUse.bounds.extents, Quaternion.identity, Layers.DefaultLayer.LayerValue);
     //    foreach (Collider col in colliders)
     //    {
-    //        if (col.CompareTag("MainCamera Collider")) return true;
+    //        if (col.CompareTag(Tags.MainCameraColliderTag)) return true;
     //    }
     //    return false;
     //}

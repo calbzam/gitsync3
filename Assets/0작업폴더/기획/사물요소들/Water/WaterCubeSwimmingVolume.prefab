@@ -162,8 +162,8 @@ BuoyancyEffector2D:
   m_LinearDrag: 10
   m_AngularDrag: 5
   m_FlowAngle: 225
-  m_FlowMagnitude: 5
-  m_FlowVariation: 2
+  m_FlowMagnitude: 0
+  m_FlowVariation: 1
 --- !u!1 &1321264418748170893
 GameObject:
   m_ObjectHideFlags: 0
@@ -350,6 +350,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73c51f9974924074d968e00e9903399f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _diveSwimAllowed: 1
 --- !u!61 &1427305303513351223
 BoxCollider2D:
   m_ObjectHideFlags: 0

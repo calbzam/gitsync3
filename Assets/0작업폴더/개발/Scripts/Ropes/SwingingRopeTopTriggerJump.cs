@@ -10,7 +10,7 @@ public class SwingingRopeTopTriggerJump : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.CompareTag("Player"))
+        if (col.CompareTag(Tags.PlayerTag))
         {
             if (!_disconnectAlways && !PlayerLogic.Player.OnGround) return;
             if (_rope.PlayerIsAttached)
@@ -26,9 +26,14 @@ public class SwingingRopeTopTriggerJump : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D col)
     {
-        if (col.CompareTag("Player"))
+        if (col.CompareTag(Tags.PlayerTag))
         {
-            if (_rope.PlayerIsAttached) _rope.DisconnectPlayerKeepRangeNoJump();
+            // do not remove .InputDir.y==0 check here, or PlayerOnThisObject?.Invoke(false) will be called,
+            // then player will stick to other rope while climbing down from ground above
+            if (_rope.PlayerIsAttached && FrameInputReader.FrameInput.InputDir.y == 0)
+            {
+                _rope.DisconnectPlayerKeepRangeNoJump(); // be careful with this and PlayerOnOtherObject
+            }
 
             if (FrameInputReader.FrameInput.InputDir.y == 0)
             {
@@ -44,7 +49,7 @@ public class SwingingRopeTopTriggerJump : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D col)
     {
-        if (col.CompareTag("Player"))
+        if (col.CompareTag(Tags.PlayerTag))
         {
             PlayerLogic.Player.RopeClimbAllowed = true;
             SwingingRope.EnablePlayerRopeCollision(true);

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class LightsToggle3D_Emmision : MonoBehaviour
@@ -110,7 +108,7 @@ public class LightsToggle3D_Emmision : MonoBehaviour
 
     //private void OnTriggerEnter(Collider other)
     //{
-    //    if (other.gameObject.CompareTag("MainCamera Collider"))
+    //    if (other.gameObject.CompareTag(Tags.MainCameraColliderTag))
     //    {
     //        _isToggling = true;
     //        for (int i = 0; i < _lightsCount; ++i) { _toggleInProcess[i] = true; _toIntensity[i] = _onIntensity[i]; }
@@ -119,7 +117,7 @@ public class LightsToggle3D_Emmision : MonoBehaviour
 
     //private void OnTriggerExit(Collider other)
     //{
-    //    if (other.gameObject.CompareTag("MainCamera Collider"))
+    //    if (other.gameObject.CompareTag(Tags.MainCameraColliderTag))
     //    {
     //        _isToggling = true;
     //        for (int i = 0; i < _lightsCount; ++i) { _toggleInProcess[i] = true; _toIntensity[i] = _offIntensity[i]; }

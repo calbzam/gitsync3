@@ -1,49 +1,49 @@
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PullablePanel : MonoBehaviour
 {
-    [SerializeField] private GameObject[] _gameobjsToActivateChildRbsOnPullStart;
+    [SerializeField] private GameObject[] _parentObjsToDeactivateChildRbsUntilPullStarft;
+    [SerializeField] private HingeJoint2D _playerJoint;
+    [SerializeField] private BoxCollider2D _selfCollider;
 
-    private HingeJoint2D _joint;
-
-    public event Action<bool> PlayerIsInRange;
-    public void InvokePlayerIsInRange(bool playerIsInRange) => PlayerIsInRange?.Invoke(playerIsInRange);
+    public bool PlayerIsInRange;
 
     private bool _playerIsConnected;
     private bool _isPickedUp;
     private bool _firstPickedUp;
+
+    private static int _heldInstanceID; // instanceID of PullablePanel currently held by Player (== 0: no PullablePanel held by Player)
 
     private void Awake()
     {
         _playerIsConnected = false;
         _isPickedUp = false;
         _firstPickedUp = false;
-        _joint = gameObject.GetComponent<HingeJoint2D>();
+        _heldInstanceID = 0;
     }
 
     private void Start()
     {
-        _joint.enabled = false;
+        _playerJoint.enabled = false;
         initRbsBodytype();
     }
 
     private void OnEnable()
     {
-        PlayerIsInRange += PlayerIsInRangeAction;
+        CentralInputReader.Input.Player.PickupActivate.started += PickupActivatedAction;
     }
 
     private void OnDisable()
     {
-        PlayerIsInRange -= PlayerIsInRangeAction;
+        CentralInputReader.Input.Player.PickupActivate.started -= PickupActivatedAction;
     }
 
     private void initRbsBodytype()
     {
-        if (_gameobjsToActivateChildRbsOnPullStart != null)
+        if (_parentObjsToDeactivateChildRbsUntilPullStarft != null)
         {
-            foreach (var parentRb in _gameobjsToActivateChildRbsOnPullStart)
+            foreach (var parentRb in _parentObjsToDeactivateChildRbsUntilPullStarft)
             {
                 var _childRbArray = parentRb.GetComponentsInChildren<Rigidbody2D>();
                 if (_childRbArray != null) foreach (var rb in _childRbArray) rb.bodyType = RigidbodyType2D.Kinematic;
@@ -53,9 +53,9 @@ public class PullablePanel : MonoBehaviour
 
     private void toggleRbsBodytype()
     {
-        if (_gameobjsToActivateChildRbsOnPullStart != null)
+        if (_parentObjsToDeactivateChildRbsUntilPullStarft != null)
         {
-            foreach (var parentRb in _gameobjsToActivateChildRbsOnPullStart)
+            foreach (var parentRb in _parentObjsToDeactivateChildRbsUntilPullStarft)
             {
                 var _childRbArray = parentRb.GetComponentsInChildren<Rigidbody2D>();
                 if (_childRbArray != null) foreach (var rb in _childRbArray) rb.bodyType = RigidbodyType2D.Dynamic;
@@ -63,26 +63,40 @@ public class PullablePanel : MonoBehaviour
         }
     }
 
-    private void PlayerIsInRangeAction(bool playerIsInRange)
-    {
-        if (playerIsInRange || _playerIsConnected) CentralInputReader.Input.Player.PickupActivate.started += PickupActivatedAction;
-        else CentralInputReader.Input.Player.PickupActivate.started -= PickupActivatedAction;
-    }
-
     private void PickupActivatedAction(InputAction.CallbackContext ctx)
     {
-        _isPickedUp = !_isPickedUp;
-
-        if (_isPickedUp)
+        if (_heldInstanceID == 0 && PlayerIsInRange && !_playerIsConnected)
         {
-            _joint.enabled = true;
-            _playerIsConnected = true;
-            if (!_firstPickedUp) { _firstPickedUp = true; toggleRbsBodytype(); }
+            PickupPanel();
         }
         else
         {
-            _joint.enabled = false;
-            _playerIsConnected = false;
+            LetgoPanel();
+        }
+    }
+
+    private void PickupPanel()
+    {
+        _heldInstanceID = GetInstanceID();
+
+        _playerJoint.enabled = true;
+        _playerIsConnected = true;
+        if (!_firstPickedUp) { _firstPickedUp = true; toggleRbsBodytype(); }
+    }
+
+    public void LetgoPanel()
+    {
+        if (_heldInstanceID == GetInstanceID()) _heldInstanceID = 0;
+
+        _playerJoint.enabled = false;
+        _playerIsConnected = false;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision) // ignore collisions between PullablePanels
+    {
+        if (collision.collider.CompareTag(Tags.PullablePanelTag))
+        {
+            Physics2D.IgnoreCollision(_selfCollider, collision.collider);
         }
     }
 }

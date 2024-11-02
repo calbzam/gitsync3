@@ -1,5 +1,3 @@
-//using System.Collections;
-//using System.Collections.Generic;
 //using UnityEngine;
 
 //[ExecuteInEditMode]
@@ -28,7 +26,7 @@
 
 //    private void OnTriggerEnter2D(Collider2D col)
 //    {
-//        if (col.CompareTag("Player"))
+//        if (col.CompareTag(Tags.PlayerTag))
 //        {
 //            col.GetComponent<PlayerController>().SetRespawnPos(transform.position);
 //        }

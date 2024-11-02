@@ -5,14 +5,20 @@ public class LeverConnectedCraneRope : LeverConnectedObject
 {
     [Help("Needs ObiRope and ObiRopeCursor on this object")]
     [SerializeField] private float _ropeSpeed = 5;
-    [SerializeField] private float _maxRopeLength = 50;
-    [SerializeField] private float _minRopeLength = 20;
+    private static float _lerpSpeed = 5; // speed for (_currentRopeSpeed MoveTowards _ropeSpeed)
+    private float _currentRopeSpeed;
+    [SerializeField] private float _switchDelay = 3;
+    private float _switchDelayTimer;
+    private bool _switchActivated;
+    private bool _firstTimeActivated;
+    [SerializeField] private float _maxRopeLength = 55;
+    [SerializeField] private float _minRopeLength = 18;
 
-    private RopeLengthStatus _ropeLengthStatus;
+    public RopeLengthStatus RopeLengthChangeStatus { get; private set; }
 
-    private enum RopeLengthStatus
+    public enum RopeLengthStatus
     {
-        Static,
+        Unchanging,
         Increasing,
         Decreasing,
     }
@@ -22,27 +28,70 @@ public class LeverConnectedCraneRope : LeverConnectedObject
 
     private void Awake()
     {
-        _ropeLengthStatus = RopeLengthStatus.Static;
+        _switchActivated = false;
+        _firstTimeActivated = true;
+        _switchDelayTimer = 0f;
+        RopeLengthChangeStatus = RopeLengthStatus.Unchanging;
         _rope = gameObject.GetComponent<ObiRope>();
         _ropeCursor = gameObject.GetComponent<ObiRopeCursor>();
     }
 
+    public override void ActivatedAction(bool enabledState)
+    {
+        RopeLengthChangeStatus = enabledState ? RopeLengthStatus.Increasing : RopeLengthStatus.Decreasing;
+
+        if (_firstTimeActivated)
+        {
+            _firstTimeActivated = false;
+            _switchDelayTimer = Time.time - (_switchDelay + 0.1f);
+        }
+        else
+        {
+            _switchDelayTimer = Time.time;
+        }
+
+        _switchActivated = true;
+    }
+
     private void Update()
     {
-        if (_ropeLengthStatus == RopeLengthStatus.Increasing)
+        if (_switchActivated)
         {
-            _ropeCursor.ChangeLength(_rope.restLength + _ropeSpeed * Time.deltaTime);
-            if (_rope.restLength > _maxRopeLength) _ropeLengthStatus = RopeLengthStatus.Static;
-        }
-        else if (_ropeLengthStatus == RopeLengthStatus.Decreasing)
-        {
-            _ropeCursor.ChangeLength(_rope.restLength - _ropeSpeed * Time.deltaTime);
-            if (_rope.restLength < _minRopeLength) _ropeLengthStatus = RopeLengthStatus.Static;
+            if (Time.time - _switchDelayTimer > _switchDelay)
+            {
+                ChangeRopeLength();
+            }
         }
     }
 
-    public override void ActivatedAction(bool enabledState)
+    private void ChangeRopeLength()
     {
-        _ropeLengthStatus = enabledState ? RopeLengthStatus.Increasing : RopeLengthStatus.Decreasing;
+        switch (RopeLengthChangeStatus)
+        {
+            case RopeLengthStatus.Increasing:
+                _currentRopeSpeed = Mathf.MoveTowards(_currentRopeSpeed, _ropeSpeed, _lerpSpeed * Time.deltaTime);
+                if (_rope.restLength > _maxRopeLength) RopeLengthChangeStatus = RopeLengthStatus.Unchanging;
+                break;
+
+            case RopeLengthStatus.Decreasing:
+                _currentRopeSpeed = Mathf.MoveTowards(_currentRopeSpeed, -_ropeSpeed, _lerpSpeed * Time.deltaTime);
+                if (_rope.restLength < _minRopeLength) RopeLengthChangeStatus = RopeLengthStatus.Unchanging;
+                break;
+
+            case RopeLengthStatus.Unchanging:
+            default:
+                _currentRopeSpeed = Mathf.MoveTowards(_currentRopeSpeed, 0, _lerpSpeed * Time.deltaTime);
+                break;
+        }
+
+        if (_currentRopeSpeed == 0)
+        {
+            _switchActivated = false;
+        }
+
+        else
+        {
+            _ropeCursor.ChangeLength(_rope.restLength + _currentRopeSpeed * Time.deltaTime);
+        }
     }
 }

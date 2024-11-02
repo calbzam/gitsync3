@@ -872,8 +872,8 @@ GameObject:
   m_Component:
   - component: {fileID: 6267011453846813039}
   - component: {fileID: 6915546198768996632}
-  - component: {fileID: 4371100052024708653}
   - component: {fileID: 1034268440887328872}
+  - component: {fileID: 4371100052024708653}
   - component: {fileID: 4251932846081943950}
   - component: {fileID: 1057626220465479436}
   - component: {fileID: 1440368311175493488}
@@ -882,6 +882,7 @@ GameObject:
   - component: {fileID: 6982242985851781951}
   - component: {fileID: 8623014285385943460}
   - component: {fileID: 211111714204180197}
+  - component: {fileID: 2782986188416697660}
   - component: {fileID: 7087077982555406182}
   - component: {fileID: 4580120999989042602}
   - component: {fileID: 4652936418349749694}
@@ -919,6 +920,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45e48c09583a90448b38925bfa30a510, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1034268440887328872
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5112010605077674254}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e4862b7e06680a469a2afda603cd424, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _ropeSpeed: 4
+  _switchDelay: 4
+  _maxRopeLength: 56
+  _minRopeLength: 20
 --- !u!114 &4371100052024708653
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -934,21 +951,6 @@ MonoBehaviour:
   PlayerOnOtherObject: 0
   _disablePlayerGroundCollision: 0
   _noClimbingParticlesUntil: 4
---- !u!114 &1034268440887328872
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5112010605077674254}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e4862b7e06680a469a2afda603cd424, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _ropeSpeed: 4
-  _maxRopeLength: 55
-  _minRopeLength: 18
 --- !u!114 &4251932846081943950
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1031,225 +1033,235 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61104f33a3f344db9b7e0d0cda41a9fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  solverIndices: 000000000100000002000000030000000400000005000000060000000700000008000000090000000a0000000b0000000c0000000d0000000e0000000f000000100000001100000012000000130000001400000015000000160000001700000018000000190000001a0000001b0000001c0000001d0000001e0000001f000000200000002100000022000000230000002400000025000000260000002700000028000000290000002a0000002b0000002c0000002d0000002e0000002f000000300000003100000032000000330000003400000035000000360000003700000038000000390000003a0000003b0000003c0000003d0000003e0000003f000000400000004100000042000000430000004400000045000000460000004700000048000000490000004a0000004b0000004c0000004d0000004e0000004f000000500000005100000052000000530000005400000055000000560000005700000058000000590000005a0000005b0000005c0000005d0000005e0000005f000000600000006100000062000000630000006400000065000000660000006700000068000000690000006a0000006b0000006c0000006d0000006e0000006f000000700000007100000072000000730000007400000075000000760000007700000078000000790000007a0000007b0000007c0000007d0000007e0000007f000000800000008100000082000000830000008400000085000000860000008700000088000000890000008a0000008b0000008c0000008d0000008e0000008f000000
+  solverIndices: 000000000100000002000000030000000400000005000000060000000700000008000000090000000a0000000b0000000c0000000d0000000e0000000f000000100000001100000012000000130000001400000015000000160000001700000018000000190000001a0000001b0000001c0000001d0000001e0000001f000000200000002100000022000000230000002400000025000000260000002700000028000000290000002a0000002b0000002c0000002d0000002e0000002f000000300000003100000032000000330000003400000035000000360000003700000038000000390000003a0000003b0000003c0000003d0000003e0000003f000000400000004100000042000000430000004400000045000000460000004700000048000000490000004a0000004b0000004c0000004d0000004e0000004f000000500000005100000052000000530000005400000055000000560000005700000058000000590000005a0000005b0000005c0000005d0000005e0000005f000000600000006100000062000000630000006400000065000000660000006700000068000000690000006a0000006b0000006c0000006d0000006e0000006f000000700000007100000072000000730000007400000075000000760000007700000078000000790000007a0000007b0000007c0000007d0000007e0000007f000000800000008100000082000000830000008400000085000000860000008700000088000000890000008a0000008b0000008c0000008d0000008e0000008f0000009000000091000000
   m_CollisionMaterial: {fileID: 0}
   m_SurfaceCollisions: 0
   m_SelfCollisions: 1
-  restLength_: 20.454182
+  restLength_: 21.482111
   elements:
   - particle1: 0
     particle2: 1
-    restLength: 0.44465205
+    restLength: 0.4735344
     constraintForce: 0
     tearResistance: 1
   - particle1: 1
     particle2: 2
-    restLength: 0.44487682
+    restLength: 0.47358692
     constraintForce: 0
     tearResistance: 1
   - particle1: 2
     particle2: 3
-    restLength: 0.44547406
+    restLength: 0.47439173
     constraintForce: 0
     tearResistance: 1
   - particle1: 3
     particle2: 4
-    restLength: 0.4455508
+    restLength: 0.4738782
     constraintForce: 0
     tearResistance: 1
   - particle1: 4
     particle2: 5
-    restLength: 0.43809196
+    restLength: 0.46244374
     constraintForce: 0
     tearResistance: 1
   - particle1: 5
     particle2: 6
-    restLength: 0.4816834
+    restLength: 0.47842062
     constraintForce: 0
     tearResistance: 1
   - particle1: 6
     particle2: 7
-    restLength: 0.50002074
+    restLength: 0.49231428
     constraintForce: 0
     tearResistance: 1
   - particle1: 7
     particle2: 8
-    restLength: 0.49731383
+    restLength: 0.4935247
     constraintForce: 0
     tearResistance: 1
   - particle1: 8
     particle2: 9
-    restLength: 0.49622843
+    restLength: 0.4949982
     constraintForce: 0
     tearResistance: 1
   - particle1: 9
     particle2: 10
-    restLength: 0.49801466
+    restLength: 0.49793634
     constraintForce: 0
     tearResistance: 1
   - particle1: 10
     particle2: 11
-    restLength: 0.50028586
+    restLength: 0.4874863
     constraintForce: 0
     tearResistance: 1
   - particle1: 11
     particle2: 12
-    restLength: 0.49533394
+    restLength: 0.49205402
     constraintForce: 0
     tearResistance: 1
   - particle1: 12
     particle2: 13
-    restLength: 0.49572957
+    restLength: 0.49629936
     constraintForce: 0
     tearResistance: 1
   - particle1: 13
     particle2: 14
-    restLength: 0.49841928
+    restLength: 0.48923618
     constraintForce: 0
     tearResistance: 1
   - particle1: 14
     particle2: 15
-    restLength: 0.4963213
+    restLength: 0.49336973
     constraintForce: 0
     tearResistance: 1
   - particle1: 15
     particle2: 16
-    restLength: 0.49701226
+    restLength: 0.49250984
     constraintForce: 0
     tearResistance: 1
   - particle1: 16
     particle2: 17
-    restLength: 0.49679345
+    restLength: 0.49247682
     constraintForce: 0
     tearResistance: 1
   - particle1: 17
     particle2: 18
-    restLength: 0.49673393
+    restLength: 0.4920733
     constraintForce: 0
     tearResistance: 1
   - particle1: 18
     particle2: 19
-    restLength: 0.49819973
+    restLength: 0.49310896
     constraintForce: 0
     tearResistance: 1
   - particle1: 19
     particle2: 20
-    restLength: 0.4951048
+    restLength: 0.4927945
     constraintForce: 0
     tearResistance: 1
   - particle1: 20
     particle2: 21
-    restLength: 0.4966606
+    restLength: 0.49043453
     constraintForce: 0
     tearResistance: 1
   - particle1: 21
     particle2: 22
-    restLength: 0.49989292
+    restLength: 0.49568588
     constraintForce: 0
     tearResistance: 1
   - particle1: 22
     particle2: 23
-    restLength: 0.497434
+    restLength: 0.49078184
     constraintForce: 0
     tearResistance: 1
   - particle1: 23
     particle2: 24
-    restLength: 0.49563217
+    restLength: 0.4901382
     constraintForce: 0
     tearResistance: 1
   - particle1: 24
     particle2: 25
-    restLength: 0.49710527
+    restLength: 0.49720022
     constraintForce: 0
     tearResistance: 1
   - particle1: 25
     particle2: 26
-    restLength: 0.5011724
+    restLength: 0.4941664
     constraintForce: 0
     tearResistance: 1
   - particle1: 26
     particle2: 27
-    restLength: 0.48198205
+    restLength: 0.4931312
     constraintForce: 0
     tearResistance: 1
   - particle1: 27
     particle2: 28
-    restLength: 0.32581988
+    restLength: 0.49353585
     constraintForce: 0
     tearResistance: 1
   - particle1: 28
     particle2: 29
-    restLength: 0.33383054
+    restLength: 0.4769873
     constraintForce: 0
     tearResistance: 1
   - particle1: 29
     particle2: 30
-    restLength: 0.47235647
+    restLength: 0.3263624
     constraintForce: 0
     tearResistance: 1
   - particle1: 30
     particle2: 31
-    restLength: 0.4747519
+    restLength: 0.33443895
     constraintForce: 0
     tearResistance: 1
   - particle1: 31
     particle2: 32
-    restLength: 0.4800675
+    restLength: 0.4726891
     constraintForce: 0
     tearResistance: 1
   - particle1: 32
     particle2: 33
-    restLength: 0.47461608
+    restLength: 0.47427362
     constraintForce: 0
     tearResistance: 1
   - particle1: 33
     particle2: 34
-    restLength: 0.47621852
+    restLength: 0.48043433
     constraintForce: 0
     tearResistance: 1
   - particle1: 34
     particle2: 35
-    restLength: 0.47667873
+    restLength: 0.4745107
     constraintForce: 0
     tearResistance: 1
   - particle1: 35
     particle2: 36
-    restLength: 0.47680536
+    restLength: 0.47616154
     constraintForce: 0
     tearResistance: 1
   - particle1: 36
     particle2: 37
-    restLength: 0.47686246
+    restLength: 0.47664726
     constraintForce: 0
     tearResistance: 1
   - particle1: 37
     particle2: 38
-    restLength: 0.4769597
+    restLength: 0.47678342
     constraintForce: 0
     tearResistance: 1
   - particle1: 38
     particle2: 39
-    restLength: 0.4770708
+    restLength: 0.47684795
     constraintForce: 0
     tearResistance: 1
   - particle1: 39
     particle2: 40
-    restLength: 0.47668174
+    restLength: 0.47695494
     constraintForce: 0
     tearResistance: 1
   - particle1: 40
     particle2: 41
-    restLength: 0.47338304
+    restLength: 0.4770789
     constraintForce: 0
     tearResistance: 1
   - particle1: 41
     particle2: 42
-    restLength: 0.48178068
+    restLength: 0.47671512
     constraintForce: 0
     tearResistance: 1
   - particle1: 42
     particle2: 43
-    restLength: 0.4685781
+    restLength: 0.47344598
+    constraintForce: 0
+    tearResistance: 1
+  - particle1: 43
+    particle2: 44
+    restLength: 0.48168674
+    constraintForce: 0
+    tearResistance: 1
+  - particle1: 44
+    particle2: 45
+    restLength: 0.46858096
     constraintForce: 0
     tearResistance: 1
   m_RopeBlueprint: {fileID: 11400000, guid: c0bb16af3c2e53c4bbf12ced47932d02, type: 2}
@@ -1277,8 +1289,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 958c969cfb16745f192d4d7bd28b7178, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  decimation: 0
-  smoothing: 1
+  decimation: 1
+  smoothing: 2
   twist: 0
 --- !u!114 &6982242985851781951
 MonoBehaviour:
@@ -1333,6 +1345,25 @@ MonoBehaviour:
   m_Actor: {fileID: 1773282815796922611}
   m_Target: {fileID: 1084605941041955633}
   m_ParticleGroup: {fileID: 7375444400928674960, guid: c0bb16af3c2e53c4bbf12ced47932d02, type: 2}
+  m_AttachmentType: 0
+  m_ConstrainOrientation: 0
+  m_Compliance: 0
+  m_BreakThreshold: Infinity
+--- !u!114 &2782986188416697660
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5112010605077674254}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d03c9194b7ab4aaba4dfa5afec22c69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actor: {fileID: 1773282815796922611}
+  m_Target: {fileID: 1084605941041955633}
+  m_ParticleGroup: {fileID: 4743419332964760005, guid: c0bb16af3c2e53c4bbf12ced47932d02, type: 2}
   m_AttachmentType: 0
   m_ConstrainOrientation: 0
   m_Compliance: 0
@@ -2120,6 +2151,97 @@ MonoBehaviour:
   material: {fileID: 0}
   filter: 65537
   sourceCollider: {fileID: 5795600984037185884}
+--- !u!1 &6392254579905643460
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1462932929038660821}
+  - component: {fileID: 836818998996903206}
+  - component: {fileID: 6286454502998756286}
+  m_Layer: 0
+  m_Name: "PlayerGround\uCDA9\uB3CC\uD574\uC81C\uC601\uC5ED"
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1462932929038660821
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6392254579905643460}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.52, y: 0.145, z: 0}
+  m_LocalScale: {x: 4.140619, y: 2.7078416, z: 3.2716}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 269367553015313771}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &836818998996903206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6392254579905643460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b22cb2552950834095625d272049787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _groundCollidersToIgnore: []
+--- !u!61 &6286454502998756286
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6392254579905643460}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
 --- !u!1 &7757409313855340664
 GameObject:
   m_ObjectHideFlags: 0
@@ -2222,10 +2344,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 269367553015313771}
+  - component: {fileID: 5269573904187304246}
   - component: {fileID: 190422991553704043}
   - component: {fileID: 6096295269895472874}
-  m_Layer: 0
-  m_Name: "\uB3C4\uB974\uB798 \uB05D"
+  m_Layer: 6
+  m_Name: "\uB3C4\uB974\uB798 \uD0D1\uC2B9\uC11D"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2240,7 +2363,7 @@ Transform:
   m_GameObject: {fileID: 7848139961103708814}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.22, y: -6.886, z: -0.14}
+  m_LocalPosition: {x: 0.22, y: -6.604, z: -0.14}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2248,8 +2371,23 @@ Transform:
   - {fileID: 6801949448960907196}
   - {fileID: 1298808341070827611}
   - {fileID: 7570843540285941520}
+  - {fileID: 1462932929038660821}
   m_Father: {fileID: 7661445573917071487}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5269573904187304246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7848139961103708814}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47faf6ee250214243ab8ad39379cc630, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _craneRope: {fileID: 1034268440887328872}
+  _rbDampingAmount: 5
 --- !u!50 &190422991553704043
 Rigidbody2D:
   serializedVersion: 4
@@ -2447,7 +2585,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3037060693627409264}
   m_Layer: 0
-  m_Name: "\uB3C4\uB974\uB798 \uBA38\uB9AC"
+  m_Name: "\uB3C4\uB974\uB798 \uBCF8\uCCB4"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -41,7 +41,7 @@ public class RopeParticleCollisionReaderBase_ObiContactEventDispatcher : MonoBeh
     public void OnContactStay(ObiSolver solver, Oni.Contact contact) // used with contactEventDispatcher (not Solver_OnCollision)
     {
         var col = ObiColliderWorld.GetInstance().colliderHandles[contact.bodyB].owner;
-        if (col != null && col.CompareTag("Player"))
+        if (col != null && col.CompareTag(Tags.PlayerTag))
         {
             /* do collsion of bodyA particles */
             int simplexStart = _rope.solver.simplexCounts.GetSimplexStartAndSize(contact.bodyA, out int simplexSize);
@@ -59,7 +59,7 @@ public class RopeParticleCollisionReaderBase_ObiContactEventDispatcher : MonoBeh
     public void OnContactExit(ObiSolver solver, Oni.Contact contact) // used with contactEventDispatcher (not Solver_OnCollision)
     {
         var col = ObiColliderWorld.GetInstance().colliderHandles[contact.bodyB].owner;
-        if (col != null && col.CompareTag("Player"))
+        if (col != null && col.CompareTag(Tags.PlayerTag))
         {
             /* do collsion of bodyA particles */
             int simplexStart = _rope.solver.simplexCounts.GetSimplexStartAndSize(contact.bodyA, out int simplexSize);

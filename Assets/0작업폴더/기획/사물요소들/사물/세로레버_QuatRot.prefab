@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1110008028614313293}
   - component: {fileID: 9090757676511544400}
+  - component: {fileID: 4747860175699719542}
   m_Layer: 0
   m_Name: "\uC138\uB85C\uB808\uBC84_QuatRot"
   m_TagString: Untagged
@@ -51,8 +52,25 @@ MonoBehaviour:
   - {fileID: 0}
   _checkPointToActivate: {fileID: 0}
   _updateCheckpointOnActivate: 0
+  _transitionCameraTo: {fileID: 4747860175699719542}
   IsAutomatic: 0
   NeedBattery: 0
+--- !u!114 &4747860175699719542
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 213903530998989197}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83c8a36425337be4d8637d4dd10d2795, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _toVirtualCam: {fileID: 0}
+  ZoomInTo: {fileID: 0}
+  _camTransitionDuration: 0.6
+  _camTransitionHoldDuration: 1.3
 --- !u!1 &522407954271177366
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SwapCameraBoundsOnTrigger : MonoBehaviour
@@ -8,7 +6,7 @@ public class SwapCameraBoundsOnTrigger : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.gameObject.CompareTag("Player"))
+        if (col.gameObject.CompareTag(Tags.PlayerTag))
         {
             CameraBounds.VirtualCamDefaultConfiner.m_BoundingShape2D = _cameraBoundsToUse;
         }
@@ -16,7 +14,7 @@ public class SwapCameraBoundsOnTrigger : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D col)
     {
-        if (col.gameObject.CompareTag("Player"))
+        if (col.gameObject.CompareTag(Tags.PlayerTag))
         {
             CameraBounds.VirtualCamDefaultConfiner.m_BoundingShape2D = _cameraBoundsToUse;
         }

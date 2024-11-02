@@ -197,7 +197,7 @@ public class PlayerController : MonoBehaviour
             _groundHit = _groundCol;
             if (!IsOnLadder && _groundCol != null)
             {
-                if (!_groundCol.CompareTag("SpeedBoost Ground")) LimitXVelocity = true;
+                if (!_groundCol.CompareTag(Tags.SpeedBoostGroundTag)) LimitXVelocity = true;
 
                 // Set Z-pos to the Z-pos of the ground that Player hit
                 PlayerLogic.SetPlayerZPosition(_groundCol.transform.position.z);
@@ -347,7 +347,7 @@ public class PlayerController : MonoBehaviour
             transform.position = new Vector3(ladderIntersect.x, ladderIntersect.y, ladder.transform.position.z - 0.1f);
             _rb.velocity = Vector2.zero;
 
-            if (ladder.BypassGroundCollision) PlayerLogic.IgnorePlayerGroundCollision(true);
+            if (ladder.BypassGroundCollision) PlayerLogic.EnablePlayerGroundCollision(false);
             DirInputActive = false;
 
             CurrentLadder = ladder;
@@ -361,7 +361,7 @@ public class PlayerController : MonoBehaviour
             // disable "ladder movement" only if the trigger-exited ladder is the ladder the Player is currently on
             if (ladder == CurrentLadder)
             {
-                PlayerLogic.IgnorePlayerGroundCollision(false);
+                PlayerLogic.EnablePlayerGroundCollision(true);
                 DirInputActive = true;
                 CurrentLadder = null;
             }

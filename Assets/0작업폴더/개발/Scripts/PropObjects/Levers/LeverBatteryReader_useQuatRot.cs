@@ -1,19 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class LeverBatteryReader_useQuatRot : MonoBehaviour
+public class LeverBatteryReader_useQuatRot : LeverBatteryReader
 {
+    [Header("")]
     [SerializeField] private LeverActivate _leverActivate;
     [SerializeField] private LeverHandle_useQuatRot _leverHandle;
-
-    [Header("")]
-    [SerializeField] private Transform _batteryInsertPoint;
-    [SerializeField] private float _insertedZRotation = -45;
-    private Vector3 _offsetVec3;
-    private Quaternion _insertedQuatRot;
-
-    public bool BatteryInserted { get; private set; }
 
     private void Start()
     {
@@ -27,7 +18,7 @@ public class LeverBatteryReader_useQuatRot : MonoBehaviour
     {
         if (!BatteryInserted)
         {
-            if (col.CompareTag("Battery"))
+            if (col.CompareTag(Tags.BatteryTag))
             {
                 BatteryPickup battery = col.GetComponent<BatteryPickup>();
                 if (!battery.IsHeldByPlayer) InsertBatteryToLever(battery);

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class LadderReEnableGroundCollision : MonoBehaviour
@@ -14,25 +12,25 @@ public class LadderReEnableGroundCollision : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.gameObject.CompareTag("Player"))
+        if (col.gameObject.CompareTag(Tags.PlayerTag))
         {
             if (PlayerLogic.Player.CurrentLadder == _ladder)
             {
                 _ladder.BypassGroundCollision = false;
-                PlayerLogic.IgnorePlayerGroundCollision(false);
+                PlayerLogic.EnablePlayerGroundCollision(true);
             }
         }
     }
 
     private void OnTriggerExit2D(Collider2D col)
     {
-        if (col.gameObject.CompareTag("Player"))
+        if (col.gameObject.CompareTag(Tags.PlayerTag))
         {
             if (PlayerLogic.Player.CurrentLadder == _ladder)
             {
                 _ladder.BypassGroundCollision = _bypassGroundPrevState;
                 if (PlayerLogic.Player.IsOnLadder)
-                    PlayerLogic.IgnorePlayerGroundCollision(_bypassGroundPrevState);
+                    PlayerLogic.EnablePlayerGroundCollision(!_bypassGroundPrevState);
             }
         }
     }

@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class PullablePanelPlayerChecker : MonoBehaviour
@@ -7,17 +6,19 @@ public class PullablePanelPlayerChecker : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.CompareTag("Player"))
+        if (col.CompareTag(Tags.PlayerTag))
         {
-            _pullableBase.InvokePlayerIsInRange(true);
+            _pullableBase.PlayerIsInRange = true;
+            //_pullableBase.InvokePlayerIsInRange(true);
         }
     }
 
     private void OnTriggerExit2D(Collider2D col)
     {
-        if (col.CompareTag("Player"))
+        if (col.CompareTag(Tags.PlayerTag))
         {
-            _pullableBase.InvokePlayerIsInRange(false);
+            _pullableBase.PlayerIsInRange = false;
+            //_pullableBase.InvokePlayerIsInRange(false);
         }
     }
 }

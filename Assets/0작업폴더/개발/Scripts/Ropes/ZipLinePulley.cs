@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ZipLinePulley : MonoBehaviour
@@ -8,7 +6,8 @@ public class ZipLinePulley : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("ZipLineStoppingStartBlock") || collision.gameObject.CompareTag("ZipLineStoppingEndBlock"))
+        if (collision.gameObject.CompareTag(Tags.ZipLineStoppingStartBlockTag)
+            || collision.gameObject.CompareTag(Tags.ZipLineStoppingEndBlockTag))
         {
             _zipLineHandle.StopMovingPulley = true;
         }

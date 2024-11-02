@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using FromDirection = ColBounds2D.FromDirection;
 
@@ -83,7 +81,7 @@ public class LightsToggleTrigger2D : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.gameObject.CompareTag("MainCamera Collider"))
+        if (col.gameObject.CompareTag(Tags.MainCameraColliderTag))
         {
             if (_triggerColBounds.GetRelativePosition(col) == _enableWhenEntered)
             {

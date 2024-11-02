@@ -10,7 +10,7 @@ public class StageBGMPlay : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        if (!_stageBgm.isPlaying && col.CompareTag("Player"))
+        if (!_stageBgm.isPlaying && col.CompareTag(Tags.PlayerTag))
         {
             PlayerEntered?.Invoke();
         }

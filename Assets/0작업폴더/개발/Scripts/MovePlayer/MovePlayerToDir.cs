@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MovePlayerToDir : MonoBehaviour
@@ -121,7 +119,7 @@ public class MovePlayerToDir : MonoBehaviour
     private void startMovingPlayer()
     {
         PlayerLogic.LockPlayer();
-        //PlayerLogic.IgnorePlayerGroundCollision(true);
+        //PlayerLogic.IgnorePlayerGroundCollision(false);
         _isMovingPlayer = true;
         PlayerLogic.Player.transform.position += 0.1f * _toDirection;
     }
@@ -129,7 +127,7 @@ public class MovePlayerToDir : MonoBehaviour
     private void finishMovingPlayer()
     {
         _isMovingPlayer = false;
-        //PlayerLogic.IgnorePlayerGroundCollision(false);
+        //PlayerLogic.IgnorePlayerGroundCollision(true);
         PlayerLogic.FreePlayer();
 
         if (PlayerLogic.Player.IsOnLadder) PlayerLogic.Player.SetPlayerOnLadder(true, PlayerLogic.Player.CurrentLadder);
@@ -137,7 +135,7 @@ public class MovePlayerToDir : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag(Tags.PlayerTag))
         {
             if (!PlayerLogic.PlayerIsLocked && checkValidEnter(collision))
                 startMovingPlayer();
@@ -146,7 +144,7 @@ public class MovePlayerToDir : MonoBehaviour
 
     private void OnCollisionStay2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag(Tags.PlayerTag))
         {
             if (!_isMovingPlayer && !PlayerLogic.PlayerIsLocked && checkValidEnter(collision))
                 startMovingPlayer();
@@ -155,13 +153,13 @@ public class MovePlayerToDir : MonoBehaviour
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag(Tags.PlayerTag))
         {
-            //PlayerLogic.IgnorePlayerGroundCollision(false);
+            //PlayerLogic.IgnorePlayerGroundCollision(true);
             if (!Physics2D.OverlapBox(transform.position, transform.lossyScale, transform.eulerAngles.z, Layers.PlayerLayer.MaskValue))
                 finishMovingPlayer();
             //else
-            //    PlayerLogic.IgnorePlayerGroundCollision(true);
+            //    PlayerLogic.IgnorePlayerGroundCollision(false);
         }
     }
 

@@ -63,7 +63,7 @@ public class StageBGMFade : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.CompareTag("Player"))
+        if (col.CompareTag(Tags.PlayerTag))
         {
             PlayerInZone = true;
             EvalVolumePercentInt();
@@ -72,7 +72,7 @@ public class StageBGMFade : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D col)
     {
-        if (col.CompareTag("Player"))
+        if (col.CompareTag(Tags.PlayerTag))
         {
             if (_volumeDir == VolumeDir.TopIsMaxVolume)
                 VolumePercent = Mathf.Max(PlayerLogic.Player.transform.position.y - _colBottomY, 0) / (_colTopY - _colBottomY) * (_volumeMax - _volumeMin) + _volumeMin;
@@ -83,7 +83,7 @@ public class StageBGMFade : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D col)
     {
-        if (col.CompareTag("Player"))
+        if (col.CompareTag(Tags.PlayerTag))
         {
             PlayerInZone = false;
             EvalVolumePercentInt();
