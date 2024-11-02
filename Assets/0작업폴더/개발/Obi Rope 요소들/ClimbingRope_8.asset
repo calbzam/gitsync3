@@ -400,9 +400,9 @@ MonoBehaviour:
   - {x: 0, y: 0, z: 0}
   angularVelocities: []
   invMasses:
-  - 0.25
-  - 0.25000003
-  - 0.25
+  - 0.125
+  - 0.14466076
+  - 0.18576542
   - 0.25
   - 0.25
   - 0.25
@@ -1553,7 +1553,7 @@ MonoBehaviour:
       - 0.6
     m_Masses:
       data:
-      - 4
+      - 8
       - 4
       - 4
     m_RotationalMasses:
