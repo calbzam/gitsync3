@@ -30,8 +30,10 @@ public class RespawnClothOnPlayerRespawn : MonoBehaviour
         {
             if (_cloth.enabled)
             {
-                _cloth.enabled = false;
-                _cloth.enabled = true;
+                //_cloth.enabled = false;
+                //_cloth.enabled = true;
+                _cloth.gameObject.SetActive(false);
+                _cloth.gameObject.SetActive(true);
             }
         }
     }
