@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -8,6 +9,8 @@ public class MainMenuScene : MonoBehaviour
     private AsyncOperation _asyncLoad;
 
     private int _selfInstanceID;
+
+    public static event Action Level1Loaded;
 
     public void StartGame()
     {
@@ -46,6 +49,7 @@ public class MainMenuScene : MonoBehaviour
     {
         yield return new WaitForSeconds(0.3f);
         _asyncLoad.allowSceneActivation = true;
+        SceneLoadManager.Level1LoadedExternally = true;
     }
 
     private IEnumerator LoadLevel()

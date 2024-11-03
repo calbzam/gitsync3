@@ -23,14 +23,18 @@ public class PlayerLogic : MonoBehaviour
 
     public static TMP_Text PlayerElectrocutedText { get; private set; }
 
+    public static bool PlayerHoldingSomething { get; set; }
+
     private static RigidbodyConstraints2D _origPlayerConstraints;
     
     private static FreePlayerDragUI _freePlayerDragUI;
     private static bool _freePlayerDragEnabled;
-
+    
     private void Awake()
     {
         NearestPlayerRespawn = _nearestPlayerRespawn_UseDuringDevelopmentOnly;
+
+        PlayerHoldingSomething = false;
 
         PlayerIsLocked = false;
 

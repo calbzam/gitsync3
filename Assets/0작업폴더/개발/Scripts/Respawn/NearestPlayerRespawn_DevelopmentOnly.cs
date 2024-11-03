@@ -13,8 +13,7 @@ public class NearestPlayerRespawn_DevelopmentOnly : MonoBehaviour
         _player = GameObject.FindGameObjectWithTag(Tags.PlayerTag).GetComponent<PlayerController>();
 
         RefreshCheckpoints();
-        _player.SetRespawnPoint(_initialSpawnPoint);
-        SetToNearestRespawnPoint();
+        if (!SceneLoadManager.Level1LoadedExternally) SetToNearestRespawnPoint();
     }
 
     private void RefreshCheckpoints()
@@ -26,6 +25,8 @@ public class NearestPlayerRespawn_DevelopmentOnly : MonoBehaviour
 
     private void SetToNearestRespawnPoint() // nearest respawnpoint regardless of actual respawnpoint order
     {
+        _player.SetRespawnPoint(_initialSpawnPoint);
+
         Vector3 playerPos = _player.transform.position;
         Checkpoint currentPoint = _player.RespawnPoint;
 
