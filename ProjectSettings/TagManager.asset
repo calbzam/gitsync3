@@ -17,6 +17,7 @@ TagManager:
   - LeverActivatedVirtualCam
   - DefaultVirtualCam
   - PullablePanel
+  - Player objectPickupper
   layers:
   - Default
   - TransparentFX

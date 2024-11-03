@@ -18,8 +18,6 @@ public partial class BatteryPickup : MonoBehaviour
     public bool IsHeldByPlayer { get; private set; }
     public bool BatteryIsInBox { get; private set; }
 
-    private static bool _playerHasABattery;
-
     private void OnEnable()
     {
         CentralInputReader.Input.Player.PickupActivate.started += PickupActivateStarted;
@@ -46,8 +44,6 @@ public partial class BatteryPickup : MonoBehaviour
         ResetBools();
         BatteryInserted = false;
         OrigRbConstraints = _rb.constraints;
-
-        _playerHasABattery = false;
     }
     
     private void ResetBools()
@@ -97,7 +93,7 @@ public partial class BatteryPickup : MonoBehaviour
         }
         else
         {
-            if (!_playerHasABattery && PlayerIsInRange) AttachToPlayer();
+            if (!PlayerLogic.PlayerHoldingSomething && PlayerIsInRange) AttachToPlayer();
         }
     }
 
@@ -105,7 +101,7 @@ public partial class BatteryPickup : MonoBehaviour
     {
         SetBatteryParent(null);
         IsHeldByPlayer = false;
-        _playerHasABattery = false;
+        PlayerLogic.PlayerHoldingSomething = false;
     }
 
     public void AttachToPlayer()
@@ -115,6 +111,6 @@ public partial class BatteryPickup : MonoBehaviour
 
         if (BatteryIsInBox) BatteryIsInBox = false;
         IsHeldByPlayer = true;
-        _playerHasABattery = true;
+        PlayerLogic.PlayerHoldingSomething = true;
     }
 }

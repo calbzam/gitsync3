@@ -2,6 +2,7 @@ public static class Tags
 {
     public static string PlayerTag = "Player";
     public static string PlayerRopeRiderTag = "Player ropeRider";
+    public static string PlayerObjectPickupperTag = "Player objectPickupper";
     public static string PlayerElectrocutedText = "Player electrocutedText";
 
     public static string BatteryTag = "Battery";
